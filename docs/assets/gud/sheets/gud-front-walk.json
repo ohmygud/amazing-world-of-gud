@@ -1,0 +1,38 @@
+{
+ "image": "gud-front-walk@1x.png",
+ "frameWidth": 34,
+ "frameHeight": 34,
+ "fps": 8,
+ "loop": true,
+ "frames": [
+  {
+   "x": 0,
+   "y": 0,
+   "w": 34,
+   "h": 34,
+   "source": "walk-down-0"
+  },
+  {
+   "x": 34,
+   "y": 0,
+   "w": 34,
+   "h": 34,
+   "source": "walk-down-1"
+  },
+  {
+   "x": 68,
+   "y": 0,
+   "w": 34,
+   "h": 34,
+   "source": "walk-down-0"
+  },
+  {
+   "x": 102,
+   "y": 0,
+   "w": 34,
+   "h": 34,
+   "source": "walk-down-2"
+  }
+ ],
+ "note": "Multiply x/y/w/h by the scale of the @2x / @4x sheets."
+}

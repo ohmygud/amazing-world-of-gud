@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Thank GUD It's Friday — Mobile</title>
+<meta name="description" content="An 80s girlpop pixel arcade survival game. Get GUD to Friday. Alive, preferably.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+/*@@CSS@@*/
+/* ---- MOBILE (PORTRAIT) LAYOUT ---- */
+html,body{position:fixed;inset:0;touch-action:none}
+#app{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+#topbar{height:calc(40px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 8px 0}
+.brand{font-size:9px}
+.tbtn{font-size:8px;padding:8px 7px;min-height:30px}
+#overlay{padding:10px}
+.panel{max-width:440px;padding:16px 14px 14px;box-shadow:6px 6px 0 var(--p)}
+.panel.dark{box-shadow:6px 6px 0 var(--y)}
+.title{font-size:clamp(15px,5.6vw,22px)}
+.title span{display:block}
+.title.mid{font-size:11px;margin-top:10px}
+.sub{font-size:19px}
+.msg{font-size:19px}
+.msg .lead{font-size:9px}
+.score{font-size:8px}
+.hint{font-size:7px}
+.btn{font-size:12px;padding:15px 18px;min-height:48px;width:100%}
+#hack{left:8px;right:8px;top:8px}
+.hackbox{width:auto}
+#controls{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr 1.15fr 1.15fr;grid-template-rows:58px 50px;gap:8px;
+  padding:10px 10px calc(10px + env(safe-area-inset-bottom));background:var(--k);border-top:3px solid var(--p);touch-action:none}
+.cb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-family:var(--pix);font-size:8px;line-height:1;
+  color:var(--k);background:var(--w);border:3px solid var(--w);box-shadow:3px 3px 0 var(--b);border-radius:0;padding:0;touch-action:none;-webkit-user-select:none;user-select:none}
+.cb svg{width:18px;height:18px;shape-rendering:crispEdges;fill:currentColor;pointer-events:none}
+.cb span{pointer-events:none}
+.cb[data-act=left]{grid-column:1;grid-row:1}
+.cb[data-act=right]{grid-column:2;grid-row:1}
+.cb[data-act=duck]{grid-column:1/3;grid-row:2;flex-direction:row;gap:8px}
+.cb[data-act=shoot]{grid-column:3;grid-row:1/3;background:var(--p);color:var(--w);border-color:var(--p);box-shadow:3px 3px 0 var(--w)}
+.cb[data-act=jump]{grid-column:4;grid-row:1/3;background:var(--y);color:var(--k);border-color:var(--y);box-shadow:3px 3px 0 var(--p)}
+.cb.big{font-size:9px}
+.cb.big b{font-size:16px;font-weight:400}
+.cb.on{transform:translate(3px,3px);box-shadow:none;filter:invert(1)}
+@media (max-height:560px){#controls{grid-template-rows:46px 40px;gap:6px;padding-top:6px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">THANK GUD <b>&hearts;&#xFE0E;</b></div>
+    <div class="tools">
+      <button id="menuBtn" class="tbtn" type="button" hidden>MENU</button>
+      <button id="muteBtn" class="tbtn" type="button" aria-pressed="false">SOUND ON</button>
+      <button id="hackBtn" class="tbtn hack" type="button">HACK</button>
+    </div>
+  </header>
+  <main id="stage">
+    <canvas id="game" tabindex="0" aria-label="Thank GUD It's Friday — arcade game with on-screen controls."></canvas>
+    <div id="overlay" hidden></div>
+<!--@@HACK@@-->
+  </main>
+  <nav id="controls" aria-label="Game controls">
+    <button class="cb" data-act="left" type="button" aria-label="Move left"><svg viewBox="0 0 9 9"><path d="M2 4h1V3h1V2h1V1h1v7H5V7H4V6H3V5H2z"/></svg><span>LEFT</span></button>
+    <button class="cb" data-act="right" type="button" aria-label="Move right"><svg viewBox="0 0 9 9"><path d="M7 4H6V3H5V2H4V1H3v7h1V7h1V6h1V5h1z"/></svg><span>RIGHT</span></button>
+    <button class="cb" data-act="duck" type="button" aria-label="Dodge"><svg viewBox="0 0 9 9"><path d="M4 7h1V6h1V5h1V4h1V3H1v1h1v1h1v1h1z"/></svg><span>DODGE</span></button>
+    <button class="cb big" data-act="shoot" type="button" aria-label="Shoot"><b>K</b><span>SHOOT</span></button>
+    <button class="cb big" data-act="jump" type="button" aria-label="Jump"><svg viewBox="0 0 9 9"><path d="M4 2h1v1h1v1h1v1h1v1H1V5h1V4h1V3h1z"/></svg><span>JUMP</span></button>
+  </nav>
+</div>
+<script>window.GUD_CONFIG={layout:'mobile',assetBase:'../assets/'};</script>
+<script src="../assets/manifest.js"></script>
+<script>
+/*@@ENGINE@@*/
+</script>
+</body>
+</html>

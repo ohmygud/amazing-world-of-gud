@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GUDQUEST · Pink Version</title>
+<meta name="description" content="GUD's interactive CV: a handheld-RPG in pixel art. Art direction, type design, teaching, curation, writing.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+/*@@CSS@@*/
+/*@@CVCSS@@*/
+#topbar{height:38px;padding:0 10px}
+.brand{font-size:10px}
+.tbtn{font-size:9px;padding:7px 9px}
+.keys{font-family:var(--pix);font-size:7px;color:var(--b);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;text-align:center}
+@media (max-width:760px){.keys{display:none}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">GUDQUEST <b>&hearts;&#xFE0E;</b> PINK VERSION</div>
+    <div class="keys" aria-hidden="true">ARROWS MOVE · Z/SPACE = A · X = B · ENTER = START</div>
+    <div class="tools">
+      <button id="cvBtn" class="tbtn hack" type="button">CV RAPIDO</button>
+      <button id="langBtn" class="tbtn" type="button">EN</button>
+      <button id="muteBtn" class="tbtn" type="button" aria-pressed="false">AUDIO ON</button>
+    </div>
+  </header>
+  <main id="stage">
+    <canvas id="game" tabindex="0" aria-label="GUDQUEST, interactive CV game. Use the Quick CV button for a text version."></canvas>
+<!--@@CVPANEL@@-->
+  </main>
+</div>
+<script>window.GUD_CONFIG={layout:'desktop',assetBase:'../../assets/'};</script>
+<script>
+/*@@ENGINE@@*/
+</script>
+</body>
+</html>

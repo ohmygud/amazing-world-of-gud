@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>GUD CMS</title>
+<link rel="icon" href="../assets/gud/favicon.png">
+<style>/*@@CSS@@*/
+/*@@VIEWERCSS@@*/
+html,body{height:auto;min-height:100%;overflow:auto;overscroll-behavior:auto;background:var(--l)}
+body{-webkit-user-select:text;user-select:text;font-size:20px;line-height:1.1}
+a{color:var(--p)}
+.hide{display:none!important}
+/* top */
+#top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:calc(6px + env(safe-area-inset-top)) 12px 6px;background:var(--k);border-bottom:3px solid var(--p);color:var(--y)}
+#top h1{display:flex;align-items:center;gap:8px;margin:0;font:400 12px/1 var(--pix);letter-spacing:1px;white-space:nowrap}
+#top h1 i{width:30px;height:30px;background:url(../assets/gud/sheets/gud-idle@1x.png) 0 0/68px 34px;image-rendering:pixelated;animation:idle 1.2s steps(2) infinite}
+@keyframes idle{to{background-position:-68px 0}}
+#top .sp{flex:1}
+#state{font:400 8px/1.4 var(--pix);color:var(--b);max-width:240px}
+#state.dirty{color:var(--y)}
+.b{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:400 9px/1 var(--pix);border:2px solid var(--k);background:var(--w);color:var(--k);padding:9px 10px;border-radius:0;box-shadow:3px 3px 0 var(--k);cursor:pointer;white-space:nowrap;min-height:36px;text-decoration:none}
+.b:active{transform:translate(3px,3px);box-shadow:none}
+.b:disabled{opacity:.45;cursor:default;transform:none}
+.b.y{background:var(--y)}.b.p{background:var(--p);color:var(--w)}.b.k{background:var(--k);color:var(--y);border-color:var(--k)}
+#top .b{border-color:var(--w);box-shadow:2px 2px 0 var(--p)}
+#top .b.y{border-color:var(--y)}
+.b.sm{font-size:8px;padding:6px 7px;min-height:28px;box-shadow:2px 2px 0 var(--k)}
+.b.x{background:var(--k);color:var(--w)}
+.b:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px dashed var(--p);outline-offset:2px}
+/* layout */
+#wrap{display:grid;grid-template-columns:210px 1fr;gap:18px;max-width:1240px;margin:0 auto;padding:16px 14px 80px}
+#nav{position:sticky;top:70px;align-self:start;display:flex;flex-direction:column;gap:8px}
+#nav button{text-align:left;font:400 10px/1.3 var(--pix);border:3px solid var(--k);background:var(--w);padding:11px 10px;box-shadow:4px 4px 0 var(--k);cursor:pointer;border-radius:0}
+#nav button[aria-current=true]{background:var(--p);color:var(--w)}
+#nav button small{display:block;font:16px/1 var(--body);margin-top:4px;opacity:.8}
+main{min-width:0}
+h2.t{font:400 16px/1.3 var(--pix);margin:0 0 6px;color:var(--p);text-shadow:2px 2px 0 var(--k)}
+p.lead{margin:0 0 16px;font-size:20px}
+.box{background:var(--w);border:3px solid var(--k);box-shadow:6px 6px 0 var(--p);padding:14px;margin:0 0 18px}
+.box>h3,.fs>summary{font:400 11px/1.3 var(--pix);margin:0 0 12px}
+details.fs{background:var(--w);border:3px solid var(--k);box-shadow:5px 5px 0 var(--b);margin:0 0 16px}
+details.fs>summary{cursor:pointer;padding:12px 14px;margin:0;list-style:none;display:flex;align-items:center;gap:8px}
+details.fs>summary::-webkit-details-marker{display:none}
+details.fs>summary:before{content:'▶';font-size:8px;color:var(--p)}
+details.fs[open]>summary:before{content:'▼'}
+details.fs>.in{padding:0 14px 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.f{display:flex;flex-direction:column;gap:4px;margin:0 0 10px;min-width:0}
+.f>span{font:400 8px/1.3 var(--pix);color:var(--k);letter-spacing:.5px}
+.f>span em{font:16px/1 var(--body);font-style:normal;color:#8a3d66;letter-spacing:0;margin-left:6px}
+.f>span b{display:inline-block;background:var(--k);color:var(--y);padding:2px 4px;font-weight:400;margin-right:4px}
+.f>span b.en{background:var(--p);color:var(--w)}
+input[type=text],input[type=url],input[type=number],input[type=password],textarea,select{font:20px/1.1 var(--body);color:var(--k);background:#fff;border:2px solid var(--k);border-radius:0;padding:7px 8px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:64px}
+input.empty,textarea.empty{background:#fff3f9;border-style:dashed}
+.bi{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bi .f{margin:0}
+.bi-w{margin:0 0 12px}
+.bi-w>span{display:block;font:400 8px/1.3 var(--pix);margin:0 0 4px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.list>.it{border:2px solid var(--k);background:#fff;padding:10px;margin:0 0 10px;position:relative}
+.it-h{display:flex;align-items:center;gap:8px;margin:0 0 8px;flex-wrap:wrap}
+.it-h .n{font:400 9px/1 var(--pix);background:var(--k);color:var(--y);padding:5px 6px}
+.it-h .ttl{flex:1;font:400 10px/1.3 var(--pix);min-width:120px;overflow:hidden;text-overflow:ellipsis}
+.chip{display:inline-block;font:400 7px/1 var(--pix);background:var(--y);border:2px solid var(--k);padding:4px 5px}
+.chip.p{background:var(--p);color:var(--w)}
+/* sections list */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--w);border:3px solid var(--k);box-shadow:5px 5px 0 var(--k);padding:12px;display:flex;flex-direction:column;gap:8px}
+.card h4{margin:0;font:400 11px/1.35 var(--pix)}
+.card p{margin:0;font-size:18px;flex:1}
+.card .row{margin-top:4px}
+.card.new{border-style:dashed;background:var(--l);align-items:center;justify-content:center;text-align:center;cursor:pointer;min-height:150px;box-shadow:none}
+/* media */
+.media{display:flex;flex-direction:column;gap:8px}
+.m{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:start;border:2px dashed var(--b);padding:8px;background:var(--w)}
+.m .th{width:96px;height:64px;background:var(--k);display:flex;align-items:center;justify-content:center;color:var(--y);font:400 8px/1 var(--pix);overflow:hidden;cursor:pointer;border:0;padding:0}
+.m .th img,.m .th video{width:100%;height:100%;object-fit:cover}
+.m .ctl{display:flex;flex-direction:column;gap:4px}
+.addm{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.prog{height:10px;border:2px solid var(--k);background:#fff;margin-top:6px}
+.prog i{display:block;height:100%;width:0;background:var(--p)}
+/* mons */
+.mons{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.mon{background:var(--w);border:3px solid var(--k);box-shadow:4px 4px 0 var(--k);padding:10px;text-align:center;cursor:pointer;font:400 9px/1.3 var(--pix)}
+.mon[aria-current=true]{box-shadow:4px 4px 0 var(--p);background:var(--y)}
+.mon canvas,.prev canvas{image-rendering:pixelated;display:block;margin:0 auto 6px}
+.prev{display:flex;gap:16px;align-items:center;justify-content:center;background:var(--l);border:2px solid var(--k);padding:10px;margin:0 0 12px}
+/* library */
+.lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.lib .card{padding:8px;gap:6px}
+.lib .th{aspect-ratio:4/3;background:var(--k);display:flex;align-items:center;justify-content:center;color:var(--y);font:400 9px/1 var(--pix);overflow:hidden}
+.lib .th img,.lib .th video{width:100%;height:100%;object-fit:cover}
+.lib small{font-size:15px;word-break:break-all}
+.lib .card.pick{cursor:pointer}
+.lib .card.pick:hover{box-shadow:5px 5px 0 var(--p)}
+/* tabs inside */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.tabs button{font:400 9px/1 var(--pix);border:2px solid var(--k);background:var(--w);padding:9px 10px;cursor:pointer;border-radius:0}
+.tabs button[aria-pressed=true]{background:var(--k);color:var(--y)}
+/* login */
+#login{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--p);background-image:repeating-linear-gradient(0deg,rgba(17,17,17,.25) 0 2px,transparent 2px 8px)}
+#login .box{max-width:420px;width:100%;text-align:center;box-shadow:8px 8px 0 var(--k)}
+#login h2{font:400 18px/1.3 var(--pix);margin:8px 0 6px;color:var(--p);text-shadow:2px 2px 0 var(--k)}
+#login canvas{image-rendering:pixelated;width:102px;height:102px}
+#login form{display:flex;flex-direction:column;gap:10px;margin-top:12px;text-align:left}
+.err{color:var(--p);font-size:19px;min-height:20px;margin:0}
+/* toast + dialog */
+#toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:200;background:var(--k);color:var(--y);font:400 10px/1.4 var(--pix);padding:12px 14px;border:3px solid var(--y);box-shadow:5px 5px 0 var(--p);max-width:calc(100vw - 30px);text-align:center}
+#toast.bad{color:var(--w);background:var(--p);border-color:var(--k);box-shadow:5px 5px 0 var(--k)}
+#dlg{position:fixed;inset:0;z-index:150;background:rgba(17,17,17,.7);display:flex;align-items:center;justify-content:center;padding:14px}
+#dlg .box{width:100%;max-width:560px;max-height:100%;overflow:auto;margin:0}
+#dlg .box.wide{max-width:900px}
+#offline{background:var(--y);border-bottom:3px solid var(--k);padding:10px 14px;font-size:19px;text-align:center}
+.hint{font-size:17px;color:#7a2d58;margin:2px 0 10px}
+.warn{background:var(--y);border:2px solid var(--k);padding:8px 10px;font-size:18px;margin:0 0 12px}
+@media (max-width:860px){
+  #wrap{grid-template-columns:1fr;padding:12px 10px 90px}
+  #nav{position:sticky;top:58px;z-index:20;flex-direction:row;overflow-x:auto;background:var(--l);padding:6px 0 10px;margin:0 -10px;padding-left:10px;padding-right:10px;-webkit-overflow-scrolling:touch}
+  #nav button{flex:0 0 auto;padding:9px 9px;font-size:9px;box-shadow:3px 3px 0 var(--k)}
+  #nav button small{display:none}
+  .grid2,.bi{grid-template-columns:1fr}
+  #state{display:none}
+  #top h1 span{display:none}
+  .m{grid-template-columns:72px 1fr}
+  .m .th{width:72px;height:54px}
+  .m .ctl{grid-column:1/3;flex-direction:row;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<div id="offline" class="hide"></div>
+
+<div id="login" class="hide">
+  <div class="box">
+    <canvas id="loginSprite" width="34" height="34"></canvas>
+    <h2>GUD CMS</h2>
+    <p id="loginLead" style="margin:0;font-size:19px"></p>
+    <form id="loginForm" autocomplete="on">
+      <input type="text" name="username" value="gud" autocomplete="username" hidden>
+      <label class="f"><span id="pwLbl">PASSWORD</span><input id="pw" type="password" autocomplete="current-password" required minlength="1"></label>
+      <label class="f hide" id="pw2Wrap"><span>RIPETI PASSWORD</span><input id="pw2" type="password" autocomplete="new-password"></label>
+      <p class="err" id="loginErr" role="alert"></p>
+      <button class="b y" type="submit" id="loginBtn">ENTRA</button>
+      <a href="../" class="b sm" style="align-self:center">◀ TORNA AL SITO</a>
+    </form>
+  </div>
+</div>
+
+<div id="app" class="hide" style="position:static;display:block;background:none">
+  <header id="top">
+    <h1><i aria-hidden="true"></i><span>GUD CMS</span></h1>
+    <div class="sp"></div>
+    <span id="state" aria-live="polite"></span>
+    <a class="b" href="../brand/" target="_blank" rel="noopener">🎨 KIT</a>
+    <a class="b" href="../" target="_blank" rel="noopener" id="bView">👁 SITO</a>
+    <button class="b y" type="button" id="bSave">💾 PUBBLICA</button>
+    <button class="b x" type="button" id="bOut">ESCI</button>
+  </header>
+  <div id="wrap">
+    <nav id="nav" aria-label="Sezioni"></nav>
+    <main id="main"></main>
+  </div>
+</div>
+
+<div id="dlg" class="hide" role="dialog" aria-modal="true"><div class="box" id="dlgBox"></div></div>
+<div id="toast" class="hide" role="status"></div>
+<input type="file" id="filePick" class="hide">
+
+<script>/*@@CONTENT@@*/</script>
+<script>(function(){
+/*@@PIXELKIT@@*/
+})();</script>
+<script>/*@@VIEWERJS@@*/</script>
+<script>
+(function () {
+  'use strict';
+  /* ================= basics ================= */
+  const $ = id => document.getElementById(id);
+  const DEF = window.GUD_DEFAULT_CONTENT;
+  const API = '../api/index.php';
+  const BASE = '../content/';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const trI = o => (o == null ? '' : typeof o === 'string' ? o : (o.it || o.en || ''));
+  const slug = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30) || 'x';
+  const uid = (p, list) => { let b = slug(p), id = b, n = 2; while (list.includes(id)) id = b + '-' + n++; return id; };
+  const fmtSize = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+  let D = null;               // the content being edited
+  let SERVER = { online: false, csrf: '', maxUpload: 0, zip: false };
+  let dirty = false, view = 'cv', sub = null;
+  const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* */ } }, del(k) { try { localStorage.removeItem(k); } catch (e) { /* */ } } };
+
+  /* ================= api ================= */
+  async function api(action, body, opt) {
+    opt = opt || {};
+    const init = { method: body ? 'POST' : 'GET', credentials: 'same-origin', headers: { 'X-CSRF': SERVER.csrf } };
+    if (body instanceof FormData) init.body = body;
+    else if (body) { init.headers['Content-Type'] = 'application/json'; init.body = JSON.stringify(body); }
+    const r = await fetch(API + '?action=' + action + (opt.q || ''), init);
+    let j = null; try { j = await r.json(); } catch (e) { throw new Error('Il server non ha risposto bene (' + r.status + ')'); }
+    if (!j.ok) { const e = new Error(j.error || 'Errore'); e.status = r.status; throw e; }
+    if (j.csrf) SERVER.csrf = j.csrf;
+    return j;
+  }
+  function uploadXHR(action, file, onProg) {
+    return new Promise((res, rej) => {
+      const fd = new FormData(); fd.append('file', file, file.name || 'file');
+      const x = new XMLHttpRequest(); x.open('POST', API + '?action=' + action); x.setRequestHeader('X-CSRF', SERVER.csrf); x.withCredentials = true;
+      x.upload.onprogress = e => { if (e.lengthComputable && onProg) onProg(e.loaded / e.total); };
+      x.onload = () => { let j = null; try { j = JSON.parse(x.responseText); } catch (e) { return rej(new Error('Upload fallito (' + x.status + '). Forse il file supera il limite del server.')); } j.ok ? res(j) : rej(new Error(j.error || 'Upload fallito')); };
+      x.onerror = () => rej(new Error('Connessione interrotta'));
+      x.send(fd);
+    });
+  }
+
+  /* ================= ui helpers ================= */
+  let toastT = 0;
+  function toast(msg, bad) { const t = $('toast'); t.textContent = msg; t.className = bad ? 'bad' : ''; clearTimeout(toastT); toastT = setTimeout(() => t.className = 'hide', bad ? 5200 : 2600); }
+  function dialog(html, opts) {
+    opts = opts || {};
+    return new Promise(res => {
+      const box = $('dlgBox'); box.className = 'box' + (opts.wide ? ' wide' : ''); box.innerHTML = html; $('dlg').classList.remove('hide');
+      const done = v => { $('dlg').classList.add('hide'); box.innerHTML = ''; document.removeEventListener('keydown', kd, true); res(v); };
+      const kd = e => { if (e.key === 'Escape') { e.preventDefault(); done(null); } };
+      document.addEventListener('keydown', kd, true);
+      box.querySelectorAll('[data-dlg]').forEach(b => b.addEventListener('click', () => {
+        const v = b.dataset.dlg; if (v === 'cancel') return done(null);
+        const vals = {}; box.querySelectorAll('[name]').forEach(i => { vals[i.name] = i.type === 'checkbox' ? i.checked : i.value; });
+        done(v === 'ok' ? vals : v);
+      }));
+      const f = box.querySelector('input,textarea,select,[data-dlg=ok]'); setTimeout(() => f && f.focus(), 30);
+      if (opts.onOpen) opts.onOpen(box, done);
+    });
+  }
+  const confirmBox = (msg, yes) => dialog(`<h3>${esc(msg)}</h3><div class="row" style="justify-content:flex-end"><button class="b" data-dlg="cancel" type="button">ANNULLA</button><button class="b p" data-dlg="yes" type="button">${esc(yes || 'SÌ')}</button></div>`).then(v => v === 'yes');
+  function setDirty(v) { dirty = v; const s = $('state'); s.textContent = v ? '● MODIFICHE NON PUBBLICATE' : (D && D.savedAt ? '✓ PUBBLICATO ' + new Date(D.savedAt).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : ''); s.className = v ? 'dirty' : ''; if (v) draftSoon(); }
+  let draftT = 0; function draftSoon() { clearTimeout(draftT); draftT = setTimeout(() => store.set('gud_cms_draft', JSON.stringify({ at: Date.now(), content: D })), 600); }
+  window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+  /* path get/set: "sections.0.title.it" */
+  function getP(path) { return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), D); }
+  function setP(path, v) {
+    const ks = path.split('.'); let o = D;
+    for (let i = 0; i < ks.length - 1; i++) {
+      const k = ks[i];
+      if (o[k] == null || typeof o[k] !== 'object') { const was = o[k]; o[k] = /^\d+$/.test(ks[i + 1]) ? [] : {}; if (typeof was === 'string' && (ks[i + 1] === 'it' || ks[i + 1] === 'en')) o[k].it = was; }
+      o = o[k];
+    }
+    o[ks[ks.length - 1]] = v;
+    setDirty(true);
+  }
+  function biVal(path, l) { const v = getP(path); if (v == null) return ''; if (typeof v === 'string') return l === 'it' ? v : ''; return v[l] || ''; }
+  const area = (s, force) => force || String(s || '').length > 70;
+  function input(path, val, o) {
+    o = o || {};
+    const cls = val === '' ? 'empty' : '';
+    if (o.type === 'select') return `<select data-p="${path}"${o.num ? ' data-num="1"' : ''}>${o.opts.map(op => `<option value="${esc(op[0])}"${String(op[0]) === String(val) ? ' selected' : ''}>${esc(op[1])}</option>`).join('')}</select>`;
+    if (o.type === 'number') return `<input type="number" data-p="${path}" data-num="1" value="${esc(val)}" min="${o.min || 0}" max="${o.max || 999}" inputmode="numeric">`;
+    if (area(val, o.area)) return `<textarea class="${cls}" data-p="${path}" rows="${o.rows || 3}"${o.ph ? ` placeholder="${esc(o.ph)}"` : ''}>${esc(val)}</textarea>`;
+    return `<input type="${o.type || 'text'}" class="${cls}" data-p="${path}" value="${esc(val)}"${o.ph ? ` placeholder="${esc(o.ph)}"` : ''}${o.max ? ` maxlength="${o.max}"` : ''}>`;
+  }
+  function F(label, path, o) { o = o || {}; const v = getP(path); return `<label class="f"><span>${esc(label)}${o.hint ? `<em>${esc(o.hint)}</em>` : ''}</span>${input(path, v == null ? '' : v, o)}</label>`; }
+  function BI(label, path, o) {
+    o = o || {};
+    return `<div class="bi-w"><span>${esc(label)}${o.hint ? ` <em style="font:16px var(--body);color:#8a3d66">${esc(o.hint)}</em>` : ''}</span><div class="bi">` +
+      ['it', 'en'].map(l => `<label class="f"><span><b class="${l}">${l.toUpperCase()}</b></span>${input(path + '.' + l, biVal(path, l), Object.assign({}, o, { bi: 1 }))}</label>`).join('') + '</div></div>';
+  }
+  function bind(root) {
+    root.querySelectorAll('[data-p]').forEach(el => {
+      const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+      el.addEventListener(ev, () => {
+        let v = el.value; if (el.dataset.num) v = v === '' ? '' : +v;
+        if (el.type === 'checkbox') v = el.checked;
+        setP(el.dataset.p, v); el.classList.toggle('empty', v === '');
+        if (el.dataset.live) liveUpdate(el.dataset.live);
+      });
+    });
+    root.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); act(b.dataset.act, b.dataset, b); }));
+  }
+  function move(arr, i, d) { const j = i + d; if (j < 0 || j >= arr.length) return false; [arr[i], arr[j]] = [arr[j], arr[i]]; setDirty(true); return true; }
+
+  /* ================= nav ================= */
+  const VIEWS = [
+    ['cv', 'CV & QUEST', 'Capitoli, progetti, media'],
+    ['mons', 'GUDMON', 'Le passioni da catturare'],
+    ['profile', 'PROFILO', 'Chi sei, studi, contatti'],
+    ['texts', 'TESTI', 'Benvenuto, TGIF, Quest'],
+    ['media', 'MEDIA', 'Immagini e video caricati'],
+    ['settings', 'IMPOSTAZIONI', 'Password, backup, trasloco']
+  ];
+  function renderNav() {
+    $('nav').innerHTML = VIEWS.map(v => `<button type="button" data-v="${v[0]}" aria-current="${view === v[0] || (view === 'section' && v[0] === 'cv')}">${v[1]}<small>${v[2]}</small></button>`).join('');
+    $('nav').querySelectorAll('button').forEach(b => b.addEventListener('click', () => go(b.dataset.v)));
+  }
+  function go(v, s) { view = v; sub = s == null ? null : s; renderNav(); render(); window.scrollTo(0, 0); }
+  function render() {
+    const m = $('main');
+    m.innerHTML = ({ cv: vCv, section: vSection, mons: vMons, profile: vProfile, texts: vTexts, media: vMedia, settings: vSettings }[view] || vCv)();
+    bind(m);
+    if (view === 'mons') drawMons();
+    if (view === 'media') loadLibrary($('libGrid'), false);
+    if (view === 'settings' && SERVER.online) loadBackups();
+    m.querySelectorAll('.th[data-prev]').forEach(t => t.addEventListener('click', () => { const [si, ii, mi] = t.dataset.prev.split(',').map(Number); GUDViewer.open(D.sections[si].items[ii], { base: BASE, index: mi }); }));
+  }
+
+  /* ================= CV & QUEST ================= */
+  const LOOK_OPTS = () => Object.keys((window.PIXEL && PIXEL.LOOKS) || { prof: 1, client: 1, girl: 1, boy: 1, teach: 1, barista: 1, punk: 1, critic: 1, libr: 1, guard: 1, mom: 1 }).filter(k => k !== 'gud').map(k => [k, k.toUpperCase()]);
+  const ENEMIES = ['brief', 'f24', 'logo', 'bug', 'voice', 'email', 'urgent', 'call', 'link404', 'update', 'internet', 'overtime', 'martini', 'pranzo', 'parmigiana', 'malessere', 'contradictory'];
+  const GMOVES = [[0, 'ART DIRECTION'], [1, 'KERNING'], [2, 'LETTERING'], [3, 'DIRITTI UMANI']];
+  const mediaCount = s => (s.items || []).reduce((n, it) => n + ((it.media || []).length ? 1 : 0), 0);
+  function vCv() {
+    return `<h2 class="t">CV & QUEST</h2><p class="lead">Ogni capitolo è una sezione del BANALE CV e un edificio di GUDQUEST, con il suo capo palestra. I capitoli nuovi diventano edifici in un quartiere nuovo, a sud di Lucca.</p>
+    <div class="cards">${D.sections.map((s, i) => `<div class="card">
+      <div class="row"><span class="chip">${String(i + 1).padStart(2, '0')}</span>${s.builtin ? '<span class="chip">ORIGINALE</span>' : '<span class="chip p">NUOVO</span>'}</div>
+      <h4>${esc(trI(s.title))}</h4><p>${(s.items || []).length} voci · ${mediaCount(s)} con media<br><span style="color:#8a3d66">${esc(trI(s.place))}</span></p>
+      <div class="row"><button class="b y sm" data-act="editSec" data-i="${i}" type="button">MODIFICA</button>
+      <button class="b sm" data-act="secUp" data-i="${i}" type="button" aria-label="Sposta su">▲</button><button class="b sm" data-act="secDown" data-i="${i}" type="button" aria-label="Sposta giù">▼</button>
+      ${s.builtin ? '' : `<button class="b x sm" data-act="secDel" data-i="${i}" type="button">ELIMINA</button>`}</div></div>`).join('')}
+      <button class="card new" type="button" data-act="secAdd"><span style="font:400 24px var(--pix);color:var(--p)">+</span><h4>NUOVO CAPITOLO</h4><p>Diventa un nuovo edificio nella Quest</p></button>
+    </div>`;
+  }
+  function vSection() {
+    const i = sub, s = D.sections[i]; if (!s) return vCv();
+    const P = 'sections.' + i;
+    const items = s.items || (s.items = []);
+    return `<div class="row" style="margin:0 0 12px"><button class="b sm" data-act="back" type="button">◀ TUTTI I CAPITOLI</button><span class="chip">${esc(s.id)}</span></div>
+    <h2 class="t">${esc(trI(s.title)) || 'CAPITOLO'}</h2><p class="lead">Le modifiche si vedono sul sito dopo <b>PUBBLICA</b>.</p>
+    <details class="fs" open><summary>1 · TITOLO E INTRO</summary><div class="in">
+      ${BI('TITOLO DEL CAPITOLO', P + '.title', { hint: 'nel CV e nel menu' })}
+      ${BI('INTRO', P + '.summary', { area: 1, hint: 'paragrafo sotto il titolo' })}
+      ${BI('NOME DEL LUOGO', P + '.place', { hint: 'edificio nella Quest, MAIUSCOLO' })}
+      ${BI('CARTELLO', P + '.sign', { hint: 'cosa si legge davanti all\'edificio' })}
+    </div></details>
+    <details class="fs" open><summary>2 · VOCI E PROGETTI (${items.length})</summary><div class="in">
+      <p class="hint">Ogni voce è una riga del CV e un oggetto da esplorare nella stanza della Quest. Aggiungi immagini, video o link: nella Quest compare un luccichio e GUD chiede "Vuoi vedere il progetto?".</p>
+      <div class="list">${items.map((it, j) => itemEditor(i, j, it, items.length)).join('')}</div>
+      <button class="b y" data-act="itemAdd" data-i="${i}" type="button">+ NUOVA VOCE</button>
+    </div></details>
+    <details class="fs"><summary>3 · PALESTRA NELLA QUEST</summary><div class="in">
+      <div class="grid2">
+        ${F('MEDAGLIA (ICONA)', P + '.icon', { type: 'select', num: 1, opts: [0, 1, 2, 3, 4, 5].map(n => [n, 'MEDAGLIA ' + (n + 1)]) })}
+        ${F('ASPETTO DEL CAPO PALESTRA', P + '.leader.look', { type: 'select', opts: LOOK_OPTS() })}
+      </div>
+      ${BI('NOME DELLA MEDAGLIA', P + '.badge')}
+      ${BI('NOME DEL CAPO PALESTRA', P + '.leader.name')}
+      <div class="grid2">${F('ASPETTO DEL PERSONAGGIO IN STANZA', P + '.npc.look', { type: 'select', opts: LOOK_OPTS() })}</div>
+      ${BI('COSA DICE IL PERSONAGGIO', P + '.npc.say', { area: 1 })}
+      <h3 style="font:400 10px var(--pix);margin:16px 0 10px">NEMICO DELLA LOTTA</h3>
+      <div class="grid2">
+        ${F('NEMICO', P + '.battle.enemy', { type: 'select', opts: ENEMIES.map(e => [e, e.toUpperCase()]) })}
+        ${F('MOSSA SUPEREFFICACE', P + '.battle.weak', { type: 'select', num: 1, opts: GMOVES })}
+        ${F('PUNTI VITA', P + '.battle.hp', { type: 'number', min: 20, max: 200 })}
+        ${F('LIVELLO', P + '.battle.lv', { type: 'number', min: 1, max: 99 })}
+      </div>
+      ${BI('NOME DEL NEMICO', P + '.battle.name')}
+      ${BI('FRASE PRIMA DELLA LOTTA', P + '.battle.pre', { area: 1 })}
+      ${BI('FRASE DOPO LA VITTORIA', P + '.battle.post', { area: 1 })}
+      <div class="bi-w"><span>MOSSE DEL NEMICO</span>
+      ${((s.battle || {}).moves || []).map((mv, k) => `<div class="row" style="margin:0 0 6px;align-items:flex-end"><div style="flex:1;min-width:220px">${BI('MOSSA ' + (k + 1), P + '.battle.moves.' + k + '.n')}</div><div style="width:90px">${F('POTENZA', P + '.battle.moves.' + k + '.p', { type: 'number', min: 1, max: 40 })}</div><button class="b x sm" style="margin-bottom:22px" data-act="moveDel" data-i="${i}" data-k="${k}" type="button">✕</button></div>`).join('')}
+      <button class="b sm" data-act="moveAdd" data-i="${i}" type="button">+ MOSSA</button></div>
+    </div></details>
+    ${s.builtin ? '' : `<button class="b x" data-act="secDel" data-i="${i}" type="button">ELIMINA QUESTO CAPITOLO</button>`}`;
+  }
+  function itemEditor(i, j, it, n) {
+    const P = `sections.${i}.items.${j}`;
+    const media = it.media || [];
+    return `<div class="it"><div class="it-h"><span class="n">${j + 1}</span><span class="ttl">${esc(trI(it.t)) || '(senza titolo)'}</span>
+      ${media.length ? `<span class="chip p">${media.length} MEDIA</span>` : ''}
+      <button class="b sm" data-act="itemUp" data-i="${i}" data-j="${j}" type="button" aria-label="Su"${j === 0 ? ' disabled' : ''}>▲</button>
+      <button class="b sm" data-act="itemDown" data-i="${i}" data-j="${j}" type="button" aria-label="Giù"${j === n - 1 ? ' disabled' : ''}>▼</button>
+      <button class="b x sm" data-act="itemDel" data-i="${i}" data-j="${j}" type="button">ELIMINA</button></div>
+      ${BI('TITOLO', P + '.t', { hint: 'se EN è vuoto vale l\'italiano' })}
+      ${BI('DESCRIZIONE', P + '.d', { area: 1 })}
+      <div class="bi-w"><span>MEDIA DEL PROGETTO</span><div class="media">${media.map((m, k) => mediaRow(i, j, k, m, media.length)).join('')}</div>
+      <div class="addm">
+        <button class="b sm y" data-act="addImg" data-i="${i}" data-j="${j}" type="button"${SERVER.online ? '' : ' disabled title="Serve il server PHP"'}>+ IMMAGINI</button>
+        <button class="b sm y" data-act="addVid" data-i="${i}" data-j="${j}" type="button"${SERVER.online ? '' : ' disabled'}>+ VIDEO MP4</button>
+        <button class="b sm" data-act="addLib" data-i="${i}" data-j="${j}" type="button"${SERVER.online ? '' : ' disabled'}>+ DALLA LIBRERIA</button>
+        <button class="b sm" data-act="addLink" data-i="${i}" data-j="${j}" data-kind="video" type="button">+ YOUTUBE / VIMEO</button>
+        <button class="b sm" data-act="addLink" data-i="${i}" data-j="${j}" data-kind="web" type="button">+ PAGINA WEB</button>
+        ${media.length ? `<button class="b sm k" data-act="preview" data-i="${i}" data-j="${j}" type="button">▶ ANTEPRIMA</button>` : ''}
+      </div><div class="up" id="up-${i}-${j}"></div></div></div>`;
+  }
+  function thumbHTML(m) {
+    const k = GUDViewer.kindOf(m), src = /^(https?:|data:|\/)/.test(m.src || '') ? m.src : BASE + (m.src || '');
+    if (k === 'image') return `<img src="${esc(src)}" alt="" loading="lazy">`;
+    if (k === 'video') return `<video src="${esc(src)}#t=0.5" muted preload="metadata"></video>`;
+    if (k === 'youtube') return `<img src="https://i.ytimg.com/vi/${esc(GUDViewer.ytId(m.src))}/mqdefault.jpg" alt="">`;
+    return k === 'vimeo' ? 'VIMEO ▶' : 'WEB ↗';
+  }
+  function mediaRow(i, j, k, m, n) {
+    const P = `sections.${i}.items.${j}.media.${k}`;
+    const kind = GUDViewer.kindOf(m);
+    return `<div class="m"><button class="th" type="button" data-prev="${i},${j},${k}" aria-label="Anteprima">${thumbHTML(m)}</button>
+      <div><div class="row" style="margin:0 0 4px"><span class="chip">${kind.toUpperCase()}</span></div>
+      ${F('INDIRIZZO / FILE', P + '.src', { hint: kind === 'web' ? 'alcuni siti non si lasciano incorporare: c\'è sempre il tasto APRI' : '' })}
+      ${BI('DIDASCALIA', P + '.caption')}</div>
+      <div class="ctl"><button class="b sm" data-act="mUp" data-i="${i}" data-j="${j}" data-k="${k}" type="button"${k === 0 ? ' disabled' : ''}>▲</button><button class="b sm" data-act="mDown" data-i="${i}" data-j="${j}" data-k="${k}" type="button"${k === n - 1 ? ' disabled' : ''}>▼</button><button class="b x sm" data-act="mDel" data-i="${i}" data-j="${j}" data-k="${k}" type="button">✕</button></div></div>`;
+  }
+  function newSection() {
+    const n = D.sections.length, ids = D.sections.map(s => s.id);
+    return {
+      id: uid('capitolo-' + (n + 1), ids), builtin: false, icon: n % 6,
+      title: { it: 'Nuovo capitolo', en: 'New chapter' }, place: { it: 'NUOVO EDIFICIO', en: 'NEW BUILDING' },
+      badge: { it: 'MEDAGLIA NUOVA', en: 'NEW BADGE' }, sign: { it: 'Un posto nuovo. Entra pure.', en: 'A new place. Come on in.' },
+      summary: { it: '', en: '' },
+      leader: { name: { it: 'LA CAPOPALESTRA', en: 'THE GYM LEADER' }, look: 'girl' },
+      npc: { look: 'boy', say: { it: 'Qui succedono cose belle.', en: 'Nice things happen here.' } },
+      battle: { enemy: ENEMIES[n % ENEMIES.length], hp: 80, lv: 30 + n, weak: n % 4, name: { it: 'IL NEMICO', en: 'THE ENEMY' }, moves: [{ n: { it: 'SCADENZA', en: 'DEADLINE' }, p: 10 }, { n: { it: 'FEEDBACK', en: 'FEEDBACK' }, p: 8 }], pre: { it: 'Pronta?', en: 'Ready?' }, post: { it: 'Brava. Questa è tua.', en: 'Well done. This is yours.' } },
+      items: [{ id: 'voce-1', t: { it: 'NUOVA VOCE', en: '' }, d: { it: '', en: '' }, media: [] }]
+    };
+  }
+
+  /* ================= media adding ================= */
+  function pickFiles(accept, multiple) {
+    return new Promise(res => { const f = $('filePick'); f.value = ''; f.accept = accept; f.multiple = !!multiple; f.onchange = () => res([...f.files]); f.click(); });
+  }
+  async function shrinkImage(file) {
+    if (/gif$/i.test(file.type) || file.size < 350 * 1024 && /png|jpe?g|webp/i.test(file.type)) return file;
+    let bmp; try { bmp = await createImageBitmap(file); } catch (e) { return file; }
+    const MAX = 2400, sc = Math.min(1, MAX / Math.max(bmp.width, bmp.height));
+    const w = Math.round(bmp.width * sc), h = Math.round(bmp.height * sc);
+    const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d');
+    const png = /png/i.test(file.type);
+    if (!png) { x.fillStyle = '#fff'; x.fillRect(0, 0, w, h); }
+    x.drawImage(bmp, 0, 0, w, h);
+    let alpha = false;
+    if (png) { const d = x.getImageData(0, 0, w, h).data; for (let p = 3; p < d.length; p += 4 * 97) if (d[p] < 250) { alpha = true; break; } }
+    const type = alpha ? 'image/png' : 'image/jpeg';
+    const blob = await new Promise(r => c.toBlob(r, type, 0.86));
+    if (!blob || blob.size >= file.size && sc === 1) return file;
+    const name = file.name.replace(/\.\w+$/, '') + (alpha ? '.png' : '.jpg');
+    return new File([blob], name, { type });
+  }
+  async function uploadInto(i, j, files, kind) {
+    const box = $(`up-${i}-${j}`);
+    for (const f0 of files) {
+      const f = kind === 'image' ? await shrinkImage(f0) : f0;
+      if (SERVER.maxUpload && f.size > SERVER.maxUpload) { toast(`${f0.name}: troppo grande (${fmtSize(f.size)}). Il server accetta fino a ${fmtSize(SERVER.maxUpload)}. Comprimi il video o caricalo su YouTube/Vimeo.`, true); continue; }
+      box.innerHTML = `<p class="hint">Carico ${esc(f0.name)} (${fmtSize(f.size)})…</p><div class="prog"><i></i></div>`;
+      try {
+        const r = await uploadXHR('upload', f, p => { const b = box.querySelector('.prog i'); if (b) b.style.width = Math.round(p * 100) + '%'; });
+        const item = D.sections[i].items[j]; (item.media || (item.media = [])).push({ type: r.type, src: r.src, caption: { it: '', en: '' } });
+        setDirty(true);
+      } catch (e) { toast(f0.name + ': ' + e.message, true); if (e.status === 401) return needLogin(); }
+    }
+    box.innerHTML = ''; render(); openItem(i, j);
+  }
+  function openItem(i, j) { const el = $('main').querySelectorAll('.list>.it')[j]; if (el) el.scrollIntoView({ block: 'center' }); }
+  async function addLink(i, j, kind) {
+    const v = await dialog(`<h3>${kind === 'web' ? 'AGGIUNGI UNA PAGINA WEB' : 'AGGIUNGI UN VIDEO YOUTUBE O VIMEO'}</h3>
+      <label class="f"><span>INDIRIZZO</span><input type="url" name="url" placeholder="${kind === 'web' ? 'https://…' : 'https://youtu.be/… oppure https://vimeo.com/…'}"></label>
+      ${kind === 'web' ? '<p class="hint">Si apre dentro una finestra in stile GUD. Se il sito vieta di essere incorporato, resta il tasto APRI ↗.</p>' : ''}
+      <div class="row" style="justify-content:flex-end"><button class="b" data-dlg="cancel" type="button">ANNULLA</button><button class="b y" data-dlg="ok" type="button">AGGIUNGI</button></div>`);
+    if (!v || !v.url) return;
+    let url = v.url.trim(); if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+    let type = 'web';
+    if (kind === 'video') { if (GUDViewer.ytId(url) && /youtu/.test(url)) type = 'youtube'; else if (GUDViewer.vimeoId(url)) type = 'vimeo'; else return toast('Non riconosco questo link YouTube/Vimeo', true); }
+    const item = D.sections[i].items[j]; (item.media || (item.media = [])).push({ type, src: url, caption: { it: '', en: '' } });
+    setDirty(true); render(); openItem(i, j);
+  }
+  async function libraryPick() {
+    let picked = null;
+    await dialog(`<h3>SCEGLI DALLA LIBRERIA</h3><div class="lib" id="pickGrid"><p>Carico…</p></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="b" data-dlg="cancel" type="button">CHIUDI</button></div>`, {
+      wide: 1, onOpen: (box, done) => loadLibrary(box.querySelector('#pickGrid'), m => { picked = m; done(null); })
+    });
+    return picked;
+  }
+
+  /* ================= actions ================= */
+  async function act(a, d) {
+    const i = +d.i, j = +d.j, k = +d.k;
+    const S = D.sections[i];
+    switch (a) {
+      case 'back': return go('cv');
+      case 'editSec': return go('section', i);
+      case 'secUp': move(D.sections, i, -1); return render();
+      case 'secDown': move(D.sections, i, 1); return render();
+      case 'secAdd': D.sections.push(newSection()); setDirty(true); return go('section', D.sections.length - 1);
+      case 'secDel': if (await confirmBox('Eliminare il capitolo "' + trI(S.title) + '" con tutte le sue voci?', 'ELIMINA')) { D.sections.splice(i, 1); setDirty(true); go('cv'); } return;
+      case 'itemAdd': { const ids = (S.items || []).map(x => x.id); S.items.push({ id: uid('voce', ids), t: { it: '', en: '' }, d: { it: '', en: '' }, media: [] }); setDirty(true); render(); openItem(i, S.items.length - 1); return; }
+      case 'itemUp': move(S.items, j, -1); render(); return openItem(i, j - 1);
+      case 'itemDown': move(S.items, j, 1); render(); return openItem(i, j + 1);
+      case 'itemDel': if (await confirmBox('Eliminare la voce "' + (trI(S.items[j].t) || 'senza titolo') + '"?', 'ELIMINA')) { S.items.splice(j, 1); setDirty(true); render(); } return;
+      case 'moveAdd': (S.battle.moves || (S.battle.moves = [])).push({ n: { it: 'MOSSA', en: 'MOVE' }, p: 8 }); setDirty(true); return render();
+      case 'moveDel': if (S.battle.moves.length <= 1) return toast('Il nemico deve avere almeno una mossa', true); S.battle.moves.splice(k, 1); setDirty(true); return render();
+      case 'addImg': { const fs = await pickFiles('image/jpeg,image/png,image/gif,image/webp', true); if (fs.length) uploadInto(i, j, fs, 'image'); return; }
+      case 'addVid': { const fs = await pickFiles('video/mp4,video/webm', false); if (fs.length) uploadInto(i, j, fs, 'video'); return; }
+      case 'addLib': { const m = await libraryPick(); if (m) { const it = S.items[j]; (it.media || (it.media = [])).push({ type: m.type, src: m.src, caption: { it: '', en: '' } }); setDirty(true); render(); openItem(i, j); } return; }
+      case 'addLink': return addLink(i, j, d.kind);
+      case 'preview': return GUDViewer.open(S.items[j], { base: BASE });
+      case 'mUp': move(S.items[j].media, k, -1); render(); return openItem(i, j);
+      case 'mDown': move(S.items[j].media, k, 1); render(); return openItem(i, j);
+      case 'mDel': S.items[j].media.splice(k, 1); setDirty(true); render(); return openItem(i, j);
+      /* mons */
+      case 'monPick': sub = i; return render();
+      case 'monAdd': { const ids = D.mons.map(m => m.id); const leg = D.mons.findIndex(m => m.legendary); const m = { id: uid('gudmon', ids), n: 'NUOVOMON', l: 'N', c: 'B', a: 'none', type: { it: 'PASSIONE', en: 'PASSION' }, d: { it: '', en: '' } }; const at = leg >= 0 ? leg : D.mons.length; D.mons.splice(at, 0, m); setDirty(true); sub = at; return render(); }
+      case 'monUp': move(D.mons, i, -1); sub = Math.max(0, i - 1); return render();
+      case 'monDown': move(D.mons, i, 1); sub = Math.min(D.mons.length - 1, i + 1); return render();
+      case 'monDel': if (D.mons.length <= 3) return toast('Servono almeno 3 GUDMON', true); if (await confirmBox('Liberare ' + D.mons[i].n + '?', 'LIBERA')) { D.mons.splice(i, 1); setDirty(true); sub = 0; render(); } return;
+      /* profile */
+      case 'eduAdd': D.profile.education.push({ it: '', en: '' }); setDirty(true); return render();
+      case 'eduDel': D.profile.education.splice(i, 1); setDirty(true); return render();
+      case 'eduUp': move(D.profile.education, i, -1); return render();
+      case 'conAdd': D.contacts.push({ id: uid('link', D.contacts.map(c => c.id)), label: 'NUOVO LINK', url: 'https://', show: '' }); setDirty(true); return render();
+      case 'conDel': D.contacts.splice(i, 1); setDirty(true); return render();
+      case 'conUp': move(D.contacts, i, -1); return render();
+      /* texts */
+      case 'tab': sub = d.tab; return render();
+      case 'listAdd': D.lists[d.key].push({ it: '', en: '' }); setDirty(true); return render();
+      case 'listDel': D.lists[d.key].splice(i, 1); setDirty(true); return render();
+      case 'listUp': move(D.lists[d.key], i, -1); return render();
+      case 'textReset': { const def = (DEF.text[d.g] || {})[d.key]; if (def) { D.text[d.g][d.key] = clone(def); setDirty(true); render(); } return; }
+      /* media library */
+      case 'libUpload': { const fs = await pickFiles('image/jpeg,image/png,image/gif,image/webp,video/mp4,video/webm', true); for (const f0 of fs) { const f = /^image/.test(f0.type) ? await shrinkImage(f0) : f0; try { $('libUp').innerHTML = `<p class="hint">Carico ${esc(f0.name)}…</p><div class="prog"><i></i></div>`; await uploadXHR('upload', f, p => { const b = $('libUp').querySelector('.prog i'); if (b) b.style.width = Math.round(p * 100) + '%'; }); } catch (e) { toast(f0.name + ': ' + e.message, true); } } $('libUp').innerHTML = ''; return loadLibrary($('libGrid'), false); }
+      case 'libDel': {
+        const used = JSON.stringify(D).includes('"media/' + d.name + '"');
+        if (await confirmBox(used ? 'Questo file è usato in un progetto. Eliminarlo comunque? (il progetto resterà senza)' : 'Eliminare ' + d.name + '?', 'ELIMINA')) { try { await api('media_delete', { name: d.name }); toast('Eliminato'); loadLibrary($('libGrid'), false); } catch (e) { toast(e.message, true); } }
+        return;
+      }
+      case 'libCopy': try { await navigator.clipboard.writeText('media/' + d.name); toast('Percorso copiato'); } catch (e) { toast('media/' + d.name); } return;
+      /* settings */
+      case 'pwChange': return changePassword();
+      case 'export': if (dirty && !(await confirmBox('Ci sono modifiche non pubblicate: lo zip conterrà la versione già pubblicata. Continuare?', 'CONTINUA'))) return; location.href = API + '?action=export&csrf=' + encodeURIComponent(SERVER.csrf); return;
+      case 'import': return importFile(true);
+      case 'jsonDown': return downloadJSON();
+      case 'jsonLoad': return importFile(false);
+      case 'restore': try { const r = await api('backup', null, { q: '&name=' + encodeURIComponent(d.name) }); if (await confirmBox('Caricare questo backup nell\'editor? Poi dovrai premere PUBBLICA.', 'CARICA')) { D = normalize(r.content); setDirty(true); go('cv'); toast('Backup caricato. Controlla e premi PUBBLICA.'); } } catch (e) { toast(e.message, true); } return;
+      case 'resetAll': if (await confirmBox('Ricaricare TUTTI i contenuti originali? Le tue modifiche andranno perse quando pubblichi.', 'RICARICA')) { D = normalize(clone(DEF)); setDirty(true); go('cv'); } return;
+      case 'dropDraft': store.del('gud_cms_draft'); $('draftBox') && $('draftBox').remove(); return;
+    }
+  }
+
+  /* ================= GUDMON ================= */
+  const MCOL = [['P', 'ROSA SHOCK'], ['B', 'ROSA BUBBLE'], ['Y', 'GIALLO'], ['L', 'ROSA CONFETTO'], ['K', 'NERO'], ['W', 'PANNA']];
+  function vMons() {
+    if (sub == null || !D.mons[sub]) sub = 0;
+    const i = sub, m = D.mons[i], P = 'mons.' + i;
+    return `<h2 class="t">GUDMON</h2><p class="lead">Le passioni di GUD, da catturare nell'erba alta della Quest. Quella segnata come leggendaria appare solo quando hai tutte le medaglie.</p>
+      <div class="mons">${D.mons.map((x, k) => `<button class="mon" type="button" data-act="monPick" data-i="${k}" aria-current="${k === i}"><canvas data-mon="${k}" width="44" height="44" style="width:88px;height:88px"></canvas>${esc(x.n)}${x.legendary ? '<br><span class="chip p">LEGGENDARIO</span>' : ''}</button>`).join('')}
+      <button class="mon" type="button" data-act="monAdd" style="border-style:dashed;background:var(--l)"><span style="font:400 30px var(--pix);color:var(--p)">+</span><br>NUOVO GUDMON</button></div>
+      <div class="box" style="margin-top:20px"><h3>MODIFICA ${esc(m.n)}</h3>
+        <div class="prev"><canvas id="monBig" width="44" height="44" style="width:132px;height:132px"></canvas><canvas id="monBlink" width="44" height="44" style="width:88px;height:88px"></canvas></div>
+        <div class="grid2">
+          ${F('NOME', P + '.n', { max: 12, hint: 'max 12, MAIUSCOLO' })}
+          ${F('LETTERA SULLA PANCIA', P + '.l', { max: 1 })}
+          ${F('COLORE', P + '.c', { type: 'select', opts: MCOL })}
+          ${F('ACCESSORIO', P + '.a', { type: 'select', opts: ((window.PIXEL && PIXEL.MON_ACCESSORIES) || ['none']).map(a => [a, a === 'none' ? 'NESSUNO' : a.toUpperCase()]) })}
+        </div>
+        ${BI('TIPO', P + '.type')}
+        ${BI('DESCRIZIONE NEL GUDDEX', P + '.d', { area: 1 })}
+        <label class="row" style="margin:6px 0 14px;font-size:19px"><input type="checkbox" id="legChk"${m.legendary ? ' checked' : ''}> È il GUDMON leggendario (uno solo)</label>
+        <div class="row"><button class="b sm" data-act="monUp" data-i="${i}" type="button">◀ SPOSTA</button><button class="b sm" data-act="monDown" data-i="${i}" type="button">SPOSTA ▶</button><button class="b x sm" data-act="monDel" data-i="${i}" type="button">LIBERA (ELIMINA)</button></div>
+      </div>`;
+  }
+  function drawMon(cv, m, blink) {
+    if (!cv || !window.PIXEL) return;
+    const x = cv.getContext('2d'); x.clearRect(0, 0, cv.width, cv.height); x.imageSmoothingEnabled = false;
+    try { x.drawImage(PIXEL.monSprite(m, blink), 0, 0); } catch (e) { /* */ }
+  }
+  function drawMons() {
+    document.querySelectorAll('canvas[data-mon]').forEach(c => drawMon(c, D.mons[+c.dataset.mon]));
+    const m = D.mons[sub]; drawMon($('monBig'), m); drawMon($('monBlink'), m, true);
+    $('main').querySelectorAll('[data-p^="mons."]').forEach(el => { el.dataset.live = 'mon'; });
+    const leg = $('legChk'); if (leg) leg.addEventListener('change', () => { D.mons.forEach(x => delete x.legendary); if (leg.checked) { D.mons[sub].legendary = true; const [x] = D.mons.splice(sub, 1); D.mons.push(x); sub = D.mons.length - 1; } setDirty(true); render(); });
+  }
+  function liveUpdate(what) {
+    if (what === 'mon') { const m = D.mons[sub]; drawMon($('monBig'), m); drawMon($('monBlink'), m, true); const c = document.querySelector(`canvas[data-mon="${sub}"]`); drawMon(c, m); const b = c && c.parentNode; if (b) b.lastChild.nodeType === 3 && (b.lastChild.textContent = m.n); }
+  }
+
+  /* ================= PROFILE ================= */
+  function vProfile() {
+    const p = D.profile;
+    return `<h2 class="t">PROFILO E CONTATTI</h2><p class="lead">Compaiono nel BANALE CV, nella scheda allenatrice e nel PC della Quest.</p>
+    <div class="box"><h3>CHI SEI</h3><div class="grid2">${F('NOME BREVE', 'profile.name')}${F('NOME COMPLETO', 'profile.full')}</div>
+      ${BI('RUOLO IN UNA RIGA', 'profile.role', { area: 1 })}${BI('STUDIO', 'profile.studio', { area: 1 })}${BI('LINGUE', 'profile.languages')}</div>
+    <div class="box"><h3>FORMAZIONE</h3><div class="list">${(p.education || []).map((e, i) => `<div class="it"><div class="it-h"><span class="n">${i + 1}</span><span class="ttl"></span><button class="b sm" data-act="eduUp" data-i="${i}" type="button"${i ? '' : ' disabled'}>▲</button><button class="b x sm" data-act="eduDel" data-i="${i}" type="button">✕</button></div>${BI('TITOLO DI STUDIO', 'profile.education.' + i, { area: 1 })}</div>`).join('')}</div>
+      <button class="b y sm" data-act="eduAdd" type="button">+ AGGIUNGI</button></div>
+    <div class="box"><h3>CONTATTI</h3><div class="list">${D.contacts.map((c, i) => `<div class="it"><div class="it-h"><span class="n">${i + 1}</span><span class="ttl">${esc(c.label)}</span><button class="b sm" data-act="conUp" data-i="${i}" type="button"${i ? '' : ' disabled'}>▲</button><button class="b x sm" data-act="conDel" data-i="${i}" type="button">✕</button></div>
+      <div class="grid2">${F('ETICHETTA', 'contacts.' + i + '.label')}${F('LINK', 'contacts.' + i + '.url', { hint: 'https://… oppure mailto:…' })}</div>${F('TESTO DA MOSTRARE (FACOLTATIVO)', 'contacts.' + i + '.show')}</div>`).join('')}</div>
+      <button class="b y sm" data-act="conAdd" type="button">+ AGGIUNGI CONTATTO</button></div>`;
+  }
+
+  /* ================= TEXTS ================= */
+  const TEXT_TABS = [
+    ['welcome', 'BENVENUTO', [['welcome', 'Paragrafi della schermata di benvenuto']]],
+    ['site', 'SITO E MENU', []],
+    ['tgif', 'TGIF', [['tgifIntro', 'Intro della partita'], ['feedbackWeek', 'Feedback che piovono in settimana'], ['feedbackWeekend', 'Feedback del weekend'], ['beach', 'La spiaggia segreta']]],
+    ['quest', 'GUDQUEST', [['questIntro', 'Intro del professore']]],
+    ['cv', 'BANALE CV', []]
+  ];
+  const LABELS = {
+    welcome: { kicker: 'Sopra il titolo', title: 'Titolo', cta: 'Tasto entra', skip: 'Link "vai al CV"' },
+    site: { exploreCv: 'Tasto esplora il CV', tricks: 'Tasto trucchi', chooseTitle: 'Titolo scelta CV', questDesc: 'Descrizione GUDQUEST', plainName: 'Nome CV classico', plainDesc: 'Descrizione CV classico', backToTgif: 'Torna a TGIF' },
+    quest: { seeProject: 'Domanda "vuoi vedere il progetto?"', seeYes: 'Risposta sì', seeNo: 'Risposta no', mom: 'Mamma (casa)', hof1: 'Hall of Fame 1', hof2: 'Hall of Fame 2' }
+  };
+  function vTexts() {
+    if (!sub || !TEXT_TABS.find(t => t[0] === sub)) sub = 'welcome';
+    const tab = TEXT_TABS.find(t => t[0] === sub), g = tab[0];
+    const keys = [...new Set([...Object.keys(DEF.text[g] || {}), ...Object.keys((D.text || {})[g] || {})])];
+    D.text[g] = D.text[g] || {};
+    return `<h2 class="t">TESTI</h2><p class="lead">Ogni testo in italiano e in inglese. I campi tratteggiati sono vuoti: se manca l'inglese si usa l'italiano. Nei testi della Quest <b>{name}</b> o simili vengono sostituiti dal gioco: lasciali.</p>
+      <div class="tabs">${TEXT_TABS.map(t => `<button type="button" data-act="tab" data-tab="${t[0]}" aria-pressed="${t[0] === g}">${t[1]}</button>`).join('')}</div>
+      ${tab[2].map(([key, lbl]) => `<details class="fs" open><summary>${esc(lbl.toUpperCase())} (${(D.lists[key] || []).length})</summary><div class="in"><div class="list">${(D.lists[key] || (D.lists[key] = [])).map((x, i) => `<div class="it"><div class="it-h"><span class="n">${i + 1}</span><span class="ttl"></span><button class="b sm" data-act="listUp" data-key="${key}" data-i="${i}" type="button"${i ? '' : ' disabled'}>▲</button><button class="b x sm" data-act="listDel" data-key="${key}" data-i="${i}" type="button">✕</button></div>${BI('', 'lists.' + key + '.' + i)}</div>`).join('')}</div><button class="b y sm" data-act="listAdd" data-key="${key}" type="button">+ AGGIUNGI</button></div></details>`).join('')}
+      <details class="fs" open><summary>ETICHETTE E FRASI (${keys.length})</summary><div class="in">
+      ${keys.map(k => `<div style="position:relative">${BI(((LABELS[g] || {})[k] || k).toUpperCase(), 'text.' + g + '.' + k)}</div>`).join('')}</div></details>`;
+  }
+
+  /* ================= MEDIA LIBRARY ================= */
+  function vMedia() {
+    return `<h2 class="t">MEDIA</h2><p class="lead">Tutti i file caricati sul server. Le immagini vengono ridotte a 2400 px prima dell'invio.${SERVER.maxUpload ? ' Limite del server per un file: <b>' + fmtSize(SERVER.maxUpload) + '</b>.' : ''}</p>
+      ${SERVER.online ? `<div class="row" style="margin:0 0 14px"><button class="b y" data-act="libUpload" type="button">+ CARICA FILE</button></div><div id="libUp"></div><div class="lib" id="libGrid"><p>Carico…</p></div>` : '<p class="warn">La libreria funziona solo sul server con PHP.</p><div id="libGrid"></div>'}`;
+  }
+  async function loadLibrary(grid, onPick) {
+    if (!grid || !SERVER.online) return;
+    try {
+      const r = await api('media');
+      if (!r.media.length) { grid.innerHTML = '<p>Ancora nessun file.</p>'; return; }
+      grid.innerHTML = r.media.map(m => `<div class="card${onPick ? ' pick' : ''}" data-src="${esc(m.src)}" data-type="${m.type}"><div class="th">${thumbHTML(m)}</div><small>${esc(m.name)}<br>${fmtSize(m.size)}</small>${onPick ? '' : `<div class="row"><button class="b sm" data-act="libCopy" data-name="${esc(m.name)}" type="button">COPIA</button><button class="b x sm" data-act="libDel" data-name="${esc(m.name)}" type="button">✕</button></div>`}</div>`).join('');
+      if (onPick) grid.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => onPick({ src: c.dataset.src, type: c.dataset.type })));
+      else bind(grid);
+    } catch (e) { grid.innerHTML = '<p class="err">' + esc(e.message) + '</p>'; if (e.status === 401) needLogin(); }
+  }
+
+  /* ================= SETTINGS ================= */
+  function vSettings() {
+    return `<h2 class="t">IMPOSTAZIONI</h2>
+    <div class="box"><h3>CODICE HACK SEGRETO</h3><p class="hint">Scrivendolo nel tasto HACK del sito si arriva qui (serve comunque la password). Puoi anche andare su ohmygud.com/admin.</p>
+      <div class="grid2">${F('CODICE', 'settings.adminCode', { max: 20 })}</div></div>
+    ${SERVER.online ? `<div class="box"><h3>PASSWORD</h3><div class="grid2"><label class="f"><span>ATTUALE</span><input type="password" id="pwOld" autocomplete="current-password"></label><label class="f"><span>NUOVA (MIN 8)</span><input type="password" id="pwNew" autocomplete="new-password"></label></div><button class="b y sm" data-act="pwChange" type="button">CAMBIA PASSWORD</button></div>` : ''}
+    <div class="box"><h3>TRASLOCO E BACKUP</h3><p class="hint">Per cambiare hosting: ESPORTA lo zip (testi + tutti i media), carica il sito sul nuovo spazio, entra nel CMS e IMPORTA lo zip.</p>
+      <div class="row" style="margin:0 0 12px">
+        ${SERVER.online ? `<button class="b y" data-act="export" type="button">⬇ ESPORTA TUTTO (ZIP)</button><button class="b" data-act="import" type="button">⬆ IMPORTA ZIP / JSON</button>` : ''}
+        <button class="b" data-act="jsonDown" type="button">⬇ SCARICA content.json</button>
+        <button class="b" data-act="jsonLoad" type="button">APRI UN content.json</button>
+      </div>
+      ${SERVER.online ? '<h3 style="font:400 9px var(--pix);margin:16px 0 8px">BACKUP AUTOMATICI (OGNI PUBBLICAZIONE)</h3><div id="bkList"><p>Carico…</p></div>' : ''}
+    </div>
+    <div class="box"><h3>RICOMINCIA</h3><p class="hint">Ricarica nell'editor i testi originali del sito (non cancella i media).</p><button class="b x sm" data-act="resetAll" type="button">RICARICA CONTENUTI ORIGINALI</button></div>`;
+  }
+  async function loadBackups() {
+    const el = $('bkList'); if (!el) return;
+    try { const r = await api('backups'); el.innerHTML = r.backups.length ? '<div class="list">' + r.backups.slice(0, 20).map(b => `<div class="it" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px"><span style="flex:1">${new Date(b.time * 1000).toLocaleString('it-IT')} · ${b.name.includes('import') ? 'prima di un import' : 'prima di pubblicare'} · ${fmtSize(b.size)}</span><button class="b sm" data-act="restore" data-name="${esc(b.name)}" type="button">CARICA</button></div>`).join('') + '</div>' : '<p>Nessun backup ancora.</p>'; bind(el); } catch (e) { el.innerHTML = '<p class="err">' + esc(e.message) + '</p>'; }
+  }
+  async function changePassword() {
+    const o = $('pwOld').value, n = $('pwNew').value;
+    if (n.length < 8) return toast('La nuova password deve avere almeno 8 caratteri', true);
+    try { await api('password', { old: o, new: n }); toast('Password cambiata ✓'); $('pwOld').value = $('pwNew').value = ''; } catch (e) { toast(e.message, true); }
+  }
+  function downloadJSON() {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(D, null, 1)], { type: 'application/json' })); a.download = 'content.json'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+  async function importFile(server) {
+    const [f] = await pickFiles(server ? '.zip,.json,application/zip,application/json' : '.json,application/json', false); if (!f) return;
+    if (server) {
+      if (dirty && !(await confirmBox('Le modifiche non pubblicate andranno perse. Importare?', 'IMPORTA'))) return;
+      try { toast('Importo…'); const r = await uploadXHR('import', f); toast('Importato ✓ ' + (r.media ? r.media + ' media' : '')); await loadContent(); setDirty(false); go('cv'); } catch (e) { toast(e.message, true); }
+      return;
+    }
+    try { const j = JSON.parse(await f.text()); if (!j.sections) throw new Error('Non è un content.json del sito'); D = normalize(j); setDirty(true); go('cv'); toast('Caricato nell\'editor. Premi PUBBLICA per salvarlo.'); } catch (e) { toast(e.message, true); }
+  }
+
+  /* ================= load / save ================= */
+  function normalize(c) {
+    c = c || clone(DEF);
+    for (const k of ['settings', 'profile', 'text', 'lists']) c[k] = c[k] || clone(DEF[k]);
+    for (const k of ['sections', 'mons', 'contacts']) if (!Array.isArray(c[k])) c[k] = clone(DEF[k]);
+    for (const g in DEF.text) { c.text[g] = c.text[g] || {}; for (const k in DEF.text[g]) if (c.text[g][k] == null) c.text[g][k] = clone(DEF.text[g][k]); }
+    for (const k in DEF.lists) if (!Array.isArray(c.lists[k])) c.lists[k] = clone(DEF.lists[k]);
+    c.profile.education = c.profile.education || [];
+    c.sections.forEach(s => { s.items = s.items || []; s.battle = s.battle || clone(newSection().battle); s.battle.moves = s.battle.moves || []; s.leader = s.leader || { name: { it: '', en: '' }, look: 'girl' }; s.npc = s.npc || { look: 'boy', say: { it: '', en: '' } }; s.items.forEach(it => { it.media = it.media || []; }); });
+    return c;
+  }
+  async function loadContent() {
+    let c = null;
+    try { const r = await fetch(BASE + 'content.json?t=' + Date.now(), { cache: 'no-store' }); if (r.ok) c = await r.json(); } catch (e) { /* */ }
+    D = normalize(c || clone(DEF));
+  }
+  async function save() {
+    // tidy: EN-empty titles collapse to strings, ids stay unique
+    D.sections.forEach(s => s.items.forEach(it => { if (it.t && typeof it.t === 'object' && !it.t.en) it.t = it.t.it || ''; }));
+    if (!SERVER.online) { downloadJSON(); toast('Scaricato content.json: caricalo via FTP in /content/'); setDirty(false); return; }
+    const b = $('bSave'); b.disabled = true; b.textContent = '…';
+    try { const r = await api('save', { content: D }); D.savedAt = r.savedAt; store.del('gud_cms_draft'); setDirty(false); toast('PUBBLICATO! ✓ Il sito è aggiornato.'); }
+    catch (e) { toast(e.message, true); if (e.status === 401) needLogin(); }
+    finally { b.disabled = false; b.textContent = '💾 PUBBLICA'; }
+  }
+  $('bSave').addEventListener('click', save);
+  document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); if (!$('app').classList.contains('hide')) save(); } });
+  $('bOut').addEventListener('click', async () => { if (dirty && !(await confirmBox('Uscire senza pubblicare? La bozza resta salvata in questo browser.', 'ESCI'))) return; if (SERVER.online) try { await api('logout', {}); } catch (e) { /* */ } dirty = false; location.href = '../'; });
+
+  /* ================= login ================= */
+  function drawLoginSprite() {
+    const c = $('loginSprite'); if (!c || !window.PIXEL) return;
+    const x = c.getContext('2d'); let f = 0;
+    const tick = () => { x.clearRect(0, 0, 34, 34); try { x.drawImage(PIXEL.gud('idle', f), 0, 0); } catch (e) { /* */ } f = 1 - f; };
+    tick(); setInterval(tick, 600);
+  }
+  function needLogin() { $('app').classList.add('hide'); showLogin(false); }
+  function showLogin(setup) {
+    $('login').classList.remove('hide');
+    $('loginLead').textContent = setup ? 'Primo accesso: scegli la password del pannello (almeno 8 caratteri). Segnatela!' : 'Bentornata. Inserisci la password.';
+    $('pw2Wrap').classList.toggle('hide', !setup);
+    $('pw').autocomplete = setup ? 'new-password' : 'current-password';
+    $('loginBtn').textContent = setup ? 'CREA PASSWORD ED ENTRA' : 'ENTRA';
+    $('loginForm').dataset.setup = setup ? '1' : '';
+    setTimeout(() => $('pw').focus(), 50);
+  }
+  $('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const setup = !!$('loginForm').dataset.setup, pw = $('pw').value;
+    $('loginErr').textContent = '';
+    if (setup) { if (pw.length < 8) return $('loginErr').textContent = 'Almeno 8 caratteri.'; if (pw !== $('pw2').value) return $('loginErr').textContent = 'Le due password non coincidono.'; }
+    try { await api(setup ? 'setup' : 'login', { password: pw }); $('pw').value = $('pw2').value = ''; $('login').classList.add('hide'); start(); }
+    catch (err) { $('loginErr').textContent = err.message; }
+  });
+  async function start() {
+    if (!D) await loadContent();
+    $('app').classList.remove('hide');
+    const dr = store.get('gud_cms_draft');
+    renderNav(); render(); setDirty(false);
+    if (dr) {
+      try {
+        const j = JSON.parse(dr), pub = D.savedAt ? Date.parse(D.savedAt) : 0;
+        if (j.at > pub && j.content) {
+          const box = document.createElement('div'); box.id = 'draftBox'; box.className = 'warn'; box.style.margin = '0 0 16px';
+          box.innerHTML = `C'è una bozza non pubblicata del ${new Date(j.at).toLocaleString('it-IT')}. <button class="b sm y" type="button" id="drUse">RIPRENDI LA BOZZA</button> <button class="b sm" type="button" id="drDrop">IGNORA</button>`;
+          $('main').prepend(box);
+          $('drUse').onclick = () => { D = normalize(j.content); setDirty(true); go('cv'); };
+          $('drDrop').onclick = () => act('dropDraft', {});
+        }
+      } catch (e) { /* */ }
+    }
+  }
+  async function boot() {
+    drawLoginSprite();
+    let st = null;
+    if (location.protocol !== 'file:') { try { const r = await fetch(API + '?action=status', { credentials: 'same-origin', cache: 'no-store' }); st = await r.json(); } catch (e) { st = null; } }
+    if (!st || !st.ok) {
+      $('offline').classList.remove('hide');
+      $('offline').innerHTML = '<b>MODALITÀ SENZA SERVER.</b> Qui non c\'è PHP, quindi non posso salvare né caricare file. Puoi modificare i testi e i link e premere PUBBLICA per scaricare <b>content.json</b>, da caricare via FTP nella cartella <b>/content/</b>.';
+      $('bSave').textContent = '⬇ SCARICA'; $('bOut').textContent = 'ESCI';
+      return start();
+    }
+    SERVER = { online: true, csrf: st.csrf, maxUpload: st.maxUpload, zip: st.zip };
+    if (st.logged) return start();
+    showLogin(st.setup);
+  }
+  boot();
+})();
+</script>
+</body>
+</html>

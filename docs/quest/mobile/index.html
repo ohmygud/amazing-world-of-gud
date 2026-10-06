@@ -1,0 +1,2370 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>GUDQUEST · Pink Adventure</title>
+<meta name="description" content="GUD's interactive CV: a handheld-RPG in pixel art.">
+<style>
+@font-face{font-family:'GUD Pixel';src:url(../../fonts/GUDPixel-Regular.woff2) format('woff2'),url(../../fonts/GUDPixel-Regular.woff) format('woff');font-display:swap}
+@font-face{font-family:'VT323';src:url(../../fonts/VT323-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap}
+@font-face{font-family:'VT323';src:url(../../fonts/VT323-latin-ext.woff2) format('woff2');unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap}
+@font-face{font-family:'Press Start 2P';src:url(../../fonts/PressStart2P-latin.woff2) format('woff2');font-display:swap}
+:root{--y:#FFE600;--p:#FF1493;--b:#FF85C8;--l:#FFD6EA;--k:#111111;--w:#FFF9F1;
+--pix:'GUD Pixel','Press Start 2P',ui-monospace,Menlo,Consolas,monospace;--body:'VT323',ui-monospace,Menlo,Consolas,monospace}
+html.embed #topbar{display:none!important}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--l);-webkit-text-size-adjust:100%;overscroll-behavior:none}
+body{font-family:var(--body);color:var(--k);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--l)}
+#topbar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--k);border-bottom:3px solid var(--p)}
+.brand{font-family:var(--pix);color:var(--y);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:1px}
+.brand b{color:var(--p);font-weight:400}
+.tools{display:flex;gap:6px;flex:0 0 auto}
+.tbtn{font-family:var(--pix);line-height:1;border:2px solid var(--w);background:var(--k);color:var(--w);box-shadow:2px 2px 0 var(--p);border-radius:0}
+.tbtn.hack{background:var(--y);color:var(--k);border-color:var(--y)}
+.tbtn:active{transform:translate(2px,2px);box-shadow:none}
+.tbtn:focus-visible,.btn:focus-visible,.cb:focus-visible{outline:3px dashed var(--y);outline-offset:2px}
+.tbtn[hidden]{display:none}
+#stage{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;
+ background-color:var(--l);background-image:linear-gradient(45deg,var(--b) 25%,transparent 25%,transparent 75%,var(--b) 75%),linear-gradient(45deg,var(--b) 25%,transparent 25%,transparent 75%,var(--b) 75%);
+ background-size:8px 8px;background-position:0 0,4px 4px}
+canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;outline:none;touch-action:none}
+#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,214,234,.6);z-index:5}
+#overlay[hidden]{display:none}
+.panel{position:relative;width:100%;max-height:100%;overflow:auto;background:var(--w);border:4px solid var(--k);box-shadow:8px 8px 0 var(--p);text-align:center;-webkit-user-select:text;user-select:text}
+.panel.dark{background:var(--k);color:var(--w);box-shadow:8px 8px 0 var(--y)}
+.title{font-family:var(--pix);font-weight:400;margin:0;line-height:1.25;color:var(--y);
+ text-shadow:2px 0 var(--k),-2px 0 var(--k),0 2px var(--k),0 -2px var(--k),2px 2px var(--k),-2px -2px var(--k),2px -2px var(--k),-2px 2px var(--k),5px 5px 0 var(--p)}
+.title span{display:inline-block}
+.title.mid{color:var(--p);text-shadow:2px 0 var(--w),-2px 0 var(--w),0 2px var(--w),0 -2px var(--w),4px 4px 0 var(--y)}
+.panel.dark .title.big{color:var(--p);text-shadow:2px 0 var(--w),-2px 0 var(--w),0 2px var(--w),0 -2px var(--w),5px 5px 0 var(--y)}
+.sub{font-family:var(--body);font-style:italic;color:var(--p);margin:.4em 0 .6em}
+.msg p{margin:.35em 0;line-height:1.05}
+.msg .lead{font-family:var(--pix);color:var(--p);line-height:1.5}
+.panel.dark .msg .lead{color:var(--y)}
+.score{font-family:var(--pix);color:var(--p);margin:.8em 0}
+.hint{font-family:var(--pix);color:var(--k);opacity:.75;margin:.9em 0 0;line-height:1.6}
+.btn{font-family:var(--pix);border:3px solid var(--k);background:var(--p);color:var(--w);box-shadow:4px 4px 0 var(--k);border-radius:0;margin-top:.6em}
+.btn.primary{background:var(--y);color:var(--k)}
+.panel.dark .btn{border-color:var(--w);box-shadow:4px 4px 0 var(--p)}
+.btn:active{transform:translate(4px,4px);box-shadow:none}
+.blink{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{background:var(--p);color:var(--w)}}
+#hack{position:absolute;z-index:10;top:10px;right:10px}
+#hack[hidden]{display:none}
+.hackbox{background:var(--k);border:3px solid var(--y);box-shadow:6px 6px 0 var(--p);padding:12px;color:var(--y);font-family:var(--pix);width:250px;max-width:calc(100vw - 20px)}
+.hackbox .ht{font-size:10px;margin:0 0 10px;letter-spacing:1px}
+.hackbox .ht i{font-style:normal;animation:cur 0.8s steps(1) infinite}
+@keyframes cur{50%{opacity:0}}
+.hackbox input{width:100%;font-family:var(--pix);font-size:16px;background:var(--k);color:var(--y);caret-color:var(--p);border:2px dashed var(--p);padding:8px;border-radius:0;outline:none;text-transform:lowercase;-webkit-user-select:text;user-select:text}
+.hackbox .row{display:flex;gap:8px;margin-top:10px}
+.hackbox .row button{flex:1;font-family:var(--pix);font-size:10px;padding:8px 4px;border:2px solid var(--y);background:var(--y);color:var(--k);border-radius:0}
+.hackbox .row button+button{background:var(--k);color:var(--y)}
+#hackMsg{min-height:12px;margin-top:8px;font-size:9px;color:var(--p)}
+.shake{animation:shake .35s steps(2)}
+@keyframes shake{25%{transform:translate(-6px,0)}50%{transform:translate(6px,0)}75%{transform:translate(-3px,0)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.blink,.hackbox .ht i{animation:none}}
+
+#cvPanel{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:12px;background:rgba(17,17,17,.6)}
+#cvPanel[hidden]{display:none}
+.cvbox{position:relative;width:100%;max-width:680px;max-height:100%;display:flex;flex-direction:column;background:var(--w);border:4px solid var(--k);box-shadow:8px 8px 0 var(--p)}
+.cvhead{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--p);color:var(--w);padding:8px 10px;border-bottom:3px solid var(--k)}
+.cvhead h1{font-family:var(--pix);font-size:12px;font-weight:400;margin:0}
+.cvhead button{font-family:var(--pix);font-size:9px;background:var(--y);color:var(--k);border:2px solid var(--k);padding:7px 9px;border-radius:0;cursor:pointer}
+#cvBody{overflow:auto;padding:14px 18px 18px;font-family:var(--body);font-size:20px;line-height:1.12;-webkit-user-select:text;user-select:text}
+#cvBody header h2{font-family:var(--pix);font-size:22px;font-weight:400;margin:0 0 4px;color:var(--p)}
+#cvBody .full{margin:0 0 4px;font-size:22px}
+#cvBody h3{font-family:var(--pix);font-size:11px;font-weight:400;margin:16px 0 8px;padding:5px 7px;background:var(--y);display:inline-block;border:2px solid var(--k)}
+#cvBody ul{margin:0;padding:0 0 0 2px;list-style:none}
+#cvBody li{margin:0 0 7px;padding-left:16px;position:relative}
+#cvBody li:before{content:'';position:absolute;left:2px;top:7px;width:7px;height:7px;background:var(--p)}
+#cvBody b{font-weight:400;color:var(--p)}
+#cvBody .contacts a{display:inline-block;margin:0 8px 8px 0;padding:7px 10px;background:var(--k);color:var(--y);font-family:var(--pix);font-size:9px;text-decoration:none}
+#cvBody .contacts a:hover,#cvBody .contacts a:focus-visible{background:var(--p);color:var(--w)}
+.gv{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:12px;background:rgba(17,17,17,.78);
+  padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+.gv[hidden]{display:none}
+.gv-box{width:100%;max-width:980px;max-height:100%;display:flex;flex-direction:column;background:#FFF9F1;border:4px solid #111;box-shadow:8px 8px 0 #FF1493;overflow:hidden}
+.gv-head{display:flex;align-items:center;gap:10px;background:#FF1493;color:#FFF9F1;padding:8px 10px;border-bottom:3px solid #111}
+.gv-title{flex:1;margin:0;font-family:var(--pix,'GUD Pixel',monospace);font-size:12px;font-weight:400;line-height:1.4;letter-spacing:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gv-count{font-family:var(--pix,'GUD Pixel',monospace);font-size:10px;color:#FFE600}
+.gv-x{font-family:var(--pix,'GUD Pixel',monospace);font-size:10px;background:#FFE600;color:#111;border:2px solid #111;padding:7px 9px;border-radius:0;cursor:pointer}
+.gv-stage{position:relative;flex:1 1 auto;min-height:200px;background:#111;display:flex;align-items:center;justify-content:center;touch-action:pan-y}
+.gv-stage img,.gv-stage video{display:block;max-width:100%;max-height:calc(100vh - 230px);max-height:calc(100dvh - 230px);object-fit:contain}
+.gv-stage iframe{display:block;width:100%;aspect-ratio:16/9;max-height:calc(100vh - 230px);max-height:calc(100dvh - 230px);border:0;background:#111}
+.gv-web iframe{aspect-ratio:auto;height:min(70vh,640px);height:min(70dvh,640px);background:#fff}
+.gv-open{position:absolute;right:10px;bottom:10px;font-family:var(--pix,'GUD Pixel',monospace);font-size:10px;background:#FFE600;color:#111;border:2px solid #111;padding:8px 10px;text-decoration:none;box-shadow:3px 3px 0 #FF1493}
+.gv-hint{position:absolute;left:10px;bottom:6px;margin:0;font:16px/1 var(--body,'VT323',monospace);color:#FF85C8;max-width:60%}
+.gv-cap{font:18px/1.1 var(--body,'VT323',monospace);color:#FF1493;padding:8px 14px 0;min-height:4px}
+.gv-nav{display:flex;align-items:center;justify-content:center;gap:12px;padding:8px}
+.gv-nav>button{font-size:14px;width:42px;height:36px;background:#111;color:#FFE600;border:2px solid #111;border-radius:0;cursor:pointer;box-shadow:3px 3px 0 #FF85C8}
+.gv-dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.gv-dots button{width:12px;height:12px;padding:0;border:2px solid #111;background:#FFF9F1;border-radius:0;cursor:pointer}
+.gv-dots button.on{background:#FF1493}
+.gv-desc{font:20px/1.12 var(--body,'VT323',monospace);color:#111;padding:0 14px 14px;max-height:22vh;overflow:auto}
+.gv-x:focus-visible,.gv-nav button:focus-visible,.gv-open:focus-visible{outline:3px dashed #FFE600;outline-offset:2px}
+@media (max-width:600px){.gv{padding:6px}.gv-title{font-size:10px}.gv-desc{font-size:18px}.gv-stage img,.gv-stage video,.gv-stage iframe{max-height:calc(100dvh - 250px)}}
+
+html,body{position:fixed;inset:0;touch-action:none}
+#app{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+#topbar{height:calc(40px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 8px 0}
+.brand{font-size:9px}
+.tbtn{font-size:8px;padding:8px 6px;min-height:30px}
+#cvBody{font-size:19px;padding:12px}
+#pad{flex:0 0 auto;display:grid;grid-template-columns:132px 1fr 132px;align-items:center;gap:6px;
+  padding:12px 12px calc(12px + env(safe-area-inset-bottom));background:var(--k);border-top:3px solid var(--p);touch-action:none}
+.dpad{position:relative;width:126px;height:126px;display:grid;grid-template-columns:42px 42px 42px;grid-template-rows:42px 42px 42px}
+.dpad button{background:var(--w);border:3px solid var(--w);box-shadow:3px 3px 0 var(--b);border-radius:0;padding:0;display:flex;align-items:center;justify-content:center;touch-action:none}
+.dpad svg{width:16px;height:16px;fill:var(--k);shape-rendering:crispEdges;pointer-events:none}
+.dpad .c{background:var(--w);border-color:var(--w);box-shadow:none}
+[data-k=up]{grid-column:2;grid-row:1}[data-k=left]{grid-column:1;grid-row:2}[data-k=right]{grid-column:3;grid-row:2}[data-k=down]{grid-column:2;grid-row:3}
+.dpad .c{grid-column:2;grid-row:2}
+.mid{display:flex;flex-direction:column;gap:12px;align-items:center}
+.mid button{font-family:var(--pix);font-size:7px;color:var(--w);background:var(--k);border:2px solid var(--b);border-radius:0;padding:8px 6px;width:100%;max-width:84px;touch-action:none}
+.ab{position:relative;height:126px}
+.ab button{position:absolute;width:58px;height:58px;font-family:var(--pix);font-size:16px;border-radius:0;touch-action:none}
+.ab [data-k=a]{right:0;top:12px;background:var(--y);color:var(--k);border:3px solid var(--y);box-shadow:3px 3px 0 var(--p)}
+.ab [data-k=b]{left:0;top:56px;background:var(--p);color:var(--w);border:3px solid var(--p);box-shadow:3px 3px 0 var(--w)}
+#pad button.on{transform:translate(3px,3px);box-shadow:none;filter:invert(1)}
+@media (max-height:600px){#pad{padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom))}.dpad{transform:scale(.85);transform-origin:left center}.ab{transform:scale(.85);transform-origin:right center}}
+@media (max-width:340px){#pad{grid-template-columns:118px 1fr 118px}.dpad{transform:scale(.9);transform-origin:left center}.ab{transform:scale(.9);transform-origin:right center}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">GUDQUEST <b>&hearts;&#xFE0E;</b></div>
+    <div class="tools">
+      <button id="cvBtn" class="tbtn hack" type="button">CV RAPIDO</button>
+      <button id="langBtn" class="tbtn" type="button">EN</button>
+      <button id="muteBtn" class="tbtn" type="button" aria-pressed="false">AUDIO ON</button>
+    </div>
+  </header>
+  <main id="stage">
+    <canvas id="game" tabindex="0" aria-label="GUDQUEST, interactive CV game. Use the Quick CV button for a text version."></canvas>
+    <div id="cvPanel" hidden>
+      <div class="cvbox" role="dialog" aria-modal="true" aria-labelledby="cvTitle">
+        <div class="cvhead"><h1 id="cvTitle">CV RAPIDO</h1><button id="cvClose" type="button">X CLOSE</button></div>
+        <div id="cvBody"></div>
+      </div>
+    </div>
+
+  </main>
+  <nav id="pad" aria-label="Game controls">
+    <div class="dpad">
+      <button data-k="up" type="button" aria-label="Up"><svg viewBox="0 0 9 9"><path d="M4 2h1v1h1v1h1v1h1v1H1V5h1V4h1V3h1z"/></svg></button>
+      <button data-k="left" type="button" aria-label="Left"><svg viewBox="0 0 9 9"><path d="M2 4h1V3h1V2h1V1h1v7H5V7H4V6H3V5H2z"/></svg></button>
+      <span class="c" aria-hidden="true"></span>
+      <button data-k="right" type="button" aria-label="Right"><svg viewBox="0 0 9 9"><path d="M7 4H6V3H5V2H4V1H3v7h1V7h1V6h1V5h1z"/></svg></button>
+      <button data-k="down" type="button" aria-label="Down"><svg viewBox="0 0 9 9"><path d="M4 7h1V6h1V5h1V4h1V3H1v1h1v1h1v1h1z"/></svg></button>
+    </div>
+    <div class="mid">
+      <button data-k="select" type="button" aria-label="Quick CV">SELECT</button>
+      <button data-k="start" type="button" aria-label="Start menu">START</button>
+    </div>
+    <div class="ab">
+      <button data-k="b" type="button" aria-label="B, back">B</button>
+      <button data-k="a" type="button" aria-label="A, talk and confirm">A</button>
+    </div>
+  </nav>
+</div>
+<script>window.GUD_CONFIG={layout:'mobile',assetBase:'../../assets/',contentBase:'../../content/',adminUrl:'../../admin/'};</script>
+<script>window.GUD_DEFAULT_CONTENT={"version":1,"settings":{"adminCode":"gudmin"},"contacts":[{"id":"site","label":"OHMYGUD.COM","url":"https://ohmygud.com","show":""},{"id":"mail","label":"EMAIL","url":"mailto:goldengud@gmail.com","show":"goldengud@gmail.com"},{"id":"ig","label":"INSTAGRAM @TYPODIVA","url":"https://www.instagram.com/typodiva/","show":""},{"id":"in","label":"LINKEDIN","url":"https://www.linkedin.com/in/ohmygud/","show":""}],"profile":{"name":"GUD","full":"Giulia Ursenna Dorati Gherardi","role":{"it":"Creative director, type designer, docente, curatrice, autrice. Firenze.","en":"Creative director, type designer, teacher, curator, writer. Florence."},"education":[{"it":"ISIA Firenze, 2015. Diploma Accademico di I livello in Disegno Industriale.","en":"ISIA Florence, 2015. First-level Academic Diploma in Industrial Design."},{"it":"IED Firenze, 2016. Specializzazione in Grafica per l'Editoria.","en":"IED Florence, 2016. Specialisation in Editorial Graphic Design."},{"it":"IED Firenze, 2018. Master in Typography, Calligraphy & Font Design.","en":"IED Florence, 2018. Master in Typography, Calligraphy & Font Design."}],"languages":{"it":"Italiano madrelingua. Inglese C1.","en":"Italian native. English C1."},"studio":{"it":"Ergonauth S.a.s., Firenze. Fondatrice e Creative Director dal 2016.","en":"Ergonauth S.a.s., Florence. Founder and Creative Director since 2016."}},"sections":[{"id":"teaching","builtin":true,"icon":0,"title":{"it":"Insegnamento","en":"Teaching"},"place":{"it":"ACCADEMIA","en":"ACADEMY"},"badge":{"it":"MEDAGLIA GRIGLIA","en":"GRID BADGE"},"sign":{"it":"ACCADEMIA. Si insegna come si progetta.","en":"ACADEMY. Teach the way you design."},"summary":{"it":"GUD insegna dal 2016: IED, TheSign, Lorenzo de' Medici, ISIA Firenze. Con i suoi studenti progetta per aziende e istituzioni vere.","en":"GUD has been teaching since 2016: IED, TheSign, Lorenzo de' Medici, ISIA Florence. With her students she designs for real companies and institutions."},"leader":{"name":{"it":"PROF. GRID","en":"PROF. GRID"},"look":"teach"},"npc":{"look":"boy","say":{"it":"Con la prof GUD abbiamo fatto progetti veri: Jaguar Land Rover, Artribune, Mondadori.","en":"With GUD we did real projects: Jaguar Land Rover, Artribune, Mondadori."}},"battle":{"enemy":"brief","hp":70,"lv":31,"weak":0,"name":{"it":"BRIEF IN MILANESE","en":"MILANESE BRIEF"},"moves":[{"n":{"it":"SPIEGONE","en":"LONG RANT"},"p":10},{"n":{"it":"NON SO COSA VOGLIO","en":"NO IDEA WHAT I WANT"},"p":12},{"n":{"it":"MA ANCHE NO","en":"OR NOT"},"p":9}],"pre":{"it":"Per insegnare devi saper tradurre un BRIEF IN MILANESE. Vediamo!","en":"To teach, you must decode a MILANESE BRIEF. Let's see!"},"post":{"it":"Brava. Hai il metodo.","en":"Well done. You have the method."}},"items":[{"id":"ied","t":"IED FIRENZE","d":{"it":"Master in Graphic Design (New Media). Docente di Graphic Design, 2020-2024.","en":"Master in Graphic Design (New Media). Graphic Design teacher, 2020-2024."},"media":[]},{"id":"thesign","t":"THESIGN ACADEMY","d":{"it":"Comics & Arts Academy, corso di Graphic Design. Docente di Visual Design & Typography, 2022-2026.","en":"Comics & Arts Academy, Graphic Design course. Visual Design & Typography teacher, 2022-2026."},"media":[]},{"id":"ldm","t":"LORENZO DE' MEDICI","d":{"it":"Istituto Lorenzo de' Medici. Graphic Design, Web Design, Portfolio Review e Visual Design, 2022-2024.","en":"Lorenzo de' Medici Institute. Graphic Design, Web Design, Portfolio Review and Visual Design, 2022-2024."},"media":[]},{"id":"isia","t":"ISIA FIRENZE","d":{"it":"Workshop \"Brividi\": progettazione grafica, metodologia, orientamento. 2016-2026.","en":"\"Brividi\" workshop: graphic design, methodology, orientation. 2016-2026."},"media":[]},{"id":"chinese","t":"CHINESE PRE ACADEMY","d":{"it":"Chinese Pre Academy School, docente di Visual Art, 2019/2020.","en":"Chinese Pre Academy School, Visual Art teacher, 2019/2020."},"media":[]},{"id":"workshop","t":"WORKSHOP","d":{"it":"Workshop di lettering, tipografia e progettazione grafica in tutta Italia, dal 2017.","en":"Lettering, typography and graphic design workshops across Italy, since 2017."},"media":[]},{"id":"metodo","t":"METODO","d":{"it":"Ricerca teorica, sperimentazione e pratica professionale. Il designer come autore di sistemi ed esperienze.","en":"Theory, experimentation and professional practice. The designer as an author of systems and experiences."},"media":[]}]},{"id":"studio","builtin":true,"icon":1,"title":{"it":"Studio e clienti","en":"Studio and clients"},"place":{"it":"STUDIO ERGONAUTH","en":"ERGONAUTH STUDIO"},"badge":{"it":"MEDAGLIA VETTORE","en":"VECTOR BADGE"},"sign":{"it":"STUDIO ERGONAUTH. Firenze, dal 2016.","en":"ERGONAUTH STUDIO. Florence, since 2016."},"summary":{"it":"Ergonauth è lo studio di GUD dal 2016. Tra clienti e partner: Disney, Mondadori, Jaguar Land Rover, Artribune, Comune di Firenze.","en":"Ergonauth has been GUD's studio since 2016. Clients and partners include Disney, Mondadori, Jaguar Land Rover, Artribune and the City of Florence."},"leader":{"name":{"it":"IL COMMERCIALISTA","en":"THE ACCOUNTANT"},"look":"boy"},"npc":{"look":"girl","say":{"it":"Qui si fa art direction, branding, naming, lettering. E si beve molto caffè.","en":"Here we do art direction, branding, naming, lettering. And drink a lot of coffee."}},"battle":{"enemy":"f24","hp":74,"lv":32,"weak":3,"name":{"it":"F24","en":"TAX FORM F24"},"moves":[{"n":{"it":"SCADENZA","en":"DEADLINE"},"p":12},{"n":{"it":"RAVVEDIMENTO","en":"LATE FEE"},"p":10},{"n":{"it":"BOLLO","en":"STAMP DUTY"},"p":8}],"pre":{"it":"Aprire uno studio è bellissimo. Poi arrivano gli F24.","en":"Opening a studio is wonderful. Then the tax forms arrive."},"post":{"it":"Conti in ordine. Ti meriti questa.","en":"Books balanced. You earned this."}},"items":[{"id":"ergonauth","t":"ERGONAUTH S.A.S.","d":{"it":"Studio fondato a Firenze nel 2016. GUD è socia fondatrice, CEO e Creative Director.","en":"Studio founded in Florence in 2016. GUD is co-founder, CEO and Creative Director."},"media":[]},{"id":"disney","t":"THE WALT DISNEY COMPANY","d":{"it":"Milano, 2018-2019. Lettering artist e illustratrice per Art of Hand Lettering.","en":"Milan, 2018-2019. Lettering artist and illustrator for Art of Hand Lettering."},"media":[]},{"id":"mondadori","t":"GRUPPO MONDADORI","d":{"it":"Con TheSign Academy, 2024. Direzione artistica.","en":"With TheSign Academy, 2024. Art direction."},"media":[]},{"id":"jlr","t":"JAGUAR LAND ROVER","d":{"it":"Con IED Firenze, 2023. Art direction per i 75 anni del Defender: la livrea.","en":"With IED Florence, 2023. Art direction for the Defender 75th anniversary livery."},"media":[]},{"id":"artribune","t":"ARTRIBUNE","d":{"it":"Con il Master in Graphic Design di IED Firenze, 2023. Art direction.","en":"With the IED Florence Master in Graphic Design, 2023. Art direction."},"media":[]},{"id":"firenze","t":"COMUNE DI FIRENZE","d":{"it":"Estate Fiorentina 2022. Visual design della campagna istituzionale: la prima campagna in Italia realizzata con l'intelligenza artificiale.","en":"Estate Fiorentina 2022. Visual design of the city campaign: the first Italian campaign made with artificial intelligence."},"media":[]},{"id":"spencer","t":"SPENCER","d":{"it":"Con IED Firenze, 2021. Project management: il visual storytelling dei volontari Covid-19.","en":"With IED Florence, 2021. Project management: visual storytelling of Covid-19 volunteers."},"media":[]},{"id":"branding","t":"BRANDING E NAMING","d":{"it":"Identità e naming per aziende e agenzie, come NTC.","en":"Identity and naming for companies and agencies, such as NTC."},"media":[]}]},{"id":"lucca","builtin":true,"icon":2,"title":{"it":"Lucca Comics & Games","en":"Lucca Comics & Games"},"place":{"it":"LUCCA CREA","en":"LUCCA CREA"},"badge":{"it":"MEDAGLIA MURA","en":"WALLS BADGE"},"sign":{"it":"LUCCA C&G. La città del fumetto e del gioco.","en":"LUCCA C&G. The city of comics and games."},"summary":{"it":"Dal 2023 GUD guida la comunicazione di Lucca Crea. Per i 60 anni del festival ha firmato art direction, progetto e mostra.","en":"Since 2023 GUD has led communication for Lucca Crea. For the festival's 60th anniversary she signed art direction, project and exhibition."},"leader":{"name":{"it":"IL GUARDIANO DELLE MURA","en":"THE WALL KEEPER"},"look":"guard"},"npc":{"look":"punk","say":{"it":"Nella Legacy Board ognuno scrive il suo evento canonico con i Posca.","en":"On the Legacy Board everyone writes their canon event with Posca markers."}},"battle":{"enemy":"logo","hp":80,"lv":35,"weak":1,"name":{"it":"LOGO PIÙ GRANDE","en":"BIGGER LOGO"},"moves":[{"n":{"it":"PIÙ GRANDE!","en":"BIGGER!"},"p":12},{"n":{"it":"ANCORA!","en":"MORE!"},"p":11},{"n":{"it":"FA POP?","en":"DOES IT POP?"},"p":10}],"pre":{"it":"Sulle mura si passa solo se resisti al LOGO PIÙ GRANDE!","en":"You only pass the walls if you resist the BIGGER LOGO!"},"post":{"it":"Le mura sono tue. Buon compleanno, Lucca.","en":"The walls are yours. Happy birthday, Lucca."}},"items":[{"id":"luccacrea","t":"LUCCA CREA","d":{"it":"Dal 2023: art director, communication consultant e project manager.","en":"Since 2023: art director, communication consultant and project manager."},"media":[]},{"id":"lcg60","t":"LCG60","d":{"it":"Art direction, project management e curatela per i 60 anni di Lucca Comics & Games, 2025-2026.","en":"Art direction, project management and curation for the 60th anniversary of Lucca Comics & Games, 2025-2026."},"media":[]},{"id":"legacy","t":"LUCCA LEGACY","d":{"it":"A Comics & Games Story. Mostra inaugurata il 3 ottobre 2026: Legacy Board, The Vault, Tree of Strips, Cover Story. Progetto visivo e cura editoriale.","en":"A Comics & Games Story. Exhibition opened on 3 October 2026: Legacy Board, The Vault, Tree of Strips, Cover Story. Visual design and editorial curation."},"media":[]},{"id":"talk","t":"TALK LCG 2023","d":{"it":"Relatrice: intelligenza artificiale e progettazione grafica.","en":"Speaker: artificial intelligence and graphic design."},"media":[]},{"id":"comms","t":"COMUNICAZIONE","d":{"it":"Comunicazione istituzionale e LinkedIn per Lucca Crea e Lucca Comics & Games.","en":"Institutional communication and LinkedIn for Lucca Crea and Lucca Comics & Games."},"media":[]}]},{"id":"type","builtin":true,"icon":3,"title":{"it":"Type design","en":"Type design"},"place":{"it":"FONDERIA TYPODIVA","en":"TYPODIVA FOUNDRY"},"badge":{"it":"MEDAGLIA GLIFO","en":"GLYPH BADGE"},"sign":{"it":"FONDERIA TYPODIVA. Lettere fuse ogni giorno.","en":"TYPODIVA FOUNDRY. Letters cast daily."},"summary":{"it":"Typodiva è lo spazio tipografico di GUD: lettere disegnate, strumenti costruiti in codice, una comunità a TypeThursday.","en":"Typodiva is GUD's typographic space: drawn letters, tools built in code, a community at TypeThursday."},"leader":{"name":{"it":"IL FONT PIRATA","en":"THE FONT PIRATE"},"look":"punk"},"npc":{"look":"girl","say":{"it":"Ogni lettera qui dentro è stata disegnata, spaziata, provata. Poi ridisegnata.","en":"Every letter in here was drawn, spaced, tested. Then redrawn."}},"battle":{"enemy":"bug","hp":78,"lv":34,"weak":1,"name":{"it":"SOFTWARE BUG","en":"SOFTWARE BUG"},"moves":[{"n":{"it":"CRASH","en":"CRASH"},"p":12},{"n":{"it":"KERNING ROTTO","en":"BROKEN KERNING"},"p":11},{"n":{"it":"FONT MANCANTE","en":"MISSING FONT"},"p":10}],"pre":{"it":"Ho piratato un font! E mi porto dietro un BUG.","en":"I pirated a font! And I brought a BUG."},"post":{"it":"Va bene, restituisco il font. Con licenza.","en":"Fine, I'll return the font. Licensed."}},"items":[{"id":"typodiva","t":"TYPODIVA","d":{"it":"Il marchio di type design di GUD.","en":"GUD's type design label."},"media":[]},{"id":"master","t":"MASTER","d":{"it":"Master in Typography, Calligraphy & Font Design, IED Firenze, 2018.","en":"Master in Typography, Calligraphy & Font Design, IED Florence, 2018."},"media":[]},{"id":"tools","t":"STRUMENTI","d":{"it":"Glyphs, RoboFont, fontTools. E codice, taaaanto codice.","en":"Glyphs, RoboFont, fontTools. And code, lots of code."},"media":[]},{"id":"typethursday","t":"TYPETHURSDAY FIRENZE","d":{"it":"Dialogue Lead dal 2019. Autrice e ideatrice di TGITT.","en":"Dialogue Lead since 2019. Author and creator of TGITT."},"media":[]},{"id":"ohmyfont","t":"OHMYFONT","d":{"it":"Un corso di tipografia: programma e progetto didattico.","en":"A typography course: syllabus and teaching project."},"media":[]},{"id":"tarot","t":"TYPOGRAPHY TAROT","d":{"it":"22 Arcani Maggiori, 22 principi tipografici.","en":"22 Major Arcana, 22 typographic principles."},"media":[]},{"id":"codetools","t":"TOOL IN CODICE","d":{"it":"FONTain, visualizzatore tipografico ad acqua. Un generatore di schermate Televideo. Un generatore di cruciverba.","en":"FONTain, a typographic water visualiser. A Televideo screen generator. A crossword generator."},"media":[]}]},{"id":"gallery","builtin":true,"icon":4,"title":{"it":"Curatela e arte","en":"Curation and art"},"place":{"it":"GALLERIA","en":"GALLERY"},"badge":{"it":"MEDAGLIA CORNICE","en":"FRAME BADGE"},"sign":{"it":"GALLERIA. Curatela e arte.","en":"GALLERY. Curation and art."},"summary":{"it":"GUD cura mostre e progetti culturali: dal segno di Roberto Innocenti al fumetto italiano contemporaneo.","en":"GUD curates exhibitions and cultural projects: from Roberto Innocenti's drawings to contemporary Italian comics."},"leader":{"name":{"it":"LA CRITICA","en":"THE CRITIC"},"look":"critic"},"npc":{"look":"boy","say":{"it":"Quel piedistallo vuoto è un'opera concettuale. Si intitola \"Brief Chiaro\".","en":"That empty pedestal is a conceptual work. It is called \"Clear Brief\"."}},"battle":{"enemy":"voice","hp":76,"lv":33,"weak":2,"name":{"it":"VOCALE 4 MIN","en":"4-MIN VOICE NOTE"},"moves":[{"n":{"it":"PREAMBOLO","en":"PREAMBLE"},"p":9},{"n":{"it":"ALLORA, NIENTE...","en":"SO, ANYWAY..."},"p":11},{"n":{"it":"RIASSUNTO","en":"RECAP"},"p":12}],"pre":{"it":"Prima di parlare d'arte, ascolta il mio VOCALE di 4 minuti.","en":"Before we talk art, listen to my 4-minute VOICE NOTE."},"post":{"it":"Concettualmente ineccepibile.","en":"Conceptually flawless."}},"items":[{"id":"innocenti","t":"ROBERTO INNOCENTI","d":{"it":"Dal Sogno al Segno, Scandicci. Curatela e art direction della mostra.","en":"Dal Sogno al Segno, Scandicci. Curation and art direction of the exhibition."},"media":[]},{"id":"nerosubianco","t":"NERO SU BIANCO","d":{"it":"Serate di fumetto italiano contemporaneo al Caffè Letterario Le Murate, Firenze. (WIP)","en":"Contemporary Italian comics evenings at Caffè Letterario Le Murate, Florence. (WIP)"},"media":[]},{"id":"skynmap","t":"SKYN MAP","d":{"it":"Web app artistica: trasforma i segni della pelle in costellazioni. Project by GUD.","en":"Artistic web app: turns skin marks into constellations. Project by GUD."},"media":[]},{"id":"why","t":"WHY FESTIVAL","d":{"it":"Professionista e divulgatrice.","en":"Professional and speaker."},"media":[]},{"id":"tgif","t":"THANK GUD IT'S FRIDAY","d":{"it":"Un arcade pixel art girlpop: GUD sopravvive alla settimana lavorativa. Lo trovi sul sito.","en":"A girlpop pixel arcade: GUD survives the working week. Find it on the website."},"media":[]}]},{"id":"library","builtin":true,"icon":5,"title":{"it":"Scrittura","en":"Writing"},"place":{"it":"BIBLIOTECA","en":"LIBRARY"},"badge":{"it":"MEDAGLIA INCHIOSTRO","en":"INK BADGE"},"sign":{"it":"BIBLIOTECA. Le parole di GUD.","en":"LIBRARY. GUD's words."},"summary":{"it":"GUD scrive da sempre: saggi sulla tipografia, prosa lirica, rubriche, testi per la cultura.","en":"GUD has always written: essays on typography, lyric prose, columns, texts for culture."},"leader":{"name":{"it":"LA BIBLIOTECARIA","en":"THE LIBRARIAN"},"look":"libr"},"npc":{"look":"critic","say":{"it":"Shhh. Qui si legge GUD.","en":"Shhh. We are reading GUD."}},"battle":{"enemy":"email","hp":72,"lv":31,"weak":2,"name":{"it":"EMAIL NON LETTA","en":"UNREAD EMAIL"},"moves":[{"n":{"it":"RE: RE: RE:","en":"RE: RE: RE:"},"p":11},{"n":{"it":"CC: TUTTI","en":"CC: ALL"},"p":12},{"n":{"it":"PROMEMORIA","en":"REMINDER"},"p":9}],"pre":{"it":"Silenzio! Prima rispondi a questa EMAIL NON LETTA.","en":"Silence! First answer this UNREAD EMAIL."},"post":{"it":"Puoi prendere in prestito tutti i libri che vuoi.","en":"You may borrow every book you like."}},"items":[{"id":"fontdipotere","t":"FONT DI POTERE","d":{"it":"Tipografia, norma e dissidenza visiva nel design contemporaneo. Saggio, ISIA Journal, Firenze.","en":"Typography, norm and visual dissent in contemporary design. Essay, ISIA Journal, Florence."},"media":[]},{"id":"goblet","t":"THE CRYSTAL GOBLET","d":{"it":"Prosa lirica. Un archivio di scrittura attivo dal 2009, anche su ohmygud.com.","en":"Lyric prose. A writing archive active since 2009, also on ohmygud.com."},"media":[]},{"id":"kuore","t":"POSTA DEL KUORE","d":{"it":"La rubrica di consigli firmata Vodka Madonna.","en":"The advice column signed Vodka Madonna."},"media":[]},{"id":"copy","t":"COPYWRITING","d":{"it":"Testi editoriali e istituzionali per la cultura, dalla critica ai social.","en":"Editorial and institutional writing for culture, from criticism to social media."},"media":[]},{"id":"lingue","t":"LINGUE","d":{"it":"Italiano madrelingua. Inglese C1.","en":"Italian native. English C1."},"media":[]}]}],"mons":[{"id":"kernix","n":"KERNIX","l":"K","c":"P","a":"glasses","type":{"it":"TIPO","en":"TYPE"},"d":{"it":"Ama lo spazio tra le lettere più delle lettere stesse. La tipografia è il primo amore di GUD.","en":"Loves the space between letters more than the letters. Typography is GUD's first love."}},{"id":"glypho","n":"GLYPHO","l":"G","c":"Y","a":"spark","type":{"it":"DESIGN","en":"DESIGN"},"d":{"it":"Nasce in Glyphs, cresce in RoboFont, si allena con fontTools. È il type design di Typodiva.","en":"Born in Glyphs, raised in RoboFont, trained with fontTools. It is Typodiva's type design."}},{"id":"inklina","n":"INKLINA","l":"L","c":"B","a":"nib","type":{"it":"MANO","en":"HAND"},"d":{"it":"Disegna lettere a mano libera. Ha fatto la lettering artist per Disney.","en":"Draws letters by hand. Worked as a lettering artist for Disney."}},{"id":"balloona","n":"BALLOONA","l":"F","c":"W","a":"bubble","type":{"it":"FUMETTO","en":"COMICS"},"d":{"it":"Vive tra le vignette del fumetto italiano. Habitat naturale: Lucca.","en":"Lives inside Italian comics panels. Natural habitat: Lucca."}},{"id":"poppy","n":"POPPY","l":"P","c":"Y","a":"crown","type":{"it":"POP","en":"POP"},"d":{"it":"Mangia pop culture a colazione: icone, giochi, cosplay. Alta e bassa cultura nello stesso piatto.","en":"Eats pop culture for breakfast: icons, games, cosplay. High and low culture on the same plate."}},{"id":"critiko","n":"CRITIKO","l":"C","c":"K","a":"glasses","type":{"it":"TEORIA","en":"THEORY"},"d":{"it":"Legge teoria letteraria e critica. Quando ti guarda, ti sta analizzando.","en":"Reads literary and critical theory. When it looks at you, it is analysing you."}},{"id":"concetta","n":"CONCETTA","l":"A","c":"W","a":"beret","type":{"it":"ARTE","en":"ART"},"d":{"it":"Arte concettuale: l'idea prima dell'oggetto. A volte è solo un piedistallo vuoto.","en":"Conceptual art: the idea before the object. Sometimes just an empty pedestal."}},{"id":"codella","n":"CODELLA","l":"/","c":"B","a":"spark","type":{"it":"CODICE","en":"CODE"},"d":{"it":"Scrive codice per creare strumenti: FONTain, Televideo, cruciverba, automazioni. E questo gioco.","en":"Writes code to make tools: FONTain, Televideo, crosswords, automations. And this game."}},{"id":"proffy","n":"PROFFY","l":"I","c":"P","a":"cap","type":{"it":"SCUOLA","en":"SCHOOL"},"d":{"it":"Insegna dal 2016. Trasforma i brief in metodo e gli studenti in progettisti.","en":"Teaching since 2016. Turns briefs into method and students into designers."}},{"id":"archivia","n":"ARCHIVIA","l":"R","c":"B","a":"book","type":{"it":"ARCHIVIO","en":"ARCHIVE"},"d":{"it":"Colleziona archivi: 60 anni di poster, premi e interviste di Lucca Comics & Games.","en":"Collects archives: 60 years of Lucca Comics & Games posters, awards and interviews."}},{"id":"curatrix","n":"CURATRIX","l":"M","c":"Y","a":"beret","type":{"it":"MOSTRE","en":"SHOWS"},"d":{"it":"Cura mostre: mette in fila le storie e le fa respirare nello spazio.","en":"Curates exhibitions: lines up stories and lets them breathe in space."}},{"id":"pennina","n":"PENNINA","l":"W","c":"P","a":"nib","type":{"it":"PAROLE","en":"WORDS"},"d":{"it":"Scrive prosa lirica, critica e una posta del cuore. Archivio attivo dal 2009.","en":"Writes lyric prose, criticism and an agony aunt column. Archive active since 2009."}},{"id":"gudheart","n":"GUDHEART","l":"♥","c":"Y","a":"crown","legendary":true,"type":{"it":"AMORE","en":"LOVE"},"d":{"it":"Leggendario. Il segreto di GUD: fare le cose con amore. E con un po' di ironia.","en":"Legendary. GUD's secret: do things with love. And a little irony."}}],"lists":{"welcome":[{"it":"Un mondo in cui ci sono troppe cose belle da fare per preoccuparsi del portfolio.","en":"A world with far too many beautiful things to do to worry about a portfolio."},{"it":"Qui si disegnano lettere, si curano mostre, si insegna, si scrive. E si sopravvive alla settimana lavorativa.","en":"Here we draw letters, curate exhibitions, teach and write. And survive the working week."},{"it":"Il portfolio arriverà. Intanto, gioca.","en":"The portfolio will come. Meanwhile, play."}],"tgifIntro":[{"it":"Cerchi GUD?","en":"Looking for GUD?"},{"it":"Aiuta la tua art director preferita a sopravvivere alla settimana lavorativa.","en":"Help your favourite art director survive the working week."},{"it":"La tua missione? Portarla al venerdì. Possibilmente viva.","en":"Your mission? Get her to Friday. Alive, preferably."}],"feedbackWeek":[{"it":"FAI IL LOGO PIÙ GRANDE!","en":"MAKE THE LOGO BIGGER!"},{"it":"SI PUÒ FARE PIÙ POP?","en":"CAN WE MAKE IT POP?"},{"it":"SOLO UNA PICCOLA MODIFICA.","en":"JUST ONE SMALL CHANGE."},{"it":"PIÙ WOW!","en":"MORE WOW!"},{"it":"NON LO SENTO.","en":"I DON'T FEEL IT."},{"it":"PROVIAMO UN ALTRO FONT?","en":"CAN WE TRY ANOTHER FONT?"},{"it":"È URGENTE.","en":"IT'S URGENT."},{"it":"MIO CUGINO LO FA.","en":"MY COUSIN CAN DO IT."},{"it":"CE LO MANDI PER IERI?","en":"CAN WE HAVE IT BY YESTERDAY?"},{"it":"FEEDBACK NON RICHIESTO.","en":"FEEDBACK NON RICHIESTO."},{"it":"NON SO COSA VOGLIO, MA QUESTO NO.","en":"NON SO COSA VOGLIO, MA QUESTO NO."},{"it":"CI SIAMO QUASI, CAMBIAMO TUTTO.","en":"CI SIAMO QUASI, CAMBIAMO TUTTO."}],"feedbackWeekend":[{"it":"MANGIA, CHE SEI SCIUPATA!","en":"MANGIA, CHE SEI SCIUPATA!"},{"it":"UN ALTRO PO' DI PASTA?","en":"A LITTLE MORE PASTA?"},{"it":"ULTIMO GIRO, GIURO.","en":"LAST ROUND, I SWEAR."},{"it":"CHI HA CHIUSO LE TENDE?","en":"WHO CLOSED THE CURTAINS?"},{"it":"SONO LE 3 DI NOTTE.","en":"IT'S 3 AM."},{"it":"MAI PIÙ.","en":"NEVER AGAIN."},{"it":"HAI MESSO LA MAGLIA?","en":"ARE YOU WEARING A JUMPER?"},{"it":"DOMANI DIETA.","en":"DIET STARTS TOMORROW."}],"beach":[{"it":"SI VEDE CHE AMI GUD E VUOI VEDERLA FELICE.","en":"SI VEDE CHE AMI GUD E VUOI VEDERLA FELICE."},{"it":"MANDALE QUESTO SCREEN E CHIEDILE IL SUO IBAN.","en":"MANDALE QUESTO SCREEN E CHIEDILE IL SUO IBAN."},{"it":"VEDRAI CHE LO SARÀ ANCORA DI PIÙ.","en":"VEDRAI CHE LO SARÀ ANCORA DI PIÙ."}],"questIntro":[{"it":"Ciao! Benvenuto nel mondo della comunicazione visiva!","en":"Hello there! Welcome to the world of visual communication!"},{"it":"Mi chiamo PROF. SERIF. Studio le lettere. Quelle che prendono vita le chiamiamo GUDMON.","en":"My name is PROF. SERIF. I study letters. The ones that come alive we call GUDMON."},{"it":"Questa è GUD. Art director, type designer, docente, curatrice, autrice.","en":"This is GUD. Art director, type designer, teacher, curator, writer."},{"it":"Il suo sito è in costruzione. La sua storia invece è qui, in questa città.","en":"Her website is under construction. Her story, though, is right here in this town."},{"it":"Entra negli edifici e parla con tutti. Vinci le medaglie. Cattura i GUDMON nell'erba alta: sono le sue passioni.","en":"Enter the buildings and talk to everyone. Win the badges. Catch GUDMON in the tall grass: they are her passions."},{"it":"Il viaggio nel CV di GUD sta per cominciare!","en":"Your journey through GUD's CV is about to begin!"}]},"text":{"welcome":{"kicker":{"it":"BENVENUTO NELL'","en":"WELCOME TO THE"},"title":{"it":"AMAZING WORLD OF GUD","en":"AMAZING WORLD OF GUD"},"cta":{"it":"ENTRA","en":"ENTER"},"skip":{"it":"Vai dritto al CV","en":"Skip to the CV"}},"site":{"exploreCv":{"it":"ESPLORA IL CV","en":"EXPLORE THE CV"},"tricks":{"it":"TRUCCHI","en":"TRICKS"},"chooseTitle":{"it":"COME VUOI LEGGERE IL CV?","en":"HOW DO YOU WANT TO READ THE CV?"},"questDesc":{"it":"Il CV come un gioco di ruolo da Game Boy. Esplora, lotta, cattura le passioni di GUD.","en":"The CV as a handheld RPG. Explore, battle, catch GUD's passions."},"plainName":{"it":"BANALE CV","en":"BORING CV"},"plainDesc":{"it":"Il CV come lo vorrebbe un recruiter. Pulito, veloce, stampabile.","en":"The CV a recruiter would want. Clean, quick, printable."},"backToTgif":{"it":"TORNA A TGIF","en":"BACK TO TGIF"}},"tgif":{"subtitle":{"it":"E se non lo è, usa l'immaginazione.","en":"And if it's not, use your imagination."},"start":{"it":"PREMI START","en":"PRESS START"},"hint":{"it":"← → MUOVI · ↑ / SPAZIO SALTA · ↓ SCHIVA · K SPARA","en":"← → MOVE · ↑ / SPACE JUMP · ↓ DODGE · K SHOOT"},"hintMobile":{"it":"USA I TASTI SULLO SCHERMO","en":"USE THE ON-SCREEN BUTTONS"},"weekWinTitle":{"it":"CONGRATULAZIONI!","en":"CONGRATULATIONS!"},"weekWin1":{"it":"Sei sopravvissuta a un'altra settimana lavorativa.","en":"You survived another working week."},"weekWin2":{"it":"BIG CLIENT è stato sconfitto. I tuoi diritti umani sono stati temporaneamente ripristinati.","en":"BIG CLIENT has been defeated. Your human rights have been temporarily restored."},"weekWin3":{"it":"Ma sei pronta per la sfida finale?","en":"But are you ready for the ultimate challenge?"},"weekWin4":{"it":"IL WEEKEND.","en":"THE WEEKEND."},"weekWinCta":{"it":"ENTRA NEL WEEKEND","en":"ENTER WEEKEND MODE"},"weekLoseTitle":{"it":"VENERDÌ TARDI","en":"LATE FRIDAY"},"weekLoseSub":{"it":"RIUNIONE ACCETTATA","en":"MEETING ACCEPTED"},"weekLose1":{"it":"\"Congratulazioni. Il tuo weekend è stato riprogrammato a mai.\"","en":"\"Congratulations. Your weekend has been successfully rescheduled to never.\""},"wkndWinTitle":{"it":"CE L'HAI FATTA!","en":"YOU DID IT!"},"wkndWin1":{"it":"Sei sopravvissuta al weekend.","en":"You survived the weekend."},"wkndWin2":{"it":"Contro ogni previsione, sei pronta per lunedì.","en":"Against all odds, you are ready for Monday."},"wkndWinUnlock":{"it":"Hai sbloccato il posto felice segreto di GUD.","en":"You unlocked GUD's secret happy place."},"wkndWinCta":{"it":"LIVELLO SEGRETO ♥","en":"SECRET LEVEL ♥"},"wkndLoseTitle":{"it":"GAME OVER.","en":"GAME OVER."},"wkndLose1":{"it":"È lunedì.","en":"Monday is here."},"wkndLose2":{"it":"Il tuo corpo è presente. La tua anima è ancora all'aperitivo.","en":"Your body is present. Your soul is still at the aperitivo."},"retry":{"it":"RIPROVA","en":"TRY AGAIN"},"again":{"it":"GIOCA ANCORA","en":"PLAY AGAIN"},"score":{"it":"PUNTI","en":"SCORE"},"best":{"it":"RECORD","en":"BEST"},"energy":{"it":"ENERGIA","en":"ENERGY"},"goodLuck":{"it":"09:00 - IN BOCCA AL LUPO","en":"09:00 - GOOD LUCK"},"freedom":{"it":"10:00 - LIBERTÀ?","en":"10:00 - FREEDOM?"},"again2":{"it":"DI NUOVO","en":"AGAIN"},"almost":{"it":"CI SIAMO QUASI...","en":"ALMOST THERE..."},"why":{"it":"08:00 - PERCHÉ?","en":"08:00 - WHY?"},"warning":{"it":"ATTENZIONE!","en":"WARNING!"},"approaching":{"it":"IN ARRIVO","en":"APPROACHING"},"defeated":{"it":"SCONFITTO!","en":"DEFEATED!"},"secret":{"it":"LIVELLO SEGRETO: ILOVEGUD","en":"SECRET LEVEL: ILOVEGUD"}},"quest":{"subtitle":{"it":"PINK ADVENTURE","en":"PINK ADVENTURE"},"tagline":{"it":"UN CV INTERATTIVO","en":"AN INTERACTIVE CV"},"hint":{"it":"Frecce: muovi. A (Z/Spazio): parla. B (X): indietro. START (Invio): menu.","en":"Arrows: move. A (Z/Space): talk. B (X): back. START (Enter): menu."},"hintMobile":{"it":"Croce: muovi. A: parla. B: indietro. START: menu.","en":"D-pad: move. A: talk. B: back. START: menu."},"signFirenze":{"it":"FIRENZE. Dove tutto è cominciato.","en":"FLORENCE. Where it all began."},"signHome":{"it":"Casa di GUD.","en":"GUD's house."},"signCentro":{"it":"CENTRO GUD. Caffè, pause e contatti.","en":"GUD CENTER. Coffee, breaks and contacts."},"signRoute":{"it":"VIA DEL SEGNO. Attenzione: erba alta. Ci vivono i GUDMON selvatici!","en":"ROUTE OF THE MARK. Warning: tall grass. Wild GUDMON live here!"},"signLucca":{"it":"LUCCA. Città del fumetto e del gioco.","en":"LUCCA. City of comics and games."},"signNew":{"it":"QUARTIERE NUOVO. Qui GUD sta costruendo.","en":"NEW DISTRICT. GUD is building here."},"signTower":{"it":"TORRE GUINIGI. Sì, in cima ci sono gli alberi.","en":"GUINIGI TOWER. Yes, there are trees on top."},"tower":{"it":"La Torre Guinigi. Da quassù si vede tutta la storia di Lucca Comics.","en":"The Guinigi Tower. From up here you can see all of Lucca Comics' history."},"monument":{"it":"MONUMENTO ALLA G. Per qualcuno è una lettera. Per GUD è un'identità.","en":"MONUMENT TO THE G. For some, a letter. For GUD, an identity."},"npcTourist":{"it":"Il David? No, io sono qui per il kerning perfetto.","en":"The David? No, I came for the perfect kerning."},"npcBrividi":{"it":"Ho fatto il workshop Brividi all'ISIA. Brividi, appunto.","en":"I took the Brividi workshop at ISIA. Chills, indeed."},"npcGrass":{"it":"Nell'erba alta vivono i GUDMON: sono le passioni di GUD! Usa lo SKETCHBOOK per catturarli.","en":"GUDMON live in the tall grass: they are GUD's passions! Use the SKETCHBOOK to catch them."},"npcDex":{"it":"Ogni GUDMON catturato entra nel GUDDEX. Premi START per vederlo.","en":"Every GUDMON you catch goes into the GUDDEX. Press START to see it."},"npcCosplay":{"it":"Mi sono vestito da BIG CLIENT. Nessuno ha riso.","en":"I came dressed as BIG CLIENT. Nobody laughed."},"npcGuard":{"it":"Lucca Comics & Games ha 60 anni. GUD ne ha graficato la festa.","en":"Lucca Comics & Games turned 60. GUD designed the party."},"profStart":{"it":"Premi START per aprire il menu: GUDDEX, scheda di GUD, zaino e CV rapido. Le medaglie si vincono negli edifici di Firenze e di Lucca.","en":"Press START to open the menu: GUDDEX, GUD's card, bag and quick CV. Badges are won in the buildings of Florence and Lucca."},"profProgress":{"it":"Hai {b} medaglie su {B} e {c} GUDMON su {C}. Ottimo lavoro!","en":"You have {b} of {B} badges and {c} of {C} GUDMON. Great work!"},"profLegend":{"it":"Sei nella Hall of Fame! Si dice che, catturati tutti i GUDMON, ne appaia uno leggendario.","en":"You made the Hall of Fame! Legend says that once every GUDMON is caught, a legendary one appears."},"mom":{"it":"GUD! Il tuo ufficio è tutta la città, a quanto pare. Ricordati di mangiare: stasera parmigiana.","en":"GUD! Your office is the whole town, apparently. Remember to eat: parmigiana tonight."},"homeShelf":{"it":"Libri di tipografia. Tanti. Troppi? Mai troppi.","en":"Typography books. Many. Too many? Never."},"homePoster":{"it":"Un poster: THANK GUD IT'S FRIDAY. Un arcade girlpop: si gioca sul sito di GUD.","en":"A poster: THANK GUD IT'S FRIDAY. A girlpop arcade: play it on GUD's website."},"homeWindow":{"it":"Fuori c'è Firenze. E una scadenza.","en":"Outside: Florence. And a deadline."},"homeBoard":{"it":"Una bacheca: moodboard, post-it, un biglietto per Lucca.","en":"A pinboard: moodboard, post-its, a ticket to Lucca."},"homeBed":{"it":"Il letto di GUD. Ci dorme poco: troppe idee.","en":"GUD's bed. She barely sleeps: too many ideas."},"homePc":{"it":"Il PC di GUD. Una cartella si chiama definitivo_v8_ultimo.","en":"GUD's PC. A folder is called final_v8_really_final."},"homeTv":{"it":"In TV: un'art director attraversa Firenze cercando il weekend.","en":"On TV: an art director crosses Florence looking for the weekend."},"homePlant":{"it":"Una pianta. Sopravvive. Come GUD.","en":"A plant. It survives. Like GUD."},"barista1":{"it":"Benvenuta al CENTRO GUD! Qui ci si ricarica.","en":"Welcome to the GUD CENTER! This is where we recharge."},"barista2":{"it":"Vuoi un caffè e una sigaretta?","en":"Would you like a coffee and a cigarette?"},"barista3":{"it":"GUD è di nuovo in forma. Torna quando vuoi!","en":"GUD is back in shape. Come back anytime!"},"recruiter":{"it":"Ho sentito che GUD è disponibile per nuovi progetti. Il PC a destra ha tutti i suoi contatti.","en":"I heard GUD is open to new projects. The PC on the right has all her contacts."},"pcContacts":{"it":"PC di GUD. Contatti per nuovi progetti, docenze e collaborazioni:","en":"GUD's PC. Contacts for new projects, teaching and collaborations:"},"centroPoster":{"it":"Un poster: \"Il riposo fa parte del progetto.\"","en":"A poster: \"Rest is part of the project.\""},"clientEarly":{"it":"Ah, sei tu. Torna quando avrai tutte le medaglie. Ne hai {b}. Io intanto scrivo a tutti in CC.","en":"Oh, it's you. Come back with every badge. You have {b}. Meanwhile I'll email everyone in CC."},"clientPre":{"it":"Pensavi di aver finito? Ultimo giro di revisioni!","en":"Thought you were done? One last round of revisions!"},"clientPost":{"it":"Va bene. Approvato. Così com'è.","en":"Fine. Approved. As it is."},"clientAfter":{"it":"Approvato. Non lo ripeterò.","en":"Approved. I won't say it twice."},"allBadges":{"it":"Tutte le medaglie! BIG CLIENT ti aspetta a Lucca, sotto la Torre Guinigi.","en":"All the badges! BIG CLIENT is waiting in Lucca, below the Guinigi Tower."},"hof1":{"it":"Congratulazioni! GUD e il suo team entrano nella HALL OF FAME!","en":"Congratulations! GUD and her team enter the HALL OF FAME!"},"hof2":{"it":"Hai esplorato tutto il CV di GUD. Il sito è in costruzione, ma GUD è disponibile per nuovi progetti, docenze e collaborazioni.","en":"You explored GUD's whole CV. The website is under construction, but GUD is available for new projects, teaching and collaborations."},"lose":{"it":"Un caffè e una pausa, e GUD è di nuovo in piedi. Riprova!","en":"A coffee and a break, and GUD is back on her feet. Try again!"},"seeProject":{"it":"Vuoi vedere il progetto?","en":"Want to see the project?"},"seeYes":{"it":"SÌ, MOSTRA","en":"YES, SHOW ME"},"seeNo":{"it":"NO","en":"NO"},"ludo1":{"it":"Bau! (Il ciuffo al vento, lo sguardo di chi ha già capito tutto.)","en":"Woof! (Crest in the wind, the look of someone who already gets it.)"},"ludo2":{"it":"Ludo ti segue ovunque. Anche dai clienti. Soprattutto dai clienti.","en":"Ludo follows you everywhere. Even to clients. Especially to clients."},"ludo3":{"it":"Ludo annusa il kerning e approva.","en":"Ludo sniffs the kerning and approves."},"ludo4":{"it":"Ludo chiede un biscotto. Poi un altro. Poi il portfolio può aspettare.","en":"Ludo asks for a treat. Then another one. The portfolio can wait."}},"cv":{"title":{"it":"CURRICULUM","en":"CURRICULUM"},"print":{"it":"STAMPA / PDF","en":"PRINT / PDF"},"education":{"it":"Formazione","en":"Education"},"languages":{"it":"Lingue","en":"Languages"},"passions":{"it":"Passioni","en":"Passions"},"contacts":{"it":"Contatti","en":"Contacts"},"open":{"it":"VEDI PROGETTO","en":"SEE PROJECT"},"playQuest":{"it":"Preferisci giocarlo? Apri GUDQUEST","en":"Rather play it? Open GUDQUEST"}}}};</script>
+<script>
+/* =====================================================================
+   GUD VIEWER — pixel-style gallery for project media
+   (images, uploaded videos, YouTube, Vimeo, web pages). Shared by
+   GUDQUEST, the BANALE CV and the CMS preview.
+   ===================================================================== */
+(function () {
+  'use strict';
+  if (window.GUDViewer) return;
+  const lang = () => { try { return localStorage.getItem('gud_lang') || document.documentElement.lang || 'it'; } catch (e) { return document.documentElement.lang || 'it'; } };
+  const tr = o => (o == null ? '' : typeof o === 'string' ? o : (o[lang()] || o.it || o.en || ''));
+  const T = { close: { it: 'CHIUDI', en: 'CLOSE' }, open: { it: 'APRI ↗', en: 'OPEN ↗' }, prev: { it: 'Precedente', en: 'Previous' }, next: { it: 'Successivo', en: 'Next' }, web: { it: 'Se la pagina non si vede, aprila in una nuova scheda.', en: 'If the page does not show, open it in a new tab.' } };
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  let root = null, state = null;
+  function ytId(u) { const m = String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/); return m ? m[1] : null; }
+  function vimeoId(u) { const m = String(u).match(/vimeo\.com\/(?:video\/)?(\d+)/); return m ? m[1] : null; }
+  function resolve(src, base) { if (!src) return ''; if (/^(https?:|data:|\/)/i.test(src)) return src; return (base || '') + src; }
+  function kindOf(m) {
+    if (m.type) return m.type;
+    const s = String(m.src || '');
+    if (ytId(s) && /youtu/.test(s)) return 'youtube';
+    if (vimeoId(s)) return 'vimeo';
+    if (/\.(mp4|webm|mov)(\?|$)/i.test(s)) return 'video';
+    if (/\.(jpe?g|png|gif|webp|svg)(\?|$)/i.test(s)) return 'image';
+    return 'web';
+  }
+  function build() {
+    root = document.createElement('div');
+    root.className = 'gv';
+    root.setAttribute('role', 'dialog'); root.setAttribute('aria-modal', 'true'); root.hidden = true;
+    root.innerHTML = '<div class="gv-box"><div class="gv-head"><h2 class="gv-title"></h2><div class="gv-count"></div><button class="gv-x" type="button"></button></div>' +
+      '<div class="gv-stage"></div><div class="gv-cap"></div>' +
+      '<div class="gv-nav"><button class="gv-prev" type="button">◀</button><div class="gv-dots"></div><button class="gv-next" type="button">▶</button></div>' +
+      '<div class="gv-desc"></div></div>';
+    document.body.appendChild(root);
+    root.addEventListener('click', e => { if (e.target === root) close(); });
+    root.querySelector('.gv-x').addEventListener('click', close);
+    root.querySelector('.gv-prev').addEventListener('click', () => go(-1));
+    root.querySelector('.gv-next').addEventListener('click', () => go(1));
+    document.addEventListener('keydown', e => {
+      if (!state) return;
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); e.stopPropagation(); go(-1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); go(1); }
+    }, true);
+    let sx = null;
+    const st = root.querySelector('.gv-stage');
+    st.addEventListener('pointerdown', e => { sx = e.clientX; });
+    st.addEventListener('pointerup', e => { if (sx != null && Math.abs(e.clientX - sx) > 50) go(e.clientX < sx ? 1 : -1); sx = null; });
+  }
+  function render() {
+    const { item, media, i, base } = state;
+    root.querySelector('.gv-title').textContent = tr(item.t) || '';
+    root.querySelector('.gv-x').textContent = '✕ ' + tr(T.close);
+    root.querySelector('.gv-x').setAttribute('aria-label', tr(T.close));
+    root.querySelector('.gv-count').textContent = media.length > 1 ? (i + 1) + '/' + media.length : '';
+    const m = media[i] || {}, k = kindOf(m), src = resolve(m.src, base), stage = root.querySelector('.gv-stage');
+    let h = '';
+    if (k === 'image') h = '<img src="' + esc(src) + '" alt="' + esc(tr(m.caption) || tr(item.t)) + '">';
+    else if (k === 'video') h = '<video src="' + esc(src) + '" controls playsinline preload="metadata"></video>';
+    else if (k === 'youtube') { const id = ytId(m.src); h = '<iframe src="https://www.youtube-nocookie.com/embed/' + esc(id) + '?rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="YouTube"></iframe>'; }
+    else if (k === 'vimeo') { const id = vimeoId(m.src); h = '<iframe src="https://player.vimeo.com/video/' + esc(id) + '" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Vimeo"></iframe>'; }
+    else h = '<iframe src="' + esc(src) + '" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" referrerpolicy="no-referrer" title="web"></iframe><a class="gv-open" href="' + esc(src) + '" target="_blank" rel="noopener">' + esc(tr(T.open)) + '</a><p class="gv-hint">' + esc(tr(T.web)) + '</p>';
+    stage.className = 'gv-stage gv-' + k;
+    stage.innerHTML = h;
+    root.querySelector('.gv-cap').textContent = tr(m.caption) || '';
+    root.querySelector('.gv-desc').textContent = tr(item.d) || '';
+    const dots = root.querySelector('.gv-dots');
+    dots.innerHTML = media.length > 1 ? media.map((_, j) => '<button type="button" class="' + (j === i ? 'on' : '') + '" aria-label="' + (j + 1) + '"></button>').join('') : '';
+    dots.querySelectorAll('button').forEach((b, j) => b.addEventListener('click', () => { state.i = j; render(); }));
+    root.querySelector('.gv-prev').style.visibility = media.length > 1 ? 'visible' : 'hidden';
+    root.querySelector('.gv-next').style.visibility = media.length > 1 ? 'visible' : 'hidden';
+    root.querySelector('.gv-prev').setAttribute('aria-label', tr(T.prev));
+    root.querySelector('.gv-next').setAttribute('aria-label', tr(T.next));
+  }
+  function go(d) { if (!state || state.media.length < 2) return; state.i = (state.i + d + state.media.length) % state.media.length; render(); }
+  function open(item, opts) {
+    opts = opts || {};
+    if (!root) build();
+    const media = (item.media || []).filter(m => m && m.src);
+    if (!media.length) return Promise.resolve();
+    return new Promise(res => {
+      state = { item, media, i: opts.index || 0, base: opts.base || '', res, prevFocus: document.activeElement };
+      render(); root.hidden = false; document.documentElement.classList.add('gv-on');
+      setTimeout(() => { try { root.querySelector('.gv-x').focus({ preventScroll: true }); } catch (e) { /* */ } }, 30);
+    });
+  }
+  function close() {
+    if (!state) return;
+    const s = state; state = null;
+    root.hidden = true; root.querySelector('.gv-stage').innerHTML = ''; document.documentElement.classList.remove('gv-on');
+    try { if (s.prevFocus) s.prevFocus.focus({ preventScroll: true }); } catch (e) { /* */ }
+    s.res();
+  }
+  window.GUDViewer = { open, close, isOpen: () => !!state, kindOf, ytId, vimeoId };
+})();
+
+</script>
+<script>
+/* =====================================================================
+   THANK GUD IT'S FRIDAY — shared game engine
+   Vanilla JS · Canvas 2D · Web Audio. No dependencies.
+   The same engine powers /desktop and /mobile (layout set by GUD_CONFIG).
+   ===================================================================== */
+(function () {
+'use strict';
+
+const CFG = Object.assign({ layout: 'desktop', assetBase: '../assets/' }, window.GUD_CONFIG || {});
+const MOBILE = CFG.layout === 'mobile';
+const C = { Y: '#FFE600', P: '#FF1493', B: '#FF85C8', L: '#FFD6EA', K: '#111111', W: '#FFF9F1' };
+const rand = (a, b) => a + Math.random() * (b - a);
+const irand = (a, b) => Math.floor(a + Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const pad = (n, l) => String(Math.max(0, Math.floor(n))).padStart(l, '0');
+const $ = id => document.getElementById(id);
+const store = {
+  get(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* ignore */ } }
+};
+/* ---- site-wide language + content (shared by every page of the GUD world) ---- */
+const EMBED = /[?&]embed=1/.test(location.search);
+let LANG = store.get('gud_lang') || ((navigator.language || '').toLowerCase().indexOf('it') === 0 ? 'it' : 'en');
+let CONTENT = window.GUD_DEFAULT_CONTENT || {};
+const tr = o => (o == null ? '' : typeof o === 'string' ? o : (o[LANG] || o.it || o.en || ''));
+const TX = (group, key, vars) => { let s = tr(((CONTENT.text || {})[group] || {})[key]); if (!s) { const d = (((window.GUD_DEFAULT_CONTENT || {}).text || {})[group] || {})[key]; s = tr(d); } Object.keys(vars || {}).forEach(k => { s = s.split('{' + k + '}').join(String(vars[k])); }); return s; };
+const LIST = key => ((CONTENT.lists || {})[key] || ((window.GUD_DEFAULT_CONTENT || {}).lists || {})[key] || []);
+function loadContent() {
+  const base = CFG.contentBase || '../../content/';
+  if (location.protocol === 'file:') return Promise.resolve(CONTENT);
+  return fetch(base + 'content.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(r => (r.ok ? r.json() : null)).catch(() => null)
+    .then(j => { if (j && j.sections) CONTENT = j; return CONTENT; });
+}
+const HOOKS = { lang: [], mute: [], code: [] };
+function setLang(l) { LANG = l === 'en' ? 'en' : 'it'; store.set('gud_lang', LANG); document.documentElement.lang = LANG; HOOKS.lang.forEach(f => { try { f(LANG); } catch (e) { console.error(e); } }); }
+window.addEventListener('message', e => {
+  const d = e.data; if (!d || d.gud !== 1) return;
+  if (location.protocol !== 'file:' && e.origin !== location.origin) return;
+  if (d.lang) setLang(d.lang);
+  if (d.mute != null) HOOKS.mute.forEach(f => f(!!d.mute));
+  if (d.code) HOOKS.code.forEach(f => f(String(d.code)));
+});
+window.addEventListener('storage', e => { if (e.key === 'gud_lang' && e.newValue && e.newValue !== LANG) setLang(e.newValue); });
+function tellParent(msg) { try { if (window.parent && window.parent !== window) window.parent.postMessage(Object.assign({ gud: 1 }, msg), location.protocol === 'file:' ? '*' : location.origin); } catch (e) { /* */ } }
+if (EMBED) document.documentElement.classList.add('embed');
+document.documentElement.lang = LANG;
+
+/* ---------------------------------------------------------------------
+   1. PIXEL FONT — custom 5×7 bitmap, uppercase + Italian accents
+   --------------------------------------------------------------------- */
+const GLYPHS = [
+  ['A', '01110,10001,10001,11111,10001,10001,10001'], ['B', '11110,10001,10001,11110,10001,10001,11110'],
+  ['C', '01110,10001,10000,10000,10000,10001,01110'], ['D', '11110,10001,10001,10001,10001,10001,11110'],
+  ['E', '11111,10000,10000,11110,10000,10000,11111'], ['F', '11111,10000,10000,11110,10000,10000,10000'],
+  ['G', '01110,10001,10000,10111,10001,10001,01111'], ['H', '10001,10001,10001,11111,10001,10001,10001'],
+  ['I', '01110,00100,00100,00100,00100,00100,01110'], ['J', '00111,00010,00010,00010,00010,10010,01100'],
+  ['K', '10001,10010,10100,11000,10100,10010,10001'], ['L', '10000,10000,10000,10000,10000,10000,11111'],
+  ['M', '10001,11011,10101,10101,10001,10001,10001'], ['N', '10001,10001,11001,10101,10011,10001,10001'],
+  ['O', '01110,10001,10001,10001,10001,10001,01110'], ['P', '11110,10001,10001,11110,10000,10000,10000'],
+  ['Q', '01110,10001,10001,10001,10101,10010,01101'], ['R', '11110,10001,10001,11110,10100,10010,10001'],
+  ['S', '01111,10000,10000,01110,00001,00001,11110'], ['T', '11111,00100,00100,00100,00100,00100,00100'],
+  ['U', '10001,10001,10001,10001,10001,10001,01110'], ['V', '10001,10001,10001,10001,10001,01010,00100'],
+  ['W', '10001,10001,10001,10101,10101,10101,01010'], ['X', '10001,10001,01010,00100,01010,10001,10001'],
+  ['Y', '10001,10001,01010,00100,00100,00100,00100'], ['Z', '11111,00001,00010,00100,01000,10000,11111'],
+  ['0', '01110,10001,10011,10101,11001,10001,01110'], ['1', '00100,01100,00100,00100,00100,00100,01110'],
+  ['2', '01110,10001,00001,00010,00100,01000,11111'], ['3', '11111,00010,00100,00010,00001,10001,01110'],
+  ['4', '00010,00110,01010,10010,11111,00010,00010'], ['5', '11111,10000,11110,00001,00001,10001,01110'],
+  ['6', '00110,01000,10000,11110,10001,10001,01110'], ['7', '11111,00001,00010,00100,01000,01000,01000'],
+  ['8', '01110,10001,10001,01110,10001,10001,01110'], ['9', '01110,10001,10001,01111,00001,00010,01100'],
+  ['!', '00100,00100,00100,00100,00100,00000,00100'], ['?', '01110,10001,00001,00010,00100,00000,00100'],
+  ['.', '00000,00000,00000,00000,00000,01100,01100'], [',', '00000,00000,00000,00000,01100,00100,01000'],
+  ["'", '00100,00100,01000,00000,00000,00000,00000'], ['-', '00000,00000,00000,11111,00000,00000,00000'],
+  [':', '00000,01100,01100,00000,01100,01100,00000'], ['/', '00001,00001,00010,00100,01000,10000,10000'],
+  ['+', '00000,00100,00100,11111,00100,00100,00000'], ['%', '11001,11001,00010,00100,01000,10011,10011'],
+  ['(', '00010,00100,01000,01000,01000,00100,00010'], [')', '01000,00100,00010,00010,00010,00100,01000'],
+  ['<', '00010,00100,01000,10000,01000,00100,00010'], ['>', '01000,00100,00010,00001,00010,00100,01000'],
+  ['=', '00000,00000,11111,00000,11111,00000,00000'], ['_', '00000,00000,00000,00000,00000,00000,11111'],
+  ['@', '01110,10001,10111,10101,10111,10000,01110'], ['&', '01100,10010,10100,01000,10101,10010,01101'],
+  ['"', '01010,01010,00000,00000,00000,00000,00000'], ['*', '00000,10101,01110,11111,01110,10101,00000'],
+  ['#', '01010,11111,01010,01010,01010,11111,01010'],
+  ['♥', '00000,01010,11111,11111,01110,00100,00000'],
+  ['À', '01000,00100,01110,10001,11111,10001,10001'], ['È', '01000,00100,11111,10000,11110,10000,11111'],
+  ['É', '00010,00100,11111,10000,11110,10000,11111'], ['Ì', '01000,00100,01110,00100,00100,00100,01110'],
+  ['Ò', '01000,00100,01110,10001,10001,10001,01110'], ['Ù', '01000,00100,10001,10001,10001,10001,01110'],
+  [' ', '0,0,0,0,0,0,0']
+];
+const FONT = {};
+GLYPHS.forEach(([k, v]) => { FONT[k] = v.split(',').map(r => parseInt(r, 2)); });
+FONT['’'] = FONT["'"]; FONT['‘'] = FONT["'"];
+
+function tw(s, sc) { s = String(s); return s.length ? (s.length * 6 - 1) * (sc || 1) : 0; }
+function dtext(c, s, x, y, sc, col, align) {
+  s = String(s).toUpperCase(); sc = sc || 1;
+  const w = tw(s, sc);
+  if (align === 'center') x -= w / 2; else if (align === 'right') x -= w;
+  x = Math.round(x); y = Math.round(y); c.fillStyle = col;
+  for (let i = 0; i < s.length; i++) {
+    const g = FONT[s[i]] || FONT['?'];
+    for (let r = 0; r < 7; r++) {
+      const row = g[r]; if (!row) continue;
+      let cc = 0;
+      while (cc < 5) {
+        if (row & (16 >> cc)) {
+          let e = cc; while (e < 5 && (row & (16 >> e))) e++;
+          c.fillRect(x + cc * sc, y + r * sc, (e - cc) * sc, sc); cc = e;
+        } else cc++;
+      }
+    }
+    x += 6 * sc;
+  }
+  return w;
+}
+function otext(c, s, x, y, sc, col, ocol, align, shadow) {
+  sc = sc || 1; const w = tw(s, sc);
+  if (align === 'center') x -= w / 2; else if (align === 'right') x -= w;
+  x = Math.round(x); y = Math.round(y);
+  const o = sc >= 3 ? Math.max(1, Math.round(sc / 3)) : 1;
+  if (shadow) dtext(c, s, x + o * 2, y + o * 2, sc, shadow);
+  dtext(c, s, x - o, y, sc, ocol); dtext(c, s, x + o, y, sc, ocol);
+  dtext(c, s, x, y - o, sc, ocol); dtext(c, s, x, y + o, sc, ocol);
+  dtext(c, s, x, y, sc, col);
+  return w;
+}
+function wrap(text, maxC) {
+  const words = String(text).toUpperCase().split(/\s+/).filter(Boolean);
+  const lines = []; let cur = '';
+  for (const w of words) {
+    if (!cur) cur = w; else if ((cur + ' ' + w).length <= maxC) cur += ' ' + w; else { lines.push(cur); cur = w; }
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+/* ---------------------------------------------------------------------
+   2. PIXEL-ART SPRITES — drawn programmatically, auto 1px black outline
+   --------------------------------------------------------------------- */
+function outline(cv) {
+  const w = cv.width, h = cv.height, x = cv.getContext('2d');
+  const im = x.getImageData(0, 0, w, h), d = im.data, src = new Uint8ClampedArray(d);
+  const col = i => src[i + 3] > 0 && !(src[i] < 40 && src[i + 1] < 40 && src[i + 2] < 40);
+  for (let yy = 0; yy < h; yy++) for (let xx = 0; xx < w; xx++) {
+    const i = (yy * w + xx) * 4; if (src[i + 3]) continue;
+    if ((xx > 0 && col(i - 4)) || (xx < w - 1 && col(i + 4)) || (yy > 0 && col(i - w * 4)) || (yy < h - 1 && col(i + w * 4))) {
+      d[i] = 17; d[i + 1] = 17; d[i + 2] = 17; d[i + 3] = 255;
+    }
+  }
+  x.putImageData(im, 0, 0); return cv;
+}
+function mk(w, h, fn, noOutline) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const x = c.getContext('2d');
+  const R = (a, b, cw, ch, col) => { x.fillStyle = col; x.fillRect(a, b, cw, ch); };
+  fn(R, x); if (!noOutline) outline(c); return c;
+}
+function disc(R, cx, cy, r, col) {
+  for (let dy = -r; dy <= r; dy++) { const hw = Math.floor(Math.sqrt(r * r - dy * dy) + 0.4); R(cx - hw, cy + dy, hw * 2 + 1, 1, col); }
+}
+const TINT = new Map();
+function tinted(cv, col) {
+  let m = TINT.get(cv); if (!m) { m = {}; TINT.set(cv, m); }
+  if (!m[col]) {
+    const c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height;
+    const x = c.getContext('2d'); x.drawImage(cv, 0, 0); x.globalCompositeOperation = 'source-in';
+    x.fillStyle = col; x.fillRect(0, 0, c.width, c.height); m[col] = c;
+  }
+  return m[col];
+}
+
+/* --- GUD, the protagonist (34×34 cell, feet on row 31) --- */
+function gudDraw(R, pose, f) {
+  const o = (x, y, w, h, c) => R(x + 5, y + 2, w, h, c);
+  const SK = C.L, HR = C.K;
+  const beach = pose === 'beach' || pose === 'beachjump';
+  if (pose === 'duck') {
+    const s = f ? 1 : 0;
+    o(0, 14 + s, 8, 3, HR); o(1, 13, 6, 1, HR); o(2, 17, 5, 1 + s, HR);
+    o(8, 13, 7, 7, SK); o(7, 11, 8, 2, HR); o(6, 12, 3, 5, HR); o(8, 13, 6, 1, HR);
+    o(9, 15, 3, 3, C.K); o(10, 16, 1, 1, C.W); o(12, 15, 3, 3, C.K); o(13, 16, 1, 1, C.W);
+    o(13, 18, 1, 1, C.P);
+    o(8, 20, 8, 4, C.P); o(15, 21, 4, 2, SK);
+    o(5, 23, 10, 3, C.B);
+    o(9, 26, 7, 2, C.K); o(14, 27, 2, 2, C.K); o(15, 28, 4, 2, C.P);
+    o(4, 26, 6, 2, C.K); o(2, 28, 4, 2, C.P);
+    return;
+  }
+  if (pose === 'defeat') {
+    o(-4, 26, 6, 3, HR); o(-3, 22, 3, 5, HR);
+    o(0, 22, 7, 6, SK); o(0, 21, 7, 1, HR);
+    o(1, 23, 3, 3, C.K); o(2, 24, 1, 1, C.P); o(4, 24, 3, 3, C.K); o(5, 25, 1, 1, C.P);
+    o(3, 27, 2, 1, C.K);
+    o(7, 23, 7, 5, C.P); o(9, 28, 5, 1, SK); o(14, 22, 4, 7, C.B);
+    o(18, 23, 7, 2, C.K); o(18, 26, 7, 2, C.K); o(25, 21, 2, 4, C.P); o(25, 26, 2, 3, C.P);
+    return;
+  }
+  const runlike = pose === 'run' || pose === 'shoot';
+  const jumpP = pose === 'jump' || pose === 'jumpshoot' || pose === 'beachjump';
+  let by = 0;
+  if (runlike && f % 2 === 1) by = -1;
+  if (pose === 'victory' && f === 1) by = -2;
+  // hair (long, behind)
+  const hl = jumpP ? 9 : 12 + (runlike ? f % 2 : 0) + (pose === 'idle' ? f : 0);
+  o(4, 3 + by, 4, hl, HR); o(3, 6 + by, 2, hl - 3, HR);
+  if (jumpP) o(1, 4 + by, 3, 4, HR);
+  if (runlike) o(2, 8 + by + (f % 2), 2, 5, HR);
+  // head
+  o(8, 4 + by, 7, 7, SK);
+  o(7, 2 + by, 8, 2, HR); o(6, 3 + by, 3, 5, HR); o(8, 4 + by, 6, 1, HR); o(8, 5 + by, 1, 1, HR);
+  // glasses
+  if (beach) {
+    o(9, 6 + by, 6, 2, C.K); o(9, 8 + by, 2, 1, C.K); o(13, 8 + by, 2, 1, C.K);
+    o(10, 6 + by, 1, 1, C.W); o(13, 6 + by, 1, 1, C.W);
+  } else {
+    o(9, 6 + by, 3, 3, C.K); o(12, 6 + by, 3, 3, C.K);
+    const lens = (pose === 'idle' && f === 1) ? C.K : (pose === 'hurt' ? C.P : C.W);
+    o(10, 7 + by, 1, 1, lens); o(13, 7 + by, 1, 1, lens);
+  }
+  // mouth
+  if (pose === 'hurt') o(12, 9 + by, 2, 2, C.K);
+  else if (['victory', 'collect', 'beach', 'beachjump'].includes(pose)) o(11, 9 + by, 3, 1, C.P);
+  else o(13, 9 + by, 1, 1, C.P);
+  o(11, 11 + by, 2, 1, SK);
+  // outfit
+  if (beach) { o(9, 12 + by, 5, 2, C.P); o(9, 14 + by, 5, 3, SK); o(9, 17 + by, 5, 2, C.P); }
+  else { o(9, 12 + by, 5, 5, C.P); o(11, 12 + by, 1, 1, C.Y); o(8, 17 + by, 7, 2, C.B); o(7, 19 + by, 9, 1, C.B); }
+  // legs
+  const LG = beach ? SK : C.K, SH = beach ? SK : C.P;
+  const leg = (tx, sx, lift) => { o(tx, 19, 2, 5, LG); o(sx, 24, 2, 4 - lift, LG); o(sx, 28 - lift, 3, 2, SH); };
+  if (jumpP) { leg(11, 13, 2); leg(8, 7, 1); }
+  else if (runlike) {
+    const L = [[[12, 14, 0], [9, 6, 1]], [[11, 12, 0], [10, 9, 2]], [[12, 13, 0], [9, 7, 0]], [[10, 10, 0], [11, 12, 2]]][f % 4];
+    leg(...L[0]); leg(...L[1]);
+  } else if (pose === 'hurt') { leg(8, 7, 0); leg(12, 14, 0); }
+  else { leg(9, 9, 0); leg(12, 12, 0); }
+  // arms
+  const arm = (x, y, w, h) => o(x, y + by, w, h, SK);
+  if (pose === 'shoot' || pose === 'jumpshoot') { arm(13, 13, 7, 2); o(20, 12 + by, 2, 4, C.Y); arm(7, 13, 2, 3); }
+  else if (pose === 'victory') { arm(14, 6, 2, 6); arm(7, 6, 2, 6); }
+  else if (pose === 'collect') { arm(14, 6, 2, 6); arm(8, 13, 2, 4); }
+  else if (pose === 'hurt') { arm(15, 9, 2, 4); arm(6, 9, 2, 4); }
+  else if (beach) {
+    arm(13, 12, 2, 2); arm(15, 10, 2, 3); arm(8, 13, 2, 4);
+    o(14, 4 + by, 7, 1, C.Y); o(15, 5 + by, 5, 1, C.Y); o(16, 6 + by, 3, 1, C.Y);
+    o(17, 7 + by, 1, 2, C.Y); o(15, 9 + by, 5, 1, C.Y); o(19, 1 + by, 1, 3, C.P); o(17, 0 + by, 5, 1, C.B);
+  }
+  else if (jumpP) { arm(14, 9, 2, 4); arm(7, 11, 2, 3); }
+  else if (pose === 'run') { if (f % 2 === 0) { arm(14, 13, 3, 2); arm(7, 13, 2, 3); } else arm(13, 13, 2, 4); }
+  else arm(13, 13, 2, 4);
+}
+const GUDC = {};
+function gud(pose, f) { const k = pose + f; return GUDC[k] || (GUDC[k] = mk(34, 34, R => gudDraw(R, pose, f))); }
+
+/* --- GUD seen from the front / from behind, same proportions and palette as the side sprites --- */
+const LOOKS = {
+  gud: { hair: 'long', hc: C.K, skin: C.L, top: C.P, bot: C.B, skirt: true, glasses: true, legs: C.K, shoe: C.P, neck: C.Y },
+  mom: { hair: 'short', hc: C.W, skin: C.L, top: C.B, bot: C.P, skirt: true, legs: C.L, shoe: C.K, earrings: true },
+  prof: { hair: 'short', hc: C.W, skin: C.L, top: C.W, bot: C.K, glasses: true, legs: C.K, shoe: C.K, coat: true },
+  client: { hair: 'bald', hc: C.K, skin: C.L, top: C.W, bot: C.K, tie: true, glasses: 'thin', legs: C.K, shoe: C.K },
+  girl: { hair: 'bob', hc: C.Y, skin: C.L, top: C.Y, bot: C.P, skirt: true, legs: C.L, shoe: C.K },
+  boy: { hair: 'short', hc: C.K, skin: C.L, top: C.B, bot: C.K, legs: C.K, shoe: C.W },
+  teach: { hair: 'bun', hc: C.B, skin: C.L, top: C.K, bot: C.K, skirt: true, glasses: true, legs: C.K, shoe: C.P },
+  barista: { hair: 'long', hc: C.P, skin: C.L, top: C.W, bot: C.P, skirt: true, legs: C.L, shoe: C.K, apron: true },
+  punk: { hair: 'mohawk', hc: C.P, skin: C.L, top: C.K, bot: C.K, legs: C.K, shoe: C.Y },
+  critic: { hair: 'short', hc: C.Y, skin: C.L, top: C.W, bot: C.K, glasses: true, legs: C.K, shoe: C.K },
+  libr: { hair: 'bun', hc: C.W, skin: C.L, top: C.B, bot: C.K, skirt: true, glasses: true, legs: C.K, shoe: C.K },
+  guard: { hair: 'short', hc: C.K, skin: C.L, top: C.Y, bot: C.K, legs: C.K, shoe: C.K, helmet: true }
+};
+function personDraw(R, lk, dir, f) {
+  const o = (x, y, w, h, c) => R(x + 5, y + 2, w, h, c);
+  const SK = lk.skin || C.L, HC = lk.hc;
+  const step = f === 1 ? 1 : f === 2 ? 2 : 0;
+  const legsFB = () => {
+    const la = step === 1 ? 2 : 0, lb = step === 2 ? 2 : 0;
+    o(9, 20, 2, 8 - la, lk.legs); o(13, 20, 2, 8 - lb, lk.legs);
+    o(8, 28 - la, 3, 2, lk.shoe); o(13, 28 - lb, 3, 2, lk.shoe);
+  };
+  const body = (front) => {
+    const sw = step === 1 ? -1 : step === 2 ? 1 : 0;
+    o(9, 12, 6, 5, lk.top);
+    if (lk.coat) { o(8, 12, 8, 9, C.W); o(11, 12, 2, 6, C.B); }
+    if (front && lk.neck) o(11, 12, 2, 1, lk.neck);
+    if (front && lk.tie) { o(11, 12, 2, 1, C.W); o(11, 13, 2, 5, C.P); }
+    if (front && lk.apron) o(10, 14, 4, 5, C.B);
+    o(7, 12 + sw, 2, 5, lk.coat ? C.W : (lk.tie ? lk.top : SK)); o(15, 12 - sw, 2, 5, lk.coat ? C.W : (lk.tie ? lk.top : SK));
+    o(7, 17 + sw, 2, 1, SK); o(15, 17 - sw, 2, 1, SK);
+    if (lk.skirt) { o(8, 17, 8, 2, lk.bot); o(7, 19, 10, 1, lk.bot); }
+    else if (!lk.coat) o(9, 17, 6, 3, lk.bot);
+  };
+  if (dir === 'down') {
+    if (lk.hair === 'long') { o(5, 4, 3, 13, HC); o(16, 4, 3, 13, HC); }
+    if (lk.hair === 'bob') { o(6, 4, 2, 7, HC); o(16, 4, 2, 7, HC); }
+    body(true);
+    o(8, 4, 8, 7, SK); o(11, 11, 2, 1, SK);
+    if (lk.hair === 'bald') { o(8, 3, 8, 1, SK); o(7, 6, 1, 3, HC); o(16, 6, 1, 3, HC); }
+    else if (lk.hair === 'mohawk') { o(10, 0, 4, 4, HC); }
+    else { o(7, 2, 10, 2, HC); o(8, 4, 8, 1, HC); o(7, 4, 1, 3, HC); o(16, 4, 1, 3, HC); }
+    if (lk.hair === 'bun') o(10, 0, 4, 2, HC);
+    if (lk.helmet) { o(7, 1, 10, 3, C.W); o(7, 3, 10, 1, C.K); }
+    if (lk.glasses === 'thin') { [8, 12].forEach(gx => { o(gx, 5, 4, 1, C.K); o(gx, 8, 4, 1, C.K); o(gx, 6, 1, 2, C.K); o(gx + 3, 6, 1, 2, C.K); }); o(10, 6, 1, 2, C.K); o(13, 6, 1, 2, C.K); }
+    else if (lk.glasses) { o(8, 6, 4, 3, C.K); o(12, 6, 4, 3, C.K); o(9, 7, 2, 1, C.W); o(13, 7, 2, 1, C.W); }
+    else { o(9, 7, 1, 2, C.K); o(14, 7, 1, 2, C.K); }
+    if (lk.earrings) { o(7, 8, 1, 2, C.Y); o(16, 8, 1, 2, C.Y); }
+    o(11, 9, 2, 1, C.P);
+    legsFB();
+  } else if (dir === 'up') {
+    body(false);
+    if (lk.hair === 'long') { o(6, 2, 12, 15, HC); o(7, 1, 10, 1, HC); }
+    else if (lk.hair === 'bald') o(8, 3, 8, 8, SK);
+    else if (lk.hair === 'mohawk') { o(8, 4, 8, 7, SK); o(10, 0, 4, 9, HC); }
+    else { o(8, 4, 8, 7, SK); o(7, 2, 10, lk.hair === 'bob' ? 9 : 6, HC); if (lk.hair === 'bun') o(10, 0, 4, 3, HC); }
+    if (lk.helmet) o(7, 1, 10, 4, C.W);
+    legsFB();
+  } else {
+    // side (facing right)
+    const run = step ? 1 : 0;
+    if (lk.hair === 'long') { o(4, 3, 4, 12 + run, HC); o(3, 6, 2, 9, HC); }
+    if (lk.hair === 'bob') o(5, 3, 3, 8, HC);
+    o(9, 12, 5, 5, lk.top); if (lk.coat) o(8, 12, 7, 9, C.W); if (lk.tie) o(13, 13, 1, 4, C.P);
+    if (lk.skirt) { o(8, 17, 7, 2, lk.bot); o(7, 19, 9, 1, lk.bot); } else if (!lk.coat) o(9, 17, 5, 3, lk.bot);
+    o(8, 4, 7, 7, SK); o(11, 11, 2, 1, SK);
+    if (lk.hair === 'bald') o(8, 3, 6, 1, SK);
+    else if (lk.hair === 'mohawk') o(9, 0, 4, 4, HC);
+    else { o(7, 2, 8, 2, HC); o(6, 3, 3, 5, HC); o(8, 4, 6, 1, HC); }
+    if (lk.hair === 'bun') o(6, 1, 3, 3, HC);
+    if (lk.helmet) { o(7, 1, 9, 3, C.W); }
+    if (lk.glasses === 'thin') { o(12, 5, 3, 1, C.K); o(12, 8, 3, 1, C.K); o(12, 6, 1, 2, C.K); o(14, 6, 1, 2, C.K); o(13, 6, 1, 2, C.K); o(9, 6, 3, 1, C.K); }
+    else if (lk.glasses) { o(12, 6, 3, 3, C.K); o(13, 7, 1, 1, C.W); o(10, 7, 2, 1, C.K); } else o(13, 7, 1, 2, C.K);
+    if (lk.earrings) o(9, 8, 1, 2, C.Y);
+    o(13, 9, 1, 1, C.P);
+    const legs = [[[11, 11, 0], [11, 11, 0]], [[12, 14, 0], [9, 6, 1]], [[12, 13, 0], [9, 7, 0]]][step];
+    legs.forEach(([tx, sx, lift]) => { o(tx, 20, 2, 4, lk.legs); o(sx, 24, 2, 4 - lift, lk.legs); o(sx, 28 - lift, 3, 2, lk.shoe); });
+    o(step === 1 ? 13 : 11, 13, 2, 4, lk.coat ? C.W : SK);
+  }
+}
+/* --- LUDO: GUD's Chinese crested dog. Hairless pink skin, white crest, socks and tail plume --- */
+const LUDOC = {};
+function ludo(dir, f) {
+  f = f ? 1 : 0;
+  const key = dir + f; if (LUDOC[key]) return LUDOC[key];
+  const side = dir === 'left' || dir === 'right';
+  let c = mk(24, 20, R => {
+    const SK = C.B, SH = C.P, HW = C.W, SP = C.K;
+    if (side) {
+      const a = f;
+      R(1, 2, 3, 4, HW); R(0, 3, 1, 2, HW); R(3, 5, 1, 2, SK); R(4, 7, 1, 3, SK);      // tail plume + tail
+      R(5 + a, 13, 1, 5, SH); R(13 - a, 14, 1, 4, SH);                                   // far legs
+      R(5, 9, 11, 4, SK); R(13, 9, 3, 5, SK); R(6, 13, 2, 1, SK);                        // body + chest
+      R(8, 10, 2, 1, SP); R(11, 11, 1, 1, SP); R(6, 9, 1, 1, SP);                        // spots
+      R(6 - a, 13, 2, 5, SK); R(14 + a, 14, 1, 4, SK);                                   // near legs
+      R(4 + a, 17, 3, 2, HW); R(12 - a, 17, 2, 2, HW); R(5 - a, 17, 3, 2, HW); R(13 + a, 17, 3, 2, HW); // socks
+      R(14, 6, 3, 4, SK);                                                                // neck
+      R(15, 4, 4, 3, SK); R(19, 5, 3, 2, SK); R(22, 5, 1, 1, C.K); R(17, 5, 1, 1, C.K); R(20, 7, 1, 1, C.P);
+      R(17, 0, 2, 4, SK); R(19, 0, 1, 3, HW);                                            // ear + fringe
+      R(15, 2, 2, 2, HW); R(14, 3, 2, 3, HW); R(13, 5, 2, 2, HW); R(13, 7, 1, 2, HW);    // crest down the neck
+    } else if (dir === 'down') {
+      const a = f;
+      R(16, 9, 2, 3, HW);                                                                // tail plume peeking
+      R(7, 1, 2, 4, SK); R(15, 1, 2, 4, SK); R(6, 1, 1, 3, HW); R(17, 1, 1, 3, HW);
+      R(9, 10, 6, 4, SK); R(10, 11, 1, 1, SP); R(13, 12, 1, 1, SP);
+      R(9, 14, 2, 4 - a, SK); R(13, 14, 2, 3 + a, SK);
+      R(8, 17 - a, 3, 2, HW); R(13, 16 + a, 3, 2, HW);
+      R(9, 4, 6, 5, SK); R(10, 8, 4, 2, SK);
+      R(9, 1, 6, 3, HW); R(10, 0, 4, 1, HW);                                             // crest
+      R(10, 6, 1, 1, C.K); R(13, 6, 1, 1, C.K); R(11, 9, 2, 1, C.K); R(11, 10, 2, 1, C.P);
+    } else {
+      const a = f;
+      R(7, 1, 2, 4, SK); R(15, 1, 2, 4, SK); R(6, 1, 1, 3, HW); R(17, 1, 1, 3, HW);
+      R(8, 3, 8, 5, SK);
+      R(9, 9, 6, 5, SK); R(9, 10, 1, 1, SP); R(14, 12, 1, 1, SP);
+      R(9, 14, 2, 4 - a, SK); R(13, 14, 2, 3 + a, SK);
+      R(8, 17 - a, 3, 2, HW); R(13, 16 + a, 3, 2, HW);
+      R(9, 1, 6, 5, HW); R(10, 0, 4, 1, HW); R(10, 6, 4, 2, HW);                         // crest from behind
+      R(11, 12, 2, 2, SK); R(10, 9, 4, 3, HW);                                           // tail + plume
+    }
+  });
+  if (dir === 'left') { const m = document.createElement('canvas'); m.width = 24; m.height = 20; const x = m.getContext('2d'); x.translate(24, 0); x.scale(-1, 1); x.drawImage(c, 0, 0); c = m; }
+  return (LUDOC[key] = c);
+}
+const PCACHE = {};
+function person(look, dir, f) {
+  f = f || 0;
+  const key = look + dir + f; if (PCACHE[key]) return PCACHE[key];
+  let c;
+  if (look === 'gud' && (dir === 'left' || dir === 'right')) c = gud(f ? 'run' : 'idle', f ? (f === 1 ? 0 : 2) : 0);
+  else { const lk = LOOKS[look] || LOOKS.boy; c = mk(34, 34, R => personDraw(R, lk, dir === 'left' ? 'right' : dir, f)); }
+  if (dir === 'left') { const m = document.createElement('canvas'); m.width = 34; m.height = 34; const x = m.getContext('2d'); x.translate(34, 0); x.scale(-1, 1); x.drawImage(c, 0, 0); c = m; }
+  return (PCACHE[key] = c);
+}
+function gudBack(f) {
+  return mk(34, 34, R => {
+    const o = (x, y, w, h, c) => R(x + 5, y + 2, w, h, c);
+    const by = f ? -1 : 0;
+    o(9, 12 + by, 6, 5, C.P); o(7, 12 + by, 2, 5, C.L); o(15, 12 + by, 2, 5, C.L);
+    o(8, 17 + by, 8, 2, C.B); o(7, 19 + by, 10, 1, C.B);
+    o(6, 2 + by, 12, 15, C.K); o(7, 1 + by, 10, 1, C.K); o(5, 8 + by, 1, 8, C.K); o(18, 8 + by, 1, 8, C.K);
+    o(5, 6 + by, 1, 1, C.K); o(18, 6 + by, 1, 1, C.K);
+    o(9, 20, 2, 8, C.K); o(13, 20, 2, 8, C.K); o(8, 28, 3, 2, C.P); o(13, 28, 3, 2, C.P);
+  });
+}
+/* --- GUDMON: GUD's passions, little creatures with a letter on the belly --- */
+function monSprite(m, blink) {
+  return mk(44, 44, (R, x) => {
+    const col = C[m.c] || C.P, dark = m.c === 'K';
+    disc(R, 22, 25, 15, col); R(9, 26, 26, 10, col); R(12, 36, 6, 4, col); R(26, 36, 6, 4, col);
+    R(9, 10, 5, 7, col); R(30, 10, 5, 7, col); R(10, 8, 3, 3, col); R(31, 8, 3, 3, col);
+    R(15, 27, 14, 11, C.W); dtext(x, String(m.l || '?').slice(0, 1), 20, 29, 1, dark ? C.K : C.P);
+    const ec = dark ? C.W : C.K;
+    if (blink) { R(14, 20, 4, 1, ec); R(26, 20, 4, 1, ec); }
+    else { R(14, 17, 4, 5, ec); R(26, 17, 4, 5, ec); R(15, 18, 1, 1, dark ? C.K : C.W); R(27, 18, 1, 1, dark ? C.K : C.W); }
+    R(11, 23, 3, 2, C.B); R(30, 23, 3, 2, C.B); R(20, 23, 4, 1, dark ? C.W : C.K);
+    const a = m.a;
+    if (a === 'glasses') { R(12, 16, 8, 7, C.K); R(24, 16, 8, 7, C.K); R(20, 18, 4, 1, C.K); R(14, 18, 4, 3, blink ? C.K : C.W); R(26, 18, 4, 3, blink ? C.K : C.W); if (!blink) { R(16, 19, 2, 2, C.K); R(28, 19, 2, 2, C.K); } }
+    if (a === 'crown') { R(14, 4, 16, 5, C.Y); R(14, 1, 2, 3, C.Y); R(21, 1, 2, 3, C.Y); R(28, 1, 2, 3, C.Y); R(21, 5, 2, 2, C.P); }
+    if (a === 'beret') { R(13, 7, 18, 4, C.K); R(16, 5, 12, 2, C.K); R(21, 3, 2, 2, C.K); }
+    if (a === 'cap') { R(12, 6, 20, 2, C.K); R(16, 8, 12, 3, C.K); R(30, 7, 1, 6, C.Y); R(29, 12, 3, 2, C.Y); }
+    if (a === 'nib') { R(36, 20, 4, 10, C.K); R(37, 30, 2, 3, C.K); R(37, 22, 2, 2, C.W); }
+    if (a === 'spark') { R(3, 6, 1, 5, C.Y); R(1, 8, 5, 1, C.Y); R(39, 30, 1, 5, C.Y); R(37, 32, 5, 1, C.Y); }
+    if (a === 'bubble') { R(30, 2, 12, 8, C.W); R(32, 10, 3, 2, C.W); R(32, 4, 1, 1, C.K); R(35, 4, 1, 1, C.K); R(38, 4, 1, 1, C.K); }
+    if (a === 'book') { R(1, 28, 9, 11, C.Y); R(5, 28, 1, 11, C.K); }
+    if (a === 'bow') { R(28, 6, 5, 4, C.P); R(34, 6, 5, 4, C.P); R(32, 7, 3, 2, C.Y); }
+    if (a === 'headphones') { R(9, 12, 26, 2, C.K); R(7, 16, 4, 8, C.K); R(33, 16, 4, 8, C.K); }
+  });
+}
+const MON_ACCESSORIES = ['none', 'glasses', 'crown', 'beret', 'cap', 'nib', 'spark', 'bubble', 'book', 'bow', 'headphones'];
+
+/* --- Obstacles, bonuses, bosses, fx --- */
+const SPR = { ob: {}, bn: {}, fx: {} };
+function buildSprites() {
+  const O = SPR.ob, B = SPR.bn, F = SPR.fx;
+  O.f24 = [mk(32, 24, (R, x) => {
+    R(1, 1, 30, 22, C.W); R(1, 1, 30, 9, C.P); dtext(x, 'F24', 3, 2, 1, C.W);
+    R(22, 3, 7, 5, C.W); R(23, 4, 5, 1, C.K); R(23, 6, 5, 1, C.K);
+    R(4, 13, 24, 1, C.K); R(4, 16, 15, 1, C.K); R(4, 19, 10, 1, C.K); R(21, 15, 8, 6, C.B); R(22, 17, 6, 1, C.P);
+  })];
+  O.email = [0, 1].map(f => mk(36, 26, (R, x) => {
+    if (f === 0) { R(1, 7, 6, 2, C.B); R(2, 5, 4, 2, C.B); R(29, 7, 6, 2, C.B); R(30, 5, 4, 2, C.B); }
+    else { R(1, 13, 6, 2, C.B); R(2, 15, 4, 2, C.B); R(29, 13, 6, 2, C.B); R(30, 15, 4, 2, C.B); }
+    R(7, 8, 22, 14, C.W);
+    for (let i = 0; i < 11; i++) { const yy = 8 + Math.floor(i * 0.6); R(7 + i, yy, 1, 1, C.K); R(28 - i, yy, 1, 1, C.K); }
+    R(11, 16, 2, 2, C.K); R(23, 16, 2, 2, C.K); R(10, 14, 3, 1, C.K); R(23, 14, 3, 1, C.K); R(14, 19, 8, 1, C.K);
+    R(23, 1, 11, 9, C.P); R(22, 2, 13, 7, C.P); dtext(x, '98', 23, 2, 1, C.W);
+  }));
+  O.urgent = [mk(66, 32, (R, x) => {
+    R(1, 1, 64, 30, C.W); R(1, 1, 64, 9, C.P); R(1, 10, 64, 1, C.K);
+    dtext(x, '!!!', 4, 2, 1, C.W); R(56, 2, 7, 7, C.W); dtext(x, 'X', 57, 2, 1, C.K);
+    dtext(x, 'MODIFICHE', 6, 13, 1, C.K); dtext(x, 'URGENTI', 12, 22, 1, C.P);
+  })];
+  O.call = [0, 1].map(f => mk(18, 28, (R) => {
+    R(2, 1, 14, 26, C.K); R(4, 4, 10, 17, f ? C.P : C.B); R(7, 2, 4, 1, C.W); R(7, 23, 4, 2, C.W);
+    R(6, 11, 6, 2, C.W); R(6, 12, 2, 3, C.W); R(10, 12, 2, 3, C.W); R(8, 8, 2, 1, C.W); R(7, 6, 4, 1, C.W);
+  }));
+  O.contradictory = [mk(30, 26, (R) => {
+    for (let i = 0; i < 5; i++) R(2 + i, 6 - i, 1, 1 + 2 * i, C.W); R(7, 4, 20, 5, C.W);
+    R(3, 15, 20, 5, C.P); for (let i = 0; i < 5; i++) R(27 - i, 17 - i, 1, 1 + 2 * i, C.P);
+  })];
+  const monitor = (R, screen) => { R(1, 3, 26, 18, C.K); R(3, 5, 22, 14, screen); R(11, 21, 6, 3, C.K); R(6, 24, 16, 3, C.K); };
+  O.bug = [mk(28, 28, (R) => {
+    monitor(R, C.B); R(17, 1, 7, 3, C.P); R(19, 1, 1, 3, C.K); R(16, 2, 1, 1, C.K); R(24, 2, 1, 1, C.K);
+  })];
+  O.internet = [mk(28, 28, (R) => {
+    monitor(R, C.W); R(12, 15, 3, 2, C.K); R(9, 12, 9, 1, C.K); R(8, 13, 1, 1, C.K); R(18, 13, 1, 1, C.K);
+    R(7, 9, 13, 1, C.K); R(6, 10, 1, 1, C.K); R(20, 10, 1, 1, C.K);
+    for (let i = 0; i < 5; i++) { R(18 + i, 6 + i, 1, 1, C.P); R(22 - i, 6 + i, 1, 1, C.P); }
+  })];
+  O.brief = [mk(80, 36, (R, x) => {
+    R(8, 9, 64, 22, C.B); R(3, 14, 74, 13, C.B); R(14, 3, 22, 8, C.B); R(38, 1, 24, 9, C.B); R(60, 6, 12, 5, C.B); R(10, 30, 58, 3, C.B);
+    dtext(x, 'BRIEF IN', 16, 11, 1, C.K); dtext(x, 'MILANESE', 16, 21, 1, C.K); dtext(x, '?', 68, 15, 1, C.P);
+  })];
+  O.overtime = [mk(52, 30, (R, x) => {
+    disc(R, 26, 11, 10, C.P); disc(R, 26, 11, 8, C.W); R(26, 5, 1, 7, C.K); R(26, 11, 5, 1, C.K);
+    R(1, 20, 50, 9, C.P); dtext(x, 'OVERTIME', 3, 21, 1, C.W);
+  })];
+  O.voice = [mk(98, 32, (R, x) => {
+    R(1, 1, 96, 25, C.W); R(2, 26, 7, 3, C.W); R(2, 29, 3, 2, C.W);
+    for (let i = 0; i < 4; i++) R(5 + i, 4 + i, 1, 7 - 2 * i, C.K);
+    [2, 4, 6, 3, 7, 5, 2, 6, 4, 3, 7, 2, 5, 3, 6, 2].forEach((h, i) => R(13 + i * 3, 7 - Math.floor(h / 2), 2, h, C.P));
+    dtext(x, '4:00', 68, 4, 1, C.K); dtext(x, 'VOCALE 4 MINUTI', 4, 16, 1, C.K);
+  })];
+  O.link404 = [mk(42, 30, (R, x) => {
+    R(1, 1, 40, 20, C.W); R(1, 1, 40, 2, C.P); dtext(x, '404', 4, 4, 2, C.P);
+    R(3, 23, 10, 5, C.K); x.clearRect(5, 24, 6, 3); R(13, 25, 4, 1, C.K);
+    R(25, 25, 4, 1, C.K); R(29, 23, 10, 5, C.K); x.clearRect(31, 24, 6, 3);
+    R(20, 23, 2, 1, C.P); R(19, 26, 1, 1, C.P); R(22, 26, 1, 1, C.P);
+  })];
+  O.update = [mk(78, 24, (R) => { R(1, 10, 76, 12, C.K); R(3, 12, 72, 8, C.W); })];
+  O.malessere = [mk(20, 18, (R) => {
+    R(2, 3, 7, 7, C.B); R(11, 3, 7, 7, C.B); R(3, 2, 5, 1, C.B); R(12, 2, 5, 1, C.B); R(2, 5, 16, 5, C.B);
+    for (let i = 0; i < 7; i++) R(3 + i, 10 + i, 14 - 2 * i, 1, C.B);
+    R(10, 3, 1, 3, C.K); R(9, 6, 1, 3, C.K); R(10, 9, 1, 3, C.K); R(9, 12, 1, 2, C.K);
+    R(5, 7, 1, 2, C.K); R(14, 7, 1, 2, C.K); R(4, 11, 3, 1, C.K); R(13, 11, 3, 1, C.K);
+  })];
+  O.martini = [mk(22, 28, (R) => {
+    R(1, 3, 20, 2, C.W); for (let i = 0; i < 9; i++) { const hw = 9 - i; R(11 - hw, 5 + i, hw * 2, 1, C.B); }
+    R(10, 13, 2, 9, C.W); R(5, 22, 12, 2, C.W);
+    for (let i = 0; i < 6; i++) R(17 - i, 1 + i, 1, 1, C.K); R(9, 6, 4, 3, C.P);
+  })];
+  O.pranzo = [mk(98, 28, (R, x) => {
+    R(22, 4, 54, 8, C.B); R(28, 2, 42, 3, C.B); R(18, 8, 62, 6, C.B); R(34, 1, 22, 3, C.P);
+    for (let i = 0; i < 12; i++) R(24 + i * 4, 5 + (i % 3), 2, 1, C.P);
+    R(4, 13, 90, 4, C.W); R(1, 15, 96, 10, C.W); R(8, 25, 82, 2, C.W); R(3, 16, 92, 1, C.P);
+    dtext(x, 'PRANZO DA MAMMA', 4, 17, 1, C.K);
+  })];
+  O.parmigiana = [mk(68, 28, (R, x) => {
+    R(3, 1, 62, 3, C.P); R(3, 4, 62, 2, C.W); R(3, 6, 62, 2, C.B);
+    R(1, 8, 66, 19, C.W); R(1, 8, 66, 1, C.K);
+    dtext(x, 'PARMIGIANA', 4, 10, 1, C.K); dtext(x, 'PER CENA', 10, 18, 1, C.P);
+  })];
+  // Bonuses — always ELECTRIC YELLOW
+  B.coffee = [mk(18, 18, (R) => {
+    R(3, 6, 10, 8, C.Y); R(4, 14, 8, 1, C.Y); R(13, 8, 3, 1, C.Y); R(15, 8, 1, 4, C.Y); R(13, 11, 3, 1, C.Y);
+    R(4, 6, 8, 1, C.K); R(1, 15, 16, 2, C.Y);
+  })];
+  B.cat = [mk(18, 16, (R) => {
+    R(2, 5, 14, 9, C.Y); R(2, 2, 3, 3, C.Y); R(3, 1, 1, 1, C.Y); R(13, 2, 3, 3, C.Y); R(14, 1, 1, 1, C.Y);
+    R(5, 8, 2, 2, C.K); R(11, 8, 2, 2, C.K); R(8, 10, 2, 1, C.P); R(1, 11, 3, 1, C.K); R(14, 11, 3, 1, C.K);
+  })];
+  B.dog = [mk(18, 16, (R) => {
+    R(4, 2, 10, 11, C.Y); R(1, 3, 3, 8, C.Y); R(14, 3, 3, 8, C.Y); R(4, 3, 1, 6, C.K); R(13, 3, 1, 6, C.K);
+    R(6, 6, 2, 2, C.K); R(10, 6, 2, 2, C.K); R(8, 9, 2, 2, C.K); R(8, 11, 2, 2, C.P);
+  })];
+  B.water = [mk(26, 19, (R, x) => {
+    R(1, 1, 22, 2, C.Y); R(2, 3, 20, 13, C.Y); R(3, 16, 18, 1, C.Y); R(3, 4, 18, 1, C.W); dtext(x, 'H2O', 4, 7, 1, C.K);
+  })];
+  B.salad = [mk(22, 16, (R) => {
+    R(1, 8, 20, 4, C.Y); R(3, 12, 16, 2, C.Y); R(6, 14, 10, 1, C.Y);
+    R(3, 4, 5, 4, C.B); R(8, 2, 6, 6, C.W); R(13, 4, 5, 4, C.P); R(6, 5, 2, 2, C.P); R(16, 3, 2, 2, C.B);
+  })];
+  B.oki = [mk(24, 14, (R, x) => { R(1, 1, 22, 12, C.Y); dtext(x, 'OKI', 4, 3, 1, C.K); R(1, 11, 22, 1, C.P); })];
+  B.polase = [mk(40, 14, (R, x) => { R(1, 1, 38, 12, C.Y); dtext(x, 'POLASE', 3, 3, 1, C.K); R(1, 11, 38, 1, C.P); })];
+  // FX
+  F.heart = mk(11, 10, (R) => { R(2, 1, 2, 1, C.Y); R(6, 1, 2, 1, C.Y); R(1, 2, 8, 3, C.Y); R(2, 5, 6, 1, C.Y); R(3, 6, 4, 1, C.Y); R(4, 7, 2, 1, C.Y); R(2, 2, 1, 1, C.W); });
+  F.heartP = mk(11, 10, (R) => { R(2, 1, 2, 1, C.P); R(6, 1, 2, 1, C.P); R(1, 2, 8, 3, C.P); R(2, 5, 6, 1, C.P); R(3, 6, 4, 1, C.P); R(4, 7, 2, 1, C.P); R(2, 2, 1, 1, C.W); });
+  F.cloud = mk(42, 18, (R) => { R(8, 5, 26, 8, C.W); R(3, 9, 36, 6, C.W); R(13, 2, 10, 4, C.W); R(24, 3, 8, 3, C.W); });
+  F.sun = mk(32, 32, (R) => disc(R, 16, 16, 13, C.Y));
+  F.cal = mk(28, 26, (R, x) => {
+    R(2, 4, 24, 20, C.W); R(2, 4, 24, 8, C.P); dtext(x, 'MON', 6, 5, 1, C.W); R(7, 1, 2, 5, C.K); R(19, 1, 2, 5, C.K);
+    dtext(x, '9:00', 3, 14, 1, C.K);
+  });
+  F.olive = mk(11, 11, (R) => { disc(R, 5, 5, 4, C.P); R(3, 3, 2, 2, C.B); });
+  F.ice = mk(12, 12, (R) => { R(1, 1, 10, 10, C.W); R(2, 2, 3, 2, C.L); R(7, 7, 2, 2, C.B); });
+  F.wave = [0, 1].map(f => mk(46, 14, (R) => {
+    R(2, 6, 42, 7, C.B); R(8, 3, 30, 3, C.B); R(16, 1, 14, 2, C.B);
+    R(10 + f * 3, 3, 4, 1, C.W); R(20 - f * 2, 1, 4, 1, C.W); R(30 + f * 2, 3, 4, 1, C.W);
+  }));
+  F.palm = mk(64, 100, (R) => {
+    for (let i = 0; i < 72; i++) { const x = 29 + Math.round(Math.sin(i / 24) * 5); R(x, 26 + i, 5, 1, (Math.floor(i / 4) % 2) ? C.K : C.B); }
+    const fr = [[-1.2, -0.25], [1.2, -0.25], [-1, 0.35], [1, 0.35], [0.3, -0.9], [-0.4, -0.85]];
+    fr.forEach(([dx, dy], j) => { for (let t = 0; t < 24; t++) R(Math.round(31 + dx * t), Math.round(26 + dy * t + (t * t) / 38), 3, 2, (t + j) % 3 ? C.P : C.B); });
+    R(26, 27, 5, 5, C.Y); R(32, 28, 5, 5, C.Y);
+  });
+  F.umbrella = mk(64, 70, (R) => {
+    const cx = 32, top = 2, rr = 28;
+    for (let dy = 0; dy < 15; dy++) {
+      const hw = Math.round(Math.sqrt(Math.max(0, 1 - Math.pow((14 - dy) / 14, 2))) * rr);
+      for (let xx = -hw; xx <= hw; xx++) R(cx + xx, top + dy, 1, 1, (Math.floor((xx + rr) / 7) % 2) ? C.W : C.P);
+    }
+    R(cx, top + 15, 2, 50, C.K);
+  });
+  // Bosses
+  const bigClient = shirt => [0, 1].map(f => mk(90, 124, (R, x) => {
+    R(30, 98, 12, 18, C.K); R(48, 98, 12, 18, C.K); R(26, 114, 18, 6, C.K); R(46, 114, 18, 6, C.K);
+    R(30, 115, 3, 1, C.B); R(50, 115, 3, 1, C.B);
+    R(20, 42, 50, 6, C.K); R(16, 46, 58, 52, C.K);
+    for (let i = 0; i < 24; i++) { const hw = Math.max(1, 9 - Math.floor(i * 0.38)); R(45 - hw, 46 + i, hw * 2, 1, C.W); }
+    R(42, 47, 6, 4, C.P); for (let i = 0; i < 22; i++) { const hw = i < 16 ? 2 + Math.floor(i / 6) : Math.max(1, 4 - (i - 16)); R(45 - hw, 51 + i, hw * 2, 1, C.P); }
+    for (let i = 0; i < 16; i++) { R(34 + Math.floor(i * 0.6), 46 + i, 1, 1, C.B); R(55 - Math.floor(i * 0.6), 46 + i, 1, 1, C.B); }
+    R(60, 58, 6, 3, C.W); R(61, 56, 2, 2, C.P); R(64, 56, 2, 2, C.Y);
+    R(43, 92, 4, 3, C.Y);
+    R(22, 62, 19, 9, C.W); dtext(x, 'CEO', 23, 63, 1, C.K);
+    R(6, 48, 12, 40, C.K); R(72, 48, 12, 40, C.K); R(6, 88, 12, 9, C.L); R(72, 88, 12, 9, C.L);
+    R(1, 97, 22, 18, C.B); R(8, 93, 8, 2, C.K); R(8, 93, 2, 5, C.K); R(14, 93, 2, 5, C.K); R(10, 104, 4, 3, C.Y); R(1, 106, 22, 1, C.K);
+    R(78, 74, 9, 15, C.K); R(80, 76, 5, 10, C.P);
+    R(36, 40, 18, 6, C.L);
+    R(22, 8, 46, 36, C.L); R(25, 5, 40, 4, C.L); R(20, 14, 50, 26, C.L);
+    R(32, 42, 26, 1, C.B);
+    R(16, 20, 5, 12, C.L); R(69, 20, 5, 12, C.L); R(17, 23, 2, 6, C.B); R(71, 23, 2, 6, C.B);
+    R(24, 4, 42, 2, C.K); for (let i = 0; i < 7; i++) R(25 + i * 6, 6, 4, 2, C.K); R(20, 10, 4, 10, C.K); R(66, 10, 4, 10, C.K);
+    for (let i = 0; i < 12; i++) { R(28 + i, 15 + Math.floor(i / 3), 1, 3, C.K); R(61 - i, 15 + Math.floor(i / 3), 1, 3, C.K); }
+    R(30, 21, 9, 5, C.W); R(51, 21, 9, 5, C.W); R(31, 22, 3, 3, C.K); R(52, 22, 3, 3, C.K);
+    R(43, 22, 5, 10, C.B); R(42, 29, 7, 3, C.B); R(26, 28, 5, 3, C.B); R(59, 28, 5, 3, C.B);
+    if (f === 0) { R(32, 34, 26, 5, C.K); R(34, 35, 22, 2, C.W); R(48, 35, 3, 2, C.Y); }
+    else { R(32, 32, 26, 10, C.K); R(34, 33, 22, 2, C.W); R(38, 37, 14, 4, C.P); R(48, 33, 3, 2, C.Y); }
+    if (shirt) {
+      // GUDQUEST version: white shirt with rolled sleeves, thin reading glasses
+      R(16, 46, 58, 52, C.W); R(6, 48, 12, 22, C.W); R(72, 48, 12, 22, C.W); R(6, 68, 12, 3, C.B); R(72, 68, 12, 3, C.B);
+      R(6, 71, 12, 26, C.L); R(72, 71, 12, 26, C.L); R(18, 48, 1, 48, C.B); R(71, 48, 1, 48, C.B);
+      R(36, 46, 9, 5, C.B); R(46, 46, 9, 5, C.B); R(38, 46, 15, 3, C.W);
+      R(42, 47, 6, 4, C.P); for (let i = 0; i < 22; i++) { const hw = i < 16 ? 2 + Math.floor(i / 6) : Math.max(1, 4 - (i - 16)); R(45 - hw, 51 + i, hw * 2, 1, C.P); }
+      for (let i = 0; i < 4; i++) R(45, 76 + i * 5, 1, 2, C.K);
+      R(56, 56, 10, 9, C.B); R(57, 57, 8, 7, C.W); R(61, 53, 2, 6, C.P); R(64, 54, 1, 5, C.K);
+      R(16, 92, 58, 6, C.K); R(43, 92, 4, 3, C.Y);
+      const fr = (gx, gy, w, h) => { R(gx, gy, w, 1, C.K); R(gx, gy + h - 1, w, 1, C.K); R(gx, gy, 1, h, C.K); R(gx + w - 1, gy, 1, h, C.K); };
+      fr(28, 19, 13, 9); fr(49, 19, 13, 9); R(41, 21, 8, 1, C.K); R(20, 21, 8, 1, C.K); R(62, 21, 8, 1, C.K);
+    }
+  }));
+  SPR.client = bigClient(false);
+  SPR.clientQ = bigClient(true);
+  SPR.hangover = [0, 1].map(f => mk(100, 122, (R) => {
+    R(4, 10, 92, 4, C.W);
+    for (let i = 0; i < 50; i++) { const hw = Math.round(46 - i * 0.86); R(50 - hw, 14 + i, hw * 2, 1, C.B); R(50 - hw, 14 + i, 2, 1, C.W); R(50 + hw - 2, 14 + i, 2, 1, C.W); }
+    R(8, 15, 84, 1, C.P);
+    for (let i = 0; i < 22; i++) R(86 - i, 1 + i, 2, 1, C.K);
+    R(70, 4, 11, 9, C.P); R(72, 3, 7, 11, C.P); R(73, 6, 4, 3, C.B);
+    R(12, 36, 11, 3, C.K); R(5, 32, 8, 8, C.W); R(77, 36, 11, 3, C.K); R(87, 32, 8, 8, C.W);
+    R(18, 22, 26, 11, C.K); R(56, 22, 26, 11, C.K); R(44, 24, 12, 3, C.K);
+    R(21, 24, 4, 2, C.W); R(25, 26, 2, 1, C.W); R(59, 24, 4, 2, C.W); R(63, 26, 2, 1, C.W);
+    if (f === 0) { R(36, 40, 28, 4, C.K); R(34, 42, 3, 3, C.K); R(63, 42, 3, 3, C.K); }
+    else { R(37, 38, 26, 12, C.K); R(39, 39, 22, 2, C.W); R(41, 44, 18, 5, C.P); }
+    R(30, 50, 2, 2, C.W); R(62, 54, 2, 2, C.W); R(46, 58, 2, 2, C.W);
+    R(46, 64, 8, 44, C.W); R(48, 64, 2, 44, C.L);
+    R(30, 107, 40, 3, C.W); R(24, 110, 52, 6, C.W);
+  }));
+}
+
+/* ---------------------------------------------------------------------
+   3. CUSTOM ASSETS — optional PNGs listed in /assets/manifest.js
+   --------------------------------------------------------------------- */
+const ASSETS = {};
+(function loadAssets() {
+  const M = window.GUD_ASSETS || {};
+  Object.keys(M).forEach(key => {
+    const def = typeof M[key] === 'string' ? { src: M[key] } : M[key];
+    if (!def || !def.src) return;
+    const img = new Image();
+    img.onload = () => { ASSETS[key] = { img, frames: Math.max(1, def.frames || 1), fps: def.fps || 10 }; };
+    img.onerror = () => { /* fallback to built-in pixel art */ };
+    img.src = CFG.assetBase + def.src;
+  });
+})();
+function drawCustom(c, key, x, y, w, h, t) {
+  const a = ASSETS[key]; if (!a) return false;
+  const fw = a.img.width / a.frames, fh = a.img.height;
+  const s = Math.min(w / fw, h / fh), dw = Math.round(fw * s), dh = Math.round(fh * s);
+  const fr = Math.floor((t || 0) * a.fps) % a.frames;
+  c.drawImage(a.img, fr * fw, 0, fw, fh, Math.round(x + (w - dw) / 2), Math.round(y + h - dh), dw, dh);
+  return true;
+}
+
+/* ---------------------------------------------------------------------
+   4. AUDIO — authentic 8-bit synth (square / triangle / noise)
+   --------------------------------------------------------------------- */
+const AU = { ctx: null, master: null, noise: null, muted: store.get('gud_muted') === '1' };
+AU.init = function () {
+  if (!this.ctx) {
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    try { this.ctx = new AC(); } catch (e) { return; }
+    this.master = this.ctx.createGain(); this.master.gain.value = this.muted ? 0 : 0.5;
+    this.master.connect(this.ctx.destination);
+    const len = this.ctx.sampleRate, b = this.ctx.createBuffer(1, len, this.ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    this.noise = b;
+  }
+  if (this.ctx.state === 'suspended') this.ctx.resume();
+};
+AU.setMute = function (m) {
+  this.muted = m; store.set('gud_muted', m ? '1' : '0');
+  if (this.master) this.master.gain.setValueAtTime(m ? 0 : 0.5, this.ctx.currentTime);
+};
+HOOKS.mute.push(m => AU.setMute(m));
+window.addEventListener('storage', e => { if (e.key === 'gud_muted') AU.setMute(e.newValue === '1'); });
+const NOTE = n => 440 * Math.pow(2, (n - 69) / 12);
+function tn(f, d, o) {
+  o = o || {}; const a = AU.ctx; if (!a || a.state !== 'running') return;
+  const t = o.t != null ? o.t : a.currentTime + (o.at || 0);
+  const osc = a.createOscillator(), g = a.createGain();
+  osc.type = o.type || 'square'; osc.frequency.setValueAtTime(f, t);
+  if (o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t + d);
+  const v = o.vol || 0.1;
+  g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + 0.005);
+  g.gain.setValueAtTime(v, t + d * 0.6); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+  osc.connect(g); g.connect(AU.master); osc.start(t); osc.stop(t + d + 0.05);
+}
+function nz(d, o) {
+  o = o || {}; const a = AU.ctx; if (!a || a.state !== 'running') return;
+  const t = o.t != null ? o.t : a.currentTime + (o.at || 0);
+  const s = a.createBufferSource(); s.buffer = AU.noise;
+  const fl = a.createBiquadFilter(); fl.type = o.ft || 'lowpass'; fl.frequency.setValueAtTime(o.f || 2000, t);
+  if (o.fto) fl.frequency.exponentialRampToValueAtTime(o.fto, t + d);
+  const g = a.createGain(); g.gain.setValueAtTime(o.vol || 0.12, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+  s.connect(fl); fl.connect(g); g.connect(AU.master); s.start(t, Math.random() * 0.5); s.stop(t + d + 0.05);
+}
+function mel(notes, step, o) {
+  o = o || {};
+  notes.forEach((n, i) => { if (n) tn(NOTE(n), (o.len || step) * 0.95, Object.assign({}, o, { at: (o.at || 0) + i * step })); });
+}
+const SFX = {
+  start() { mel([72, 76, 79, 84, 79, 84, 88], 0.07, { vol: 0.08 }); mel([48, 55, 60], 0.15, { type: 'triangle', vol: 0.16 }); },
+  jump() { tn(320, 0.13, { to: 760, vol: 0.07 }); },
+  shoot() { tn(1400, 0.1, { to: 170, vol: 0.06 }); nz(0.05, { ft: 'highpass', f: 3000, vol: 0.04 }); },
+  bonus() { mel([88, 91, 96, 100], 0.05, { vol: 0.07 }); },
+  hurt() { tn(220, 0.28, { to: 55, vol: 0.12, type: 'sawtooth' }); nz(0.22, { f: 700, vol: 0.14 }); },
+  drain() { tn(300, 0.4, { to: 120, vol: 0.08, type: 'triangle' }); mel([64, 63, 62], 0.12, { vol: 0.04, at: 0.1 }); },
+  giant() { for (let i = 0; i < 6; i++) tn(i % 2 ? 1046 : 523, 0.05, { at: i * 0.05, vol: 0.06, type: 'sawtooth' }); nz(0.3, { ft: 'bandpass', f: 1500, vol: 0.12 }); },
+  slam() { tn(130, 0.25, { to: 40, type: 'triangle', vol: 0.28 }); nz(0.2, { f: 500, vol: 0.2 }); },
+  shatter() { nz(0.3, { ft: 'highpass', f: 2000, fto: 7000, vol: 0.07 }); mel([84, 79, 74, 67], 0.035, { vol: 0.04 }); },
+  pop() { tn(600, 0.06, { to: 300, vol: 0.05 }); nz(0.05, { f: 4000, vol: 0.05 }); },
+  bossAppear() { for (let i = 0; i < 4; i++) tn(440, 0.22, { to: 880, at: i * 0.26, vol: 0.07 }); tn(55, 1.1, { type: 'triangle', vol: 0.22 }); },
+  bossHit() { nz(0.06, { f: 1400, vol: 0.1 }); tn(170, 0.08, { to: 80, vol: 0.07 }); },
+  bossDefeat() {
+    nz(1.0, { f: 3000, fto: 80, vol: 0.28 }); tn(300, 0.9, { to: 40, vol: 0.09, type: 'sawtooth' });
+    mel([72, 76, 79, 84, 79, 84, 88, 91, 96], 0.09, { at: 1.0, vol: 0.08 }); mel([48, 52, 55, 60], 0.18, { at: 1.0, type: 'triangle', vol: 0.15 });
+  },
+  gameOver() { mel([67, 66, 65, 64], 0.3, { vol: 0.08 }); tn(NOTE(40), 1.0, { at: 1.2, type: 'triangle', vol: 0.2 }); },
+  weekend() {
+    mel([72, 76, 79, 84, 76, 79, 84, 88, 0, 91, 91, 96], 0.08, { vol: 0.08 });
+    mel([48, 0, 55, 0, 52, 0, 57, 0, 60], 0.08, { type: 'triangle', vol: 0.16 });
+    [0, 0.32, 0.64, 0.8].forEach(at => nz(0.06, { at, ft: 'highpass', f: 1800, vol: 0.08 }));
+  },
+  hack() { mel([84, 79, 88, 91, 96], 0.06, { vol: 0.08 }); tn(NOTE(108), 0.3, { at: 0.3, type: 'triangle', vol: 0.05 }); },
+  denied() { tn(110, 0.3, { type: 'sawtooth', vol: 0.1 }); tn(104, 0.3, { type: 'square', vol: 0.05, at: 0.05 }); },
+  chime() { const n = pick([84, 86, 88, 91, 93, 96]); tn(NOTE(n), 0.45, { type: 'triangle', vol: 0.045 }); tn(NOTE(n + 12), 0.3, { type: 'triangle', vol: 0.015, at: 0.14 }); },
+  day() { mel([76, 84, 88], 0.09, { vol: 0.06 }); },
+  thud() { tn(90, 0.12, { to: 50, type: 'triangle', vol: 0.15 }); }
+};
+// Beach chiptune loop
+const MUSIC = {
+  bpm: 112,
+  mel: [76, 0, 79, 81, 84, 0, 81, 79, 76, 0, 74, 76, 79, 0, 0, 0, 72, 0, 74, 76, 79, 0, 76, 74, 72, 0, 69, 72, 74, 0, 0, 0],
+  bass: [48, 0, 55, 0, 53, 0, 60, 0, 45, 0, 52, 0, 50, 0, 57, 0, 48, 0, 55, 0, 53, 0, 60, 0, 43, 0, 50, 0, 55, 0, 43, 0],
+  timer: null, next: 0, step: 0
+};
+function startMusic() {
+  stopMusic(); if (!AU.ctx) return;
+  MUSIC.next = AU.ctx.currentTime + 0.1; MUSIC.step = 0;
+  MUSIC.timer = setInterval(() => {
+    if (!AU.ctx || AU.ctx.state !== 'running') return;
+    const st = 60 / MUSIC.bpm / 2;
+    while (MUSIC.next < AU.ctx.currentTime + 0.25) {
+      const i = MUSIC.step % 32, t = MUSIC.next;
+      if (MUSIC.mel[i]) tn(NOTE(MUSIC.mel[i]), st * 0.85, { t, type: 'square', vol: 0.03 });
+      if (MUSIC.bass[i]) tn(NOTE(MUSIC.bass[i]), st * 1.6, { t, type: 'triangle', vol: 0.09 });
+      if (i % 2 === 1) nz(0.03, { t, ft: 'highpass', f: 6000, vol: 0.012 });
+      MUSIC.next += st; MUSIC.step++;
+    }
+  }, 60);
+}
+function stopMusic() { if (MUSIC.timer) clearInterval(MUSIC.timer); MUSIC.timer = null; }
+
+/* =====================================================================
+   GUDQUEST — data adapter. Everything comes from content.json
+   (edited from the CMS); this file only reshapes it for the game.
+   ===================================================================== */
+const L = (it, en) => ({ it, en });
+let CONTACTS = [], CV = { sections: {} }, SECTIONS = [], SECTION_ORDER = [], MONS = [], BAT = {};
+const ENEMY_KEYS = ['brief', 'f24', 'logo', 'bug', 'voice', 'email', 'urgent', 'call', 'link404', 'update', 'internet', 'overtime', 'martini', 'pranzo', 'parmigiana', 'malessere', 'contradictory'];
+function applyContent() {
+  const c = CONTENT || {};
+  CONTACTS = (c.contacts || []).map(k => ({ k: k.id, label: k.label, url: k.url, show: k.show }));
+  const p = c.profile || {};
+  SECTIONS = (c.sections || []).filter(s => s && s.id);
+  SECTION_ORDER = SECTIONS.map(s => s.id);
+  CV = { name: p.name || 'GUD', full: p.full || '', role: p.role, education: p.education || [], languages: p.languages, studio: p.studio, sections: {} };
+  BAT = {};
+  SECTIONS.forEach((s, i) => {
+    s.items = (s.items || []).filter(Boolean);
+    CV.sections[s.id] = s;
+    const b = s.battle || {};
+    const moves = (b.moves || []).filter(m => m && m.n).map(m => [m.n, +m.p || 10]);
+    BAT[s.id] = {
+      name: b.name || s.place || s.title, spr: ENEMY_KEYS.includes(b.enemy) ? b.enemy : ENEMY_KEYS[i % 6],
+      hp: +b.hp || 72, lv: +b.lv || 30 + i, weak: b.weak == null ? i % 4 : +b.weak,
+      moves: moves.length ? moves : [[L('SCADENZA', 'DEADLINE'), 11], [L('URGENTE', 'URGENT'), 10]],
+      pre: b.pre || L('Vediamo cosa sai fare!', 'Let\'s see what you can do!'),
+      post: b.post || L('Ben fatto.', 'Well done.')
+    };
+  });
+  BAT.client = {
+    name: L('BIG CLIENT', 'BIG CLIENT'), spr: 'client', hp: 150, lv: 99, weak: 3, boss: true,
+    moves: [[L('LOGO PIÙ GRANDE', 'MAKE IT BIGGER'), 15], [L('CI SIAMO QUASI', 'ALMOST THERE'), 14], [L('MIO CUGINO LO FA', 'MY COUSIN CAN DO IT'), 17], [L('ENTRO IERI', 'BY YESTERDAY'), 16]]
+  };
+  const ms = (c.mons || []).filter(m => m && m.n);
+  MONS = ms.filter(m => !m.legendary).concat(ms.filter(m => m.legendary));
+}
+const NREG = () => MONS.filter(m => !m.legendary).length;
+const NBADGE = () => SECTIONS.length;
+const monIdx = id => MONS.findIndex(m => m.id === id || m.n === id);
+
+/* fixed UI strings (game chrome) */
+const TXT = {
+  pressStart: L('PREMI START', 'PRESS START'),
+  newGame: L('NUOVA PARTITA', 'NEW GAME'), cont: L('CONTINUA', 'CONTINUE'), quick: L('CV RAPIDO', 'QUICK CV'),
+  menu: [L('GUDDEX', 'GUDDEX'), L('GUD', 'GUD'), L('ZAINO', 'BAG'), L('CV RAPIDO', 'QUICK CV'), L('LINGUA', 'LANGUAGE'), L('SALVA', 'SAVE'), L('ESCI', 'EXIT')],
+  fight: L('LOTTA', 'FIGHT'), bag: L('ZAINO', 'BAG'), catchT: L('CATTURA', 'CATCH'), run: L('FUGA', 'RUN'),
+  yes: L('SÌ', 'YES'), no: L('NO', 'NO'),
+  saved: L('Partita salvata!', 'Game saved!')
+};
+
+/* =====================================================================
+   GUDQUEST · PINK ADVENTURE — an interactive CV with handheld-RPG logic
+   Uses the same font, palette, sprites and synth as Thank GUD It's Friday.
+   ===================================================================== */
+const cvs = $('game'), ctx = cvs.getContext('2d'), stage = $('stage');
+const T = 16;
+let W = 384, H = 240, KS = 1;
+function resize() {
+  const r = stage.getBoundingClientRect();
+  const bw = Math.max(60, r.width), bh = Math.max(60, r.height);
+  if (MOBILE) { W = 240; H = Math.round(clamp(W * bh / bw, 224, 420)); }
+  else { H = 240; W = Math.round(clamp(H * bw / bh, 320, 432)); }
+  const s = Math.min(bw / W, bh / H), dpr = window.devicePixelRatio || 1;
+  KS = Math.max(1, Math.ceil(s * dpr));
+  cvs.width = W * KS; cvs.height = H * KS;
+  cvs.style.width = Math.floor(W * s) + 'px'; cvs.style.height = Math.floor(H * s) + 'px';
+}
+
+/* ---------------- STATE ---------------- */
+const SAVE_KEY = 'gudquest_v1';
+const S = {
+  scene: 'boot', time: 0, paused: false,
+  map: 'home', px: 6, py: 5, dir: 'down', moving: false, mt: 0, fx: 0, fy: 0, step: 0, bump: 0,
+  ui: [], busy: false, timers: [], fade: 0, battle: null,
+  lv: 30, hp: 120, maxhp: 120, pp: [15, 20, 10, 5], coffee: 3,
+  badges: [], caught: [], seen: [], hof: false, introDone: false
+};
+function save() {
+  const d = { map: S.map, px: S.px, py: S.py, dir: S.dir, lv: S.lv, hp: S.hp, maxhp: S.maxhp, pp: S.pp, coffee: S.coffee, badges: S.badges, caught: S.caught, seen: S.seen, hof: S.hof, introDone: S.introDone };
+  store.set(SAVE_KEY, JSON.stringify(d));
+}
+function load() { try { const d = JSON.parse(store.get(SAVE_KEY) || 'null'); return d && d.introDone ? d : null; } catch (e) { return null; } }
+
+/* ---------------- INPUT ---------------- */
+const held = { up: false, down: false, left: false, right: false };
+const pressed = new Set();
+function press(k) { pressed.add(k); AU.init(); }
+const KEYS = { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right',
+  KeyZ: 'a', Space: 'a', KeyX: 'b', Escape: 'b', Backspace: 'b', Enter: 'start', KeyM: 'start' };
+window.addEventListener('keydown', e => {
+  if (modalOpen()) { if (e.key === 'Escape') closeModals(); return; }
+  const k = KEYS[e.code]; if (!k) return;
+  const tag = e.target && e.target.tagName; if (tag === 'BUTTON' && (k === 'a' || k === 'start')) return;
+  e.preventDefault();
+  if (held[k] !== undefined) { if (!held[k]) press(k); held[k] = true; } else if (!e.repeat) press(k);
+});
+window.addEventListener('keyup', e => { const k = KEYS[e.code]; if (k && held[k] !== undefined) held[k] = false; });
+window.addEventListener('blur', () => { Object.keys(held).forEach(k => { held[k] = false; }); });
+document.querySelectorAll('[data-k]').forEach(btn => {
+  const k = btn.dataset.k;
+  const on = e => { e.preventDefault(); try { btn.setPointerCapture(e.pointerId); } catch (_) { /* */ } btn.classList.add('on'); if (held[k] !== undefined) held[k] = true; press(k); };
+  const off = () => { btn.classList.remove('on'); if (held[k] !== undefined) held[k] = false; };
+  btn.addEventListener('pointerdown', on); btn.addEventListener('pointerup', off); btn.addEventListener('pointercancel', off);
+  btn.addEventListener('lostpointercapture', off); btn.addEventListener('contextmenu', e => e.preventDefault());
+});
+cvs.addEventListener('pointerdown', () => { AU.init(); try { cvs.focus({ preventScroll: true }); } catch (e) { /* */ } });
+document.addEventListener('visibilitychange', () => { S.paused = document.hidden; });
+
+/* ---------------- ASYNC HELPERS ---------------- */
+function wait(sec) { return new Promise(res => S.timers.push({ t: sec, res })); }
+function pushUI(layer) { return new Promise(res => { layer.resolve = v => { S.ui.splice(S.ui.indexOf(layer), 1); res(v); }; S.ui.push(layer); }); }
+const topUI = () => S.ui[S.ui.length - 1];
+
+/* ---------------- AUDIO (reuses the arcade synth) ---------------- */
+const SONGS = {
+  town: { bpm: 118, mel: [72, 0, 76, 79, 77, 76, 74, 0, 72, 0, 74, 76, 74, 0, 0, 0, 69, 0, 72, 76, 74, 72, 71, 0, 72, 0, 67, 0, 72, 0, 0, 0],
+    bass: [48, 0, 55, 0, 53, 0, 55, 0, 48, 0, 55, 0, 50, 0, 55, 0, 45, 0, 52, 0, 50, 0, 55, 0, 48, 0, 43, 0, 48, 0, 55, 0] },
+  battle: { bpm: 152, mel: [69, 72, 76, 72, 69, 72, 76, 79, 77, 76, 74, 72, 74, 0, 71, 0, 69, 72, 76, 72, 81, 79, 77, 76, 74, 76, 77, 74, 76, 0, 0, 0],
+    bass: [45, 45, 57, 45, 45, 45, 57, 45, 41, 41, 53, 41, 43, 43, 55, 43, 45, 45, 57, 45, 41, 41, 53, 41, 43, 43, 55, 43, 45, 0, 45, 0] },
+  boss: { bpm: 164, mel: [64, 0, 64, 67, 64, 0, 70, 69, 64, 0, 64, 67, 71, 72, 71, 67, 64, 0, 64, 67, 64, 0, 70, 69, 76, 74, 72, 71, 72, 71, 69, 0],
+    bass: [40, 40, 52, 40, 40, 40, 52, 40, 43, 43, 55, 43, 38, 38, 50, 38, 40, 40, 52, 40, 40, 40, 52, 40, 36, 36, 48, 36, 38, 38, 50, 38] },
+  hof: { bpm: 96, mel: [72, 0, 79, 0, 77, 76, 74, 76, 72, 0, 79, 0, 84, 0, 0, 0, 81, 0, 79, 77, 76, 77, 79, 0, 77, 76, 74, 72, 72, 0, 0, 0],
+    bass: [48, 0, 48, 0, 53, 0, 53, 0, 48, 0, 48, 0, 55, 0, 55, 0, 53, 0, 53, 0, 48, 0, 48, 0, 55, 0, 43, 0, 48, 0, 48, 0] },
+  title: { bpm: 126, mel: [76, 79, 84, 0, 83, 81, 79, 0, 76, 79, 81, 79, 76, 0, 0, 0, 77, 81, 84, 0, 83, 81, 79, 76, 74, 76, 77, 74, 72, 0, 0, 0],
+    bass: [48, 0, 55, 0, 52, 0, 55, 0, 45, 0, 52, 0, 48, 0, 52, 0, 41, 0, 48, 0, 45, 0, 48, 0, 43, 0, 50, 0, 48, 0, 43, 0] }
+};
+const MUS = { name: null, timer: null, next: 0, step: 0 };
+function playSong(name) {
+  if (MUS.name === name && MUS.timer) return;
+  stopSong(); MUS.name = name; if (!AU.ctx) return;
+  MUS.next = AU.ctx.currentTime + 0.08; MUS.step = 0;
+  MUS.timer = setInterval(() => {
+    if (!AU.ctx || AU.ctx.state !== 'running' || S.paused) return;
+    const sg = SONGS[MUS.name]; if (!sg) return; const st = 60 / sg.bpm / 2;
+    if (MUS.next < AU.ctx.currentTime - 0.5) MUS.next = AU.ctx.currentTime + 0.05;
+    while (MUS.next < AU.ctx.currentTime + 0.25) {
+      const i = MUS.step % 32, t = MUS.next;
+      if (sg.mel[i]) tn(NOTE(sg.mel[i]), st * 0.9, { t, type: 'square', vol: 0.028 });
+      if (sg.bass[i]) tn(NOTE(sg.bass[i]), st * 1.5, { t, type: 'triangle', vol: 0.085 });
+      if (MUS.name !== 'town' && MUS.name !== 'hof' && i % 2) nz(0.03, { t, ft: 'highpass', f: 6000, vol: 0.014 });
+      MUS.next += st; MUS.step++;
+    }
+  }, 60);
+}
+function stopSong() { if (MUS.timer) clearInterval(MUS.timer); MUS.timer = null; }
+function ensureSong() { if (MUS.name && !MUS.timer && AU.ctx) { const n = MUS.name; MUS.name = null; playSong(n); } }
+const J = {
+  blip() { tn(1200, 0.03, { vol: 0.03 }); },
+  select() { tn(880, 0.05, { vol: 0.05 }); tn(1320, 0.06, { vol: 0.04, at: 0.05 }); },
+  bump() { tn(110, 0.08, { type: 'triangle', vol: 0.12 }); },
+  door() { nz(0.12, { f: 1200, vol: 0.08 }); tn(300, 0.1, { to: 200, vol: 0.05, at: 0.05 }); },
+  heal() { mel([72, 76, 79, 84, 79, 84, 88], 0.11, { vol: 0.06, type: 'triangle' }); mel([72, 76, 79, 84, 79, 84, 88], 0.11, { vol: 0.03 }); },
+  badge() { mel([72, 72, 72, 76, 79, 0, 76, 79, 84, 84], 0.1, { vol: 0.07 }); mel([48, 0, 52, 0, 55, 0, 52, 55, 60, 60], 0.1, { type: 'triangle', vol: 0.14 }); },
+  catch() { mel([79, 84, 88, 91, 0, 88, 91, 96], 0.07, { vol: 0.06 }); },
+  lvl() { mel([72, 76, 79, 84], 0.06, { vol: 0.06 }); },
+  hit() { nz(0.12, { f: 1600, vol: 0.14 }); tn(160, 0.1, { to: 60, vol: 0.08 }); },
+  superHit() { nz(0.2, { f: 2600, vol: 0.18 }); tn(220, 0.18, { to: 50, vol: 0.1, type: 'sawtooth' }); },
+  miss() { tn(400, 0.15, { to: 900, vol: 0.04, type: 'triangle' }); },
+  faint() { tn(600, 0.6, { to: 60, vol: 0.08 }); },
+  grass() { nz(0.06, { ft: 'highpass', f: 3000, vol: 0.03 }); },
+  encounter() { for (let i = 0; i < 6; i++) tn(i % 2 ? 1046 : 784, 0.06, { at: i * 0.06, vol: 0.05 }); },
+  throw() { tn(500, 0.25, { to: 1200, vol: 0.05, type: 'triangle' }); },
+  wiggle() { tn(220, 0.06, { vol: 0.06, type: 'triangle' }); },
+  bark() { tn(520, 0.07, { to: 380, vol: 0.07 }); tn(560, 0.08, { to: 400, vol: 0.07, at: 0.14 }); nz(0.04, { f: 2500, vol: 0.03 }); }
+};
+
+/* ---------------- SPRITES ---------------- */
+const SP = {};
+function signSprite() { return mk(16, 18, R => { R(7, 9, 2, 8, C.K); R(1, 2, 14, 8, C.W); R(3, 4, 10, 1, C.B); R(3, 6, 7, 1, C.B); }); }
+function treeSprite() { return mk(16, 16, R => { disc(R, 8, 6, 6, C.P); R(4, 3, 3, 2, C.B); R(9, 9, 2, 2, C.B); R(7, 12, 2, 3, C.K); }); }
+
+/* --- tiles --- */
+const TILES = {};
+function tileCanvas(fn) { const c = document.createElement('canvas'); c.width = T; c.height = T; const x = c.getContext('2d'); fn((a, b, w, h, col) => { x.fillStyle = col; x.fillRect(a, b, w, h); }, x); return c; }
+function buildTiles() {
+  const grass = R => { R(0, 0, 16, 16, C.L); R(3, 4, 1, 2, C.B); R(4, 3, 1, 1, C.B); R(11, 10, 1, 2, C.B); R(12, 9, 1, 1, C.B); R(7, 13, 1, 1, C.B); };
+  TILES['.'] = tileCanvas(grass);
+  TILES[':'] = tileCanvas(R => { grass(R); [[3, 3], [10, 9]].forEach(([a, b]) => { R(a, b + 1, 3, 1, C.Y); R(a + 1, b, 1, 3, C.Y); R(a + 1, b + 1, 1, 1, C.P); }); R(12, 2, 1, 1, C.P); R(4, 12, 1, 1, C.Y); });
+  TILES['='] = tileCanvas(R => { R(0, 0, 16, 16, C.W); R(2, 3, 1, 1, C.B); R(9, 12, 2, 1, C.B); R(13, 5, 1, 1, C.B); R(5, 9, 1, 1, C.L); });
+  TILES['"'] = tileCanvas(R => {
+    R(0, 0, 16, 16, C.L);
+    [[1, 1], [9, 1], [5, 9], [13, 9]].forEach(([a, b]) => { R(a, b + 2, 5, 4, C.P); R(a, b, 1, 3, C.P); R(a + 2, b + 1, 1, 2, C.P); R(a + 4, b, 1, 3, C.P); R(a, b + 6, 5, 1, C.K); R(a + 1, b + 3, 1, 1, C.B); });
+    R(0, 7, 3, 1, C.K);
+  });
+  const tree = treeSprite();
+  TILES.T = tileCanvas((R, x) => { grass(R); x.drawImage(tree, 0, 0); });
+  TILES['~0'] = tileCanvas(R => { R(0, 0, 16, 16, C.B); R(2, 4, 5, 1, C.W); R(10, 11, 4, 1, C.W); R(0, 0, 16, 1, C.P); });
+  TILES['~1'] = tileCanvas(R => { R(0, 0, 16, 16, C.B); R(5, 4, 5, 1, C.W); R(7, 11, 4, 1, C.W); R(0, 0, 16, 1, C.P); });
+  TILES['['] = tileCanvas(R => { R(0, 0, 16, 16, C.W); for (let y = 3; y < 16; y += 4) R(0, y, 16, 1, C.B); R(0, 0, 2, 16, C.K); R(2, 0, 1, 16, C.P); });
+  TILES[']'] = tileCanvas(R => { R(0, 0, 16, 16, C.W); for (let y = 3; y < 16; y += 4) R(0, y, 16, 1, C.B); R(14, 0, 2, 16, C.K); R(13, 0, 1, 16, C.P); });
+  TILES.M = tileCanvas(R => { R(0, 0, 16, 16, C.P); R(0, 0, 16, 1, C.K); for (let y = 4; y < 16; y += 5) R(0, y, 16, 1, C.K); R(5, 1, 1, 3, C.K); R(12, 5, 1, 4, C.K); R(4, 10, 1, 4, C.K); R(1, 1, 3, 1, C.B); });
+  TILES.m = tileCanvas(R => { R(0, 0, 16, 16, C.P); R(0, 0, 4, 4, C.L); R(8, 0, 4, 4, C.L); R(0, 4, 16, 1, C.K); R(0, 9, 16, 1, C.K); R(6, 5, 1, 4, C.K); R(12, 10, 1, 6, C.K); R(3, 10, 1, 6, C.K); });
+  TILES.o = tileCanvas(R => { R(0, 0, 16, 16, C.W); R(0, 0, 8, 8, C.L); R(8, 8, 8, 8, C.L); });
+  TILES.H = tileCanvas(R => { R(0, 0, 16, 16, C.B); for (let x = 1; x < 16; x += 4) R(x, 0, 1, 16, C.L); R(0, 13, 16, 3, C.P); R(0, 12, 16, 1, C.K); });
+  TILES.h = tileCanvas(R => { R(0, 0, 16, 16, C.B); for (let x = 1; x < 16; x += 4) R(x, 0, 1, 16, C.L); });
+  TILES.D = tileCanvas(R => { R(0, 0, 16, 16, C.W); R(1, 4, 14, 10, C.P); R(2, 5, 12, 8, C.B); R(4, 8, 8, 2, C.W); });
+  TILES[' '] = tileCanvas(R => R(0, 0, 16, 16, C.K));
+}
+const SOLID = new Set(['T', '~0', '~', 'M', 'm', 'H', 'h', ' ']);
+
+/* --- buildings --- */
+function buildingSprite(b) {
+  const w = b.w * T, h = b.h * T + 10;
+  return mk(w, h, (R, x) => {
+    const roofH = 10 + (b.h >= 5 ? 26 : 20), wallTop = roofH;
+    // walls
+    R(1, wallTop, w - 2, h - wallTop - 1, b.wall || C.W);
+    // windows
+    for (let i = 0; i < b.w; i++) {
+      if (i === b.door) continue;
+      const wx = i * T + 3, wy = wallTop + 6;
+      if (wy + 10 > h - 4) continue;
+      R(wx, wy, 10, 9, C.K); R(wx + 1, wy + 1, 8, 7, C.B); R(wx + 1, wy + 4, 8, 1, C.W); R(wx + 5, wy + 1, 1, 7, C.W); R(wx + 2, wy + 2, 2, 1, C.W);
+    }
+    // roof
+    if (b.style === 'castle') {
+      R(1, 6, w - 2, roofH - 6, b.roof); for (let i = 1; i < w - 4; i += 8) R(i, 1, 5, 6, b.roof);
+      for (let y = 10; y < roofH; y += 5) R(1, y, w - 2, 1, C.K);
+    } else if (b.style === 'temple') {
+      for (let i = 0; i < 10; i++) R(Math.round(w / 2 - i * (w / 20)), 1 + i, Math.round(i * (w / 10)), 1, b.roof);
+      R(1, 11, w - 2, roofH - 11, b.roof); R(1, roofH - 3, w - 2, 1, C.K);
+      for (let i = 0; i < b.w; i++) if (i !== b.door) R(i * T + 6, wallTop, 4, h - wallTop - 2, C.W);
+    } else {
+      R(1, 1, w - 2, roofH - 1, b.roof);
+      for (let y = 4; y < roofH - 2; y += 4) R(2, y, w - 4, 1, b.roof2 || C.K);
+      R(1, roofH - 2, w - 2, 2, C.K);
+    }
+    // extras
+    if (b.icon === 'heart') { const hx = w / 2 - 6; R(hx + 1, 4, 4, 2, C.Y); R(hx + 7, 4, 4, 2, C.Y); R(hx, 6, 12, 4, C.Y); R(hx + 2, 10, 8, 2, C.Y); R(hx + 4, 12, 4, 2, C.Y); }
+    if (b.icon === 'chimney') { R(w - 18, 0, 8, 9, C.K); }
+    if (b.icon === 'frame') { R(w / 2 - 14, wallTop + 3, 28, 4, C.Y); }
+    // door
+    const dx = b.door * T + 3, dh = 15;
+    R(dx - 1, h - dh - 2, 12, dh + 1, C.P); R(dx, h - dh - 1, 10, dh, C.K); R(dx + 7, h - 9, 2, 2, C.Y);
+    // sign
+    const label = b.label, lw = tw(label, 1) + 6, lx = Math.round(w / 2 - lw / 2), ly = roofH - 13 + (b.style === 'castle' ? 2 : 0);
+    R(lx, ly, lw, 11, C.K); R(lx + 1, ly + 1, lw - 2, 9, b.signBg || C.W); dtext(x, label, lx + 3, ly + 2, 1, b.signFg || C.K);
+  });
+}
+function towerSprite() {
+  return mk(48, 104, R => {
+    R(8, 30, 32, 72, C.P); for (let y = 36; y < 100; y += 6) R(8, y, 32, 1, C.K);
+    R(20, 44, 3, 8, C.K); R(26, 60, 3, 8, C.K); R(20, 76, 3, 8, C.K); R(19, 88, 10, 12, C.K);
+    R(6, 24, 36, 7, C.P); for (let i = 6; i < 40; i += 8) R(i, 19, 5, 6, C.P);
+    disc(R, 16, 12, 8, C.B); disc(R, 30, 10, 9, C.B); disc(R, 24, 6, 5, C.B); R(13, 8, 3, 2, C.W); R(28, 5, 3, 2, C.W);
+    R(22, 16, 2, 8, C.K);
+  });
+}
+function monumentSprite() { return mk(34, 42, (R, x) => { R(3, 30, 28, 10, C.W); R(1, 37, 32, 4, C.W); dtext(x, 'G', 7, 1, 4, C.Y); R(8, 33, 18, 1, C.B); }); }
+
+/* --- furniture --- */
+function buildFurniture() {
+  const F = SP.f = {};
+  F.shelf = mk(18, 26, R => { R(1, 1, 16, 24, C.K); R(2, 2, 14, 22, C.B); [3, 10, 17].forEach((y, j) => { for (let i = 0; i < 6; i++) R(3 + i * 2 + (j % 2), y, 2, 6, [C.P, C.Y, C.W][(i + j) % 3]); R(2, y + 6, 14, 1, C.K); }); });
+  F.desk = mk(18, 18, R => { R(1, 4, 16, 6, C.W); R(1, 9, 16, 2, C.B); R(2, 11, 2, 6, C.K); R(14, 11, 2, 6, C.K); R(5, 2, 6, 3, C.Y); });
+  F.pc = mk(18, 20, R => { R(1, 10, 16, 5, C.W); R(2, 15, 2, 4, C.K); R(14, 15, 2, 4, C.K); R(4, 1, 10, 8, C.K); R(5, 2, 8, 6, C.P); R(6, 3, 3, 1, C.W); R(8, 9, 2, 1, C.K); });
+  F.plant = mk(16, 20, R => { R(4, 12, 8, 7, C.P); R(3, 12, 10, 2, C.K); disc(R, 8, 7, 5, C.B); R(5, 4, 2, 2, C.L); R(2, 8, 3, 2, C.B); R(11, 6, 3, 2, C.B); });
+  F.poster = mk(16, 16, (R, x) => { R(2, 1, 12, 14, C.W); R(3, 2, 10, 5, C.P); R(3, 9, 8, 1, C.K); R(3, 11, 6, 1, C.K); R(10, 10, 3, 3, C.Y); });
+  F.posterY = mk(16, 16, R => { R(2, 1, 12, 14, C.Y); R(4, 3, 8, 8, C.K); R(5, 4, 3, 3, C.P); R(3, 12, 9, 1, C.K); });
+  F.frame = mk(16, 16, R => { R(1, 1, 14, 13, C.Y); R(3, 3, 10, 9, C.W); R(4, 8, 3, 3, C.P); R(8, 5, 4, 4, C.B); R(6, 4, 2, 2, C.K); });
+  F.board = mk(16, 16, R => { R(0, 1, 16, 12, C.K); R(2, 4, 7, 1, C.W); R(3, 7, 9, 1, C.W); R(2, 10, 5, 1, C.W); R(10, 3, 3, 3, C.Y); R(0, 13, 16, 2, C.W); });
+  F.window = mk(16, 16, R => { R(1, 1, 14, 12, C.W); R(2, 2, 12, 10, C.B); R(7, 2, 1, 10, C.W); R(2, 6, 12, 1, C.W); R(3, 3, 2, 1, C.W); });
+  F.bed = mk(18, 30, R => { R(1, 1, 16, 28, C.W); R(1, 1, 16, 3, C.K); R(3, 5, 12, 6, C.W); R(1, 12, 16, 16, C.P); R(1, 12, 16, 2, C.B); });
+  F.tv = mk(18, 18, R => { R(1, 3, 16, 12, C.K); R(3, 5, 12, 8, C.B); R(4, 6, 4, 2, C.W); R(4, 15, 3, 2, C.K); R(11, 15, 3, 2, C.K); R(6, 0, 1, 3, C.K); R(11, 0, 1, 3, C.K); });
+  F.counter = mk(16, 18, R => { R(0, 2, 16, 4, C.W); R(0, 6, 16, 10, C.P); R(0, 6, 16, 1, C.K); R(3, 9, 10, 1, C.B); });
+  F.coffee = mk(16, 18, R => { R(0, 2, 16, 4, C.W); R(0, 6, 16, 10, C.P); R(0, 6, 16, 1, C.K); R(3, 0, 10, 8, C.K); R(5, 2, 6, 3, C.Y); R(6, 9, 4, 3, C.W); });
+  F.press = mk(18, 20, R => { R(2, 10, 14, 9, C.K); R(4, 3, 10, 7, C.K); R(5, 4, 8, 5, C.B); R(14, 1, 2, 8, C.Y); R(13, 0, 4, 2, C.Y); R(4, 12, 10, 3, C.W); });
+  F.typecase = mk(18, 18, R => { R(1, 3, 16, 14, C.B); for (let y = 5; y < 16; y += 4) { R(1, y - 1, 16, 1, C.K); R(5, y, 2, 1, C.K); R(11, y, 2, 1, C.K); } R(1, 3, 16, 1, C.K); });
+  F.pedestal = mk(16, 20, R => { R(3, 6, 10, 12, C.W); R(2, 4, 12, 2, C.W); R(2, 17, 12, 2, C.W); R(5, 9, 6, 1, C.B); });
+  F.easel = mk(16, 22, R => { R(3, 1, 10, 10, C.W); R(4, 2, 8, 8, C.P); R(6, 4, 3, 3, C.Y); R(4, 11, 1, 10, C.K); R(11, 11, 1, 10, C.K); R(7, 11, 2, 8, C.K); });
+  F.vault = mk(18, 20, R => { R(1, 2, 16, 17, C.K); R(3, 4, 12, 13, C.W); disc(R, 9, 10, 4, C.Y); R(8, 9, 2, 2, C.K); R(15, 8, 2, 4, C.Y); });
+  F.stripsTree = mk(18, 26, R => { disc(R, 9, 9, 8, C.B); R(8, 16, 3, 9, C.K); R(3, 6, 4, 4, C.W); R(11, 4, 4, 4, C.W); R(8, 11, 4, 4, C.W); R(4, 7, 2, 2, C.P); R(12, 5, 2, 2, C.Y); });
+  F.legacy = mk(16, 16, R => { R(0, 1, 16, 12, C.K); for (let i = 0; i < 4; i++) R(1 + i * 4, 3, 3, 4, [C.P, C.Y, C.W, C.B][i]); R(1, 9, 14, 1, C.W); R(3, 11, 1, 1, C.Y); R(9, 11, 1, 1, C.P); R(0, 13, 16, 2, C.W); });
+  F.books = mk(16, 16, R => { R(1, 1, 14, 13, C.K); for (let i = 0; i < 6; i++) R(2 + i * 2, 3 + (i % 2), 2, 10 - (i % 2), [C.P, C.Y, C.W][i % 3]); });
+}
+
+/* ---------------- MAPS (generated from content) ---------------- */
+const MAPS = {};
+let BUILDINGS = [];
+const BUILTIN_POS = {
+  teaching: { x: 24, y: 2, w: 8, h: 6, door: 4, roof: C.Y, roof2: C.W, style: 'temple', sign: [23, 8], wallSpr: ['board', 'poster', 'board', 'poster'], floorSpr: ['desk'] },
+  studio: { x: 4, y: 12, w: 7, h: 5, door: 3, roof: C.B, roof2: C.W, sign: [8, 18], wallSpr: ['posterY', 'frame', 'poster', 'frame'], floorSpr: ['pc'] },
+  library: { x: 13, y: 12, w: 6, h: 5, door: 3, roof: C.K, roof2: C.B, sign: [17, 18], wallSpr: ['books', 'shelf', 'books', 'shelf'], floorSpr: ['shelf'] },
+  gallery: { x: 23, y: 12, w: 8, h: 5, door: 4, roof: C.W, roof2: C.B, icon: 'frame', signBg: C.Y, sign: [28, 18], wallSpr: ['frame', 'frame', 'posterY', 'frame'], floorSpr: ['pedestal', 'easel'] },
+  type: { x: 4, y: 33, w: 7, h: 5, door: 3, roof: C.K, roof2: C.P, icon: 'chimney', signBg: C.K, signFg: C.Y, sign: [11, 37], wallSpr: ['poster', 'typecase', 'posterY', 'typecase'], floorSpr: ['press', 'typecase'] },
+  lucca: { x: 23, y: 33, w: 8, h: 5, door: 4, roof: C.P, style: 'castle', signBg: C.Y, sign: [22, 37], wallSpr: ['legacy', 'posterY', 'legacy', 'poster'], floorSpr: ['vault', 'stripsTree'] }
+};
+const NEW_STYLES = [
+  { roof: C.Y, roof2: C.P }, { roof: C.B, roof2: C.K, icon: 'frame', signBg: C.Y }, { roof: C.P, style: 'castle', signBg: C.Y },
+  { roof: C.W, roof2: C.P }, { roof: C.K, roof2: C.Y, signBg: C.K, signFg: C.Y }, { roof: C.Y, roof2: C.W, style: 'temple' }
+];
+const NEW_SLOTS_X = [3, 12, 22, 31];
+function shortLabel(s) {
+  s = tr(s).toUpperCase().trim();
+  if (s.length <= 12) return s;
+  const w = s.split(/\s+/).sort((a, b) => b.length - a.length)[0];
+  return w.slice(0, 12);
+}
+function newSections() { return SECTIONS.filter(s => !BUILTIN_POS[s.id]); }
+function genTown() {
+  const extra = newSections().length, rows = Math.ceil(extra / 4);
+  const w = 40, h = 42 + (rows ? rows * 9 + 1 : 0), g = [];
+  for (let j = 0; j < h; j++) g.push(new Array(w).fill('.'));
+  const rect = (x, y, ww, hh, c) => { for (let j = y; j < y + hh; j++) for (let i = x; i < x + ww; i++) if (g[j] && g[j][i] !== undefined) g[j][i] = c; };
+  let seed = 11; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  for (let j = 2; j < h - 2; j++) for (let i = 2; i < w - 2; i++) if (rnd() < 0.08) g[j][i] = ':';
+  rect(0, 0, w, 2, 'T'); rect(0, h - 2, w, 2, 'T'); rect(0, 0, 2, h, 'T'); rect(w - 2, 0, 2, h, 'T');
+  rect(19, 2, 2, h - 4, '=');
+  rect(2, 9, 36, 2, '='); rect(2, 17, 36, 1, '=');
+  rect(2, 19, 36, 2, '~'); g[19][19] = '['; g[19][20] = ']'; g[20][19] = '['; g[20][20] = ']';
+  rect(4, 22, 9, 4, '"'); rect(26, 22, 9, 4, '"'); rect(6, 27, 9, 4, '"'); rect(25, 27, 8, 4, '"');
+  [[14, 22], [15, 22], [14, 23], [23, 24], [35, 22], [3, 27], [17, 29], [22, 29], [36, 29], [3, 34], [13, 34], [16, 35], [33, 13], [35, 15], [3, 13], [36, 4], [9, 3]].forEach(([x, y]) => { g[y][x] = 'T'; });
+  rect(2, 32, 36, 1, 'M'); g[32][19] = '='; g[32][20] = '=';
+  rect(3, 38, 34, 1, '=');
+  if (rows) {
+    rect(2, 40, 36, 1, 'M'); g[40][19] = '='; g[40][20] = '=';
+    for (let r = 0; r < rows; r++) rect(3, 41 + r * 9 + 7, 34, 1, '=');
+  }
+  BUILDINGS.forEach(b => { for (let y = b.y + b.h; y < h - 2; y++) { const c = g[y][b.x + b.door]; if (c === '=') break; g[y][b.x + b.door] = '='; } });
+  rect(32, 12, 5, 5, ':'); g[13][33] = 'T'; g[15][35] = 'T';
+  return { w, h, g };
+}
+function makeBuildings() {
+  BUILDINGS = [
+    { id: 'home', x: 4, y: 4, w: 5, h: 4, door: 2, roof: C.P, label: 'GUD' },
+    { id: 'centro', x: 11, y: 4, w: 6, h: 4, door: 3, roof: C.P, roof2: C.B, icon: 'heart', label: LANG === 'en' ? 'GUD CENTER' : 'CENTRO GUD', signBg: C.P, signFg: C.W }
+  ];
+  SECTIONS.forEach(s => {
+    const p = BUILTIN_POS[s.id];
+    if (p) BUILDINGS.push(Object.assign({ id: s.id, label: shortLabel(s.place || s.title), sec: s }, p));
+  });
+  newSections().forEach((s, i) => {
+    const st = NEW_STYLES[i % NEW_STYLES.length], r = Math.floor(i / 4), x = NEW_SLOTS_X[i % 4], y = 41 + r * 9 + 2;
+    BUILDINGS.push(Object.assign({ id: s.id, x, y, w: 7, h: 5, door: 3, label: shortLabel(s.place || s.title), sec: s, sign: [x - 1, y + 4], wallSpr: ['poster', 'frame', 'posterY', 'board'], floorSpr: ['desk', 'plant', 'pedestal'] }, st));
+  });
+}
+function makeTown() {
+  const { w, h, g } = genTown();
+  const m = { id: 'town', w, h, g, outdoor: true, objs: [], npcs: [], warps: [], blds: [] };
+  BUILDINGS.forEach(b => { b.spr = buildingSprite(b); m.blds.push(b); m.warps.push({ x: b.x + b.door, y: b.y + b.h - 1, to: b.id }); });
+  const sign = (x, y, text) => { if (g[y] && g[y][x] !== undefined && g[y][x] !== '=' && !m.objs.some(o => o.x === x && o.y === y)) m.objs.push({ x, y, spr: SP.sign, text }); };
+  sign(8, 8, TQ('signHome')); sign(17, 8, TQ('signCentro'));
+  sign(21, 3, TQ('signFirenze'));
+  BUILDINGS.forEach(b => { if (b.sec && b.sign) sign(b.sign[0], b.sign[1], b.sec.sign || b.sec.place); });
+  sign(21, 21, TQ('signRoute'));
+  sign(21, 33, TQ('signLucca'));
+  sign(32, 37, TQ('signTower'));
+  if (h > 42) sign(21, 41, TQ('signNew'));
+  m.objs.push({ x: 33, y: 4, w: 2, h: 2, spr: SP.monument, text: TQ('monument') });
+  m.objs.push({ x: 33, y: 33, w: 3, h: 5, spr: SP.tower, text: TQ('tower') });
+  m.npcs.push(
+    { x: 9, y: 10, dir: 'down', look: 'prof', name: 'PROF. SERIF', script: 'prof' },
+    { x: 24, y: 10, dir: 'left', look: 'boy', say: TQ('npcTourist') },
+    { x: 31, y: 18, dir: 'down', look: 'girl', say: TQ('npcBrividi') },
+    { x: 17, y: 23, dir: 'down', look: 'girl', say: TQ('npcGrass') },
+    { x: 22, y: 27, dir: 'left', look: 'teach', say: TQ('npcDex') },
+    { x: 14, y: 38, dir: 'right', look: 'punk', say: TQ('npcCosplay') },
+    { x: 26, y: 35, dir: 'down', look: 'guard', say: TQ('npcGuard') },
+    { x: 34, y: 38, dir: 'down', look: 'client', name: 'BIG CLIENT', script: 'client' }
+  );
+  return m;
+}
+const TQ = k => ((CONTENT.text || {}).quest || {})[k] || (((window.GUD_DEFAULT_CONTENT || {}).text || {}).quest || {})[k] || '';
+function makeInterior(id, cfg) {
+  const w = cfg.w || 12, h = 9, g = [], cx = w / 2;
+  for (let j = 0; j < h; j++) g.push(new Array(w).fill('o'));
+  for (let i = 0; i < w; i++) { g[0][i] = 'h'; g[1][i] = 'H'; g[8][i] = 'H'; }
+  g[8][cx - 1] = 'D'; g[8][cx] = 'D';
+  const m = { id, w, h, g, outdoor: false, objs: [], npcs: [], warps: [], title: cfg.title, cx };
+  (cfg.wall || []).forEach(o => m.objs.push(Object.assign({ y: 1, wall: true }, o)));
+  (cfg.floor || []).forEach(o => m.objs.push(o));
+  (cfg.npcs || []).forEach(n => m.npcs.push(n));
+  return m;
+}
+function wallSlots(w) { const cx = w / 2, out = []; for (let x = 1; x < w - 1; x += 2) if (x !== cx - 1 && x !== cx) out.push(x); return out; }
+function sectionInterior(b) {
+  const sec = b.sec, n = sec.items.length;
+  let w = 12; while (wallSlots(w).length + 4 < n) w += 2;
+  const cx = w / 2, wallX = wallSlots(w), floorP = [[1, 4], [w - 2, 4], [1, 6], [w - 2, 6]];
+  const wall = [], floor = [];
+  sec.items.forEach((it, i) => {
+    const text = [tr(it.t) + '.', it.d];
+    if (i < wallX.length) wall.push({ x: wallX[i], spr: SP.f[b.wallSpr[i % b.wallSpr.length]], text, item: it });
+    else { const fp = floorP[i - wallX.length]; if (fp) floor.push({ x: fp[0], y: fp[1], spr: SP.f[b.floorSpr[(i - wallX.length) % b.floorSpr.length]], text, item: it }); }
+  });
+  wall.push({ x: cx - 1, spr: SP.f.window, text: L('Fuori splende il sole. Dentro, si lavora.', 'The sun is shining outside. Inside, work goes on.') });
+  wall.push({ x: cx, spr: SP.f.window, text: L('Una finestra. Vista su tutta la carriera di GUD.', 'A window. A view over GUD\'s whole career.') });
+  const ld = sec.leader || {};
+  const npcs = [{ x: cx - 1, y: 3, dir: 'down', look: ld.look || 'teach', name: ld.name || 'LEADER', script: 'leader', sec: sec.id }];
+  if (sec.npc && sec.npc.say) npcs.push({ x: cx + 2, y: 5, dir: 'left', look: sec.npc.look || 'boy', say: sec.npc.say });
+  return makeInterior(sec.id, { w, title: sec.place || sec.title, wall, floor, npcs });
+}
+function buildMaps() {
+  Object.keys(MAPS).forEach(k => delete MAPS[k]);
+  makeBuildings();
+  MAPS.town = makeTown();
+  MAPS.home = makeInterior('home', {
+    title: L('CASA DI GUD', 'GUD\'S HOUSE'),
+    wall: [
+      { x: 1, spr: SP.f.shelf, text: TQ('homeShelf') },
+      { x: 3, spr: SP.f.posterY, text: TQ('homePoster') },
+      { x: 6, spr: SP.f.window, text: TQ('homeWindow') },
+      { x: 9, spr: SP.f.board, text: TQ('homeBoard') }
+    ],
+    floor: [
+      { x: 1, y: 2, h: 2, spr: SP.f.bed, text: TQ('homeBed') },
+      { x: 10, y: 2, spr: SP.f.pc, text: TQ('homePc') },
+      { x: 3, y: 5, spr: SP.f.tv, text: TQ('homeTv') },
+      { x: 10, y: 6, spr: SP.f.plant, text: TQ('homePlant') }
+    ],
+    npcs: [{ x: 8, y: 4, dir: 'left', look: 'mom', name: L('MAMMA', 'MOM'), say: TQ('mom') }]
+  });
+  MAPS.centro = makeInterior('centro', {
+    title: L('CENTRO GUD', 'GUD CENTER'),
+    wall: [{ x: 2, spr: SP.f.posterY, text: TQ('centroPoster') }, { x: 9, spr: SP.f.window, text: L('Una finestra sul Lungarno.', 'A window over the Arno.') }],
+    floor: [
+      { x: 3, y: 3, spr: SP.f.counter, text: L('Il bancone del CENTRO GUD.', 'The GUD CENTER counter.') },
+      { x: 4, y: 3, spr: SP.f.coffee, text: L('Una macchina del caffè. Profuma di scadenze rispettate.', 'A coffee machine. It smells of met deadlines.') },
+      { x: 6, y: 3, spr: SP.f.counter, text: L('Il bancone del CENTRO GUD.', 'The GUD CENTER counter.') },
+      { x: 7, y: 3, spr: SP.f.counter, text: L('Il bancone del CENTRO GUD.', 'The GUD CENTER counter.') },
+      { x: 10, y: 3, spr: SP.f.pc, script: 'contacts' },
+      { x: 1, y: 6, spr: SP.f.plant, text: L('Una pianta molto rilassata.', 'A very relaxed plant.') }
+    ],
+    npcs: [
+      { x: 5, y: 3, dir: 'down', look: 'barista', name: 'BARISTA', script: 'heal' },
+      { x: 8, y: 6, dir: 'left', look: 'boy', say: TQ('recruiter') }
+    ]
+  });
+  BUILDINGS.forEach(b => { if (b.sec) MAPS[b.id] = sectionInterior(b); });
+}
+function entryPos(mapId) { const m = MAPS[mapId]; return [m.cx - 1, m.h - 2]; }
+
+/* ---------------- TEXT HELPERS ---------------- */
+const lf = (it, en, v) => { let s = LANG === 'en' ? en : it; Object.keys(v || {}).forEach(k => { s = s.split('{' + k + '}').join(String(v[k])); }); return s; };
+const cpl = () => Math.floor((W - 8 - 16 + 1) / 6);
+
+/* ---------------- UI LAYERS ---------------- */
+function say(items, opts) {
+  opts = opts || {}; if (!Array.isArray(items)) items = [items];
+  const pages = [];
+  items.forEach(it => { const lines = wrap(tr(it), cpl()); for (let i = 0; i < lines.length; i += 2) pages.push(lines.slice(i, i + 2)); });
+  if (!pages.length) return Promise.resolve();
+  return pushUI({ type: 'say', pages, p: 0, chars: 0, auto: opts.auto, at: 0 });
+}
+function choose(items, opts) {
+  opts = opts || {};
+  return pushUI({ type: 'menu', items: items.map(tr), idx: opts.idx || 0, cols: opts.cols || 1, x: opts.x, y: opts.y, w: opts.w, h: opts.h, cancel: !!opts.cancel, info: opts.info, title: opts.title });
+}
+function pushScreen(scr) { scr.type = 'screen'; return pushUI(scr); }
+function waitPress() { return pushUI({ type: 'wait' }); }
+function updateUI(dt) {
+  const u = topUI(); if (!u) return;
+  const A = pressed.has('a'), Bk = pressed.has('b'), St = pressed.has('start');
+  if (u.type === 'say') {
+    const page = u.pages[u.p], total = page.join('').length;
+    if (u.chars < total) { u.chars += dt * 70; if (A || Bk) u.chars = total; return; }
+    u.at += dt;
+    if (A || Bk || (u.auto && u.at > u.auto)) { if (A || Bk) J.blip(); u.p++; u.chars = 0; u.at = 0; if (u.p >= u.pages.length) u.resolve(); }
+  } else if (u.type === 'menu') {
+    const n = u.items.length, c = u.cols;
+    if (pressed.has('up')) { u.idx = (u.idx - c + n) % n; J.blip(); }
+    if (pressed.has('down')) { u.idx = (u.idx + c) % n; J.blip(); }
+    if (c > 1 && pressed.has('left')) { u.idx = (u.idx - 1 + n) % n; J.blip(); }
+    if (c > 1 && pressed.has('right')) { u.idx = (u.idx + 1) % n; J.blip(); }
+    if (A) { J.select(); u.resolve(u.idx); } else if (Bk && u.cancel) { J.blip(); u.resolve(-1); }
+  } else if (u.type === 'wait') { if (A || St) { J.select(); u.resolve(); } }
+  else if (u.type === 'screen') u.update(dt);
+}
+function box(x, y, w, h, fill) {
+  ctx.fillStyle = C.K; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = fill || C.W; ctx.fillRect(x + 2, y + 2, w - 4, h - 4);
+  ctx.fillStyle = C.P; ctx.fillRect(x + 3, y + 3, w - 6, 1); ctx.fillRect(x + 3, y + h - 4, w - 6, 1); ctx.fillRect(x + 3, y + 3, 1, h - 6); ctx.fillRect(x + w - 4, y + 3, 1, h - 6);
+}
+function cursor(x, y, col) { ctx.fillStyle = col || C.K; for (let i = 0; i < 4; i++) ctx.fillRect(x + i, y + i, 1, 7 - i * 2); }
+function drawUI() {
+  S.ui.forEach(u => {
+    if (u.type === 'say') {
+      const y = H - 48; box(4, y, W - 8, 46);
+      let left = Math.floor(u.chars);
+      u.pages[u.p].forEach((l, i) => { const s = l.slice(0, Math.max(0, left)); left -= l.length; dtext(ctx, s, 12, y + 12 + i * 15, 1, C.K); });
+      if (u.chars >= u.pages[u.p].join('').length && Math.floor(S.time * 3) % 2) { ctx.fillStyle = C.P; ctx.fillRect(W - 20, y + 34, 7, 2); ctx.fillRect(W - 19, y + 36, 5, 1); ctx.fillRect(W - 18, y + 37, 3, 1); ctx.fillRect(W - 17, y + 38, 1, 1); }
+    } else if (u.type === 'menu') {
+      const c = u.cols, rows = Math.ceil(u.items.length / c);
+      const colW = Math.max(...u.items.map(s => tw(s, 1))) + 18;
+      const w = u.w || colW * c + 12, h = u.h || rows * 14 + 14;
+      const x = u.x != null ? u.x : W - w - 4, y = u.y != null ? u.y : H - 48 - h - 2;
+      if (u.title) { const tw_ = tw(tr(u.title), 1) + 14; box(x, y - 18, Math.max(tw_, 40), 18, C.Y); dtext(ctx, tr(u.title), x + 7, y - 12, 1, C.K); }
+      box(x, y, w, h);
+      const cw = (w - 12) / c;
+      u.items.forEach((s, i) => {
+        const cx = Math.round(x + 14 + (i % c) * cw), cy = Math.round(y + 9 + Math.floor(i / c) * (rows > 2 || !u.h ? 14 : (h - 14) / rows));
+        dtext(ctx, s, cx, cy, 1, C.K);
+        if (i === u.idx) cursor(cx - 8, cy, C.P);
+      });
+      if (u.info) { const t = u.info(u.idx); if (t) { const iw = tw(t, 1) + 14; box(W - iw - 4, y - 20, iw, 18, C.Y); dtext(ctx, t, W - iw + 3, y - 14, 1, C.K); } }
+    } else if (u.type === 'screen') u.draw();
+  });
+}
+
+/* ---------------- WORLD ---------------- */
+const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+const OPP = { up: 'down', down: 'up', left: 'right', right: 'left' };
+const curMap = () => MAPS[S.map];
+function tileAt(m, x, y) { if (x < 0 || y < 0 || x >= m.w || y >= m.h) return m.outdoor ? 'T' : ' '; return m.g[y][x]; }
+function objAt(m, x, y) { return m.objs.find(o => x >= o.x && x < o.x + (o.w || 1) && y >= o.y && y < o.y + (o.h || 1)); }
+function npcAt(m, x, y) { return m.npcs.find(n => n.x === x && n.y === y); }
+function blocked(m, x, y) {
+  if (SOLID.has(tileAt(m, x, y))) return true;
+  for (const b of (m.blds || [])) if (x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h) return !(x === b.x + b.door && y === b.y + b.h - 1);
+  return !!(objAt(m, x, y) || npcAt(m, x, y));
+}
+function fadeTo(v) { return (async () => { const a = S.fade; for (let i = 1; i <= 4; i++) { S.fade = a + (v - a) * i / 4; await wait(0.05); } })(); }
+async function goTo(map, x, y, dir) {
+  S.busy = true; J.door(); await fadeTo(1);
+  S.map = map; S.px = x; S.py = y; S.dir = dir; S.moving = false;
+  const m = MAPS[map]; placeDog(); S.zone = m.outdoor ? zoneOf(y) : null; S.loc = { text: m.outdoor ? zoneName(S.zone) : m.title, t: 0 };
+  await fadeTo(0); S.busy = false; save();
+}
+/* ---------------- LUDO, GUD's Chinese crested, follows her everywhere ---------------- */
+function placeDog() {
+  const m = curMap(); if (!m) return;
+  const [dx, dy] = DIRS[S.dir] || [0, 1];
+  const cand = [[-dx, -dy], [dy, dx], [-dy, -dx], [dx, dy], [1, 1], [-1, 1], [1, -1], [-1, -1]];
+  let bx = S.px, by = S.py;
+  for (const [ax, ay] of cand) { const x = S.px + ax, y = S.py + ay; if (!blocked(m, x, y) && tileAt(m, x, y) !== 'D' && !(m.warps || []).some(w => w.x === x && w.y === y)) { bx = x; by = y; break; } }
+  S.dog = { map: S.map, x: bx, y: by, fx: bx, fy: by, dir: S.dir, moving: false };
+}
+function dogStartMove() {
+  const d = S.dog; if (!d || d.map !== S.map) { placeDog(); return; }
+  d.fx = d.x; d.fy = d.y;
+  if (d.x === S.px && d.y === S.py) { d.moving = false; return; }
+  d.tx = S.px; d.ty = S.py; d.moving = true;
+  d.dir = d.tx > d.x ? 'right' : d.tx < d.x ? 'left' : d.ty > d.y ? 'down' : 'up';
+}
+function dogArrive() { const d = S.dog; if (d && d.moving) { d.x = d.tx; d.y = d.ty; d.moving = false; } }
+function onArrive() {
+  const m = curMap(), t = tileAt(m, S.px, S.py);
+  if (m.outdoor) {
+    const w = m.warps.find(v => v.x === S.px && v.y === S.py);
+    if (w) { const [ex, ey] = entryPos(w.to); goTo(w.to, ex, ey, 'up'); return; }
+    const zone = zoneOf(S.py);
+    if (zone !== S.zone) { S.zone = zone; S.loc = { text: zoneName(zone), t: 0 }; }
+    if (t === '"') { J.grass(); S.rustle = 0.25; if (Math.random() < 0.13) wildEncounter(); }
+  } else if (t === 'D') {
+    const b = BUILDINGS.find(v => v.id === m.id); goTo('town', b.x + b.door, b.y + b.h, 'down');
+  }
+}
+function worldUpdate(dt) {
+  S.bump -= dt;
+  if (S.loc) { S.loc.t += dt; if (S.loc.t > 2.4) S.loc = null; }
+  S.rustle = Math.max(0, (S.rustle || 0) - dt);
+  const m = curMap();
+  m.npcs.forEach(n => { if (n.script === 'leader' || n.script === 'client' || n.script === 'heal') return; n.tt = (n.tt || rand(2, 5)) - dt; if (n.tt <= 0) { n.tt = rand(2.5, 6); n.dir = pick(['up', 'down', 'left', 'right']); } });
+  if (S.moving) {
+    S.mt += dt * 4.6;
+    if (S.mt >= 1) { S.moving = false; S.mt = 0; S.px += DIRS[S.dir][0]; S.py += DIRS[S.dir][1]; S.step++; dogArrive(); onArrive(); }
+    if (S.moving || S.busy || S.ui.length) return;
+  }
+  if (S.ui.length || S.busy || S.fade > 0) return;
+  if (pressed.has('start')) { startMenu(); return; }
+  if (pressed.has('a')) { interact(); return; }
+  const d = held.up ? 'up' : held.down ? 'down' : held.left ? 'left' : held.right ? 'right' : null;
+  if (!d) { S.turnT = 0; return; }
+  if (S.dir !== d) { S.dir = d; S.turnT = 0.09; return; }
+  if (S.turnT > 0) { S.turnT -= dt; return; }
+  const nx = S.px + DIRS[d][0], ny = S.py + DIRS[d][1];
+  if (blocked(m, nx, ny)) { if (S.bump <= 0) { J.bump(); S.bump = 0.3; } return; }
+  dogStartMove(); S.moving = true; S.mt = 0;
+}
+async function run(fn) { S.busy = true; try { await fn(); } catch (e) { console.error(e); } S.busy = false; }
+function interact() {
+  const m = curMap(), [dx, dy] = DIRS[S.dir], x = S.px + dx, y = S.py + dy;
+  if (S.dog && S.dog.map === S.map && S.dog.x === x && S.dog.y === y && !(x === S.px && y === S.py)) { S.dog.dir = OPP[S.dir]; run(() => ludoScript()); return; }
+  const n = npcAt(m, x, y);
+  if (n) { n.dir = OPP[S.dir]; n.tt = 4; run(() => npcScript(n)); return; }
+  const o = objAt(m, x, y);
+  if (o) { if (o.script) run(() => SCRIPTS[o.script](o)); else run(() => itemScript(o)); }
+}
+function npcScript(n) {
+  if (n.script) return SCRIPTS[n.script](n);
+  return say(tr(n.name) ? tr(n.name) + ': ' + tr(n.say) : n.say);
+}
+function camera(m) {
+  const mw = m.w * T, mh = m.h * T;
+  const ox = S.moving ? DIRS[S.dir][0] * S.mt : 0, oy = S.moving ? DIRS[S.dir][1] * S.mt : 0;
+  let cx = (S.px + ox) * T + 8 - W / 2, cy = (S.py + oy) * T + 8 - H / 2;
+  cx = mw <= W ? (mw - W) / 2 : clamp(cx, 0, mw - W);
+  cy = mh <= H ? (mh - H) / 2 : clamp(cy, 0, mh - H);
+  return [Math.round(cx), Math.round(cy)];
+}
+function drawChar(look, dir, f, x, y) { ctx.drawImage(person(look, dir, f), x - 8, y - 16); }
+function drawWorld() {
+  const m = curMap(); ctx.fillStyle = C.K; ctx.fillRect(0, 0, W, H);
+  const [cx, cy] = camera(m);
+  const x0 = Math.floor(cx / T), y0 = Math.floor(cy / T), x1 = Math.ceil((cx + W) / T), y1 = Math.ceil((cy + H) / T);
+  const wf = Math.floor(S.time * 2) % 2;
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+    let t = tileAt(m, x, y); if (t === '~') t = '~' + wf;
+    ctx.drawImage(TILES[t] || TILES['.'], x * T - cx, y * T - cy);
+  }
+  const list = [];
+  (m.blds || []).forEach(b => list.push({ y: b.y + b.h - 0.5, draw: () => ctx.drawImage(b.spr, b.x * T - cx, (b.y + b.h) * T - b.spr.height - cy) }));
+  m.objs.forEach(o => list.push({ y: o.y + (o.h || 1) - (o.wall ? 1 : 0.6), draw: () => { const s = o.spr, ox = o.x * T + Math.round(((o.w || 1) * T - s.width) / 2) - cx, oy = (o.y + (o.h || 1)) * T - s.height - cy; ctx.drawImage(s, ox, oy); if (o.item && o.item.media && o.item.media.length) sparkle(ox + s.width - 3, oy + 1, o.x * 7); } }));
+  m.npcs.forEach(n => list.push({ y: n.y, draw: () => drawChar(n.look, n.dir, 0, n.x * T - cx, n.y * T - cy) }));
+  if (!S.dog || S.dog.map !== S.map) placeDog();
+  { const d = S.dog, k = d.moving && S.moving ? S.mt : 0;
+    const dxp = (d.moving ? d.fx + (d.tx - d.fx) * k : d.x), dyp = (d.moving ? d.fy + (d.ty - d.fy) * k : d.y);
+    const df = d.moving && S.moving ? (S.mt < 0.5 ? 1 : 0) : (Math.floor(S.time * 1.5) % 4 === 0 ? 1 : 0) * 0;
+    const same = !d.moving && d.x === S.px && d.y === S.py;
+    list.push({ y: dyp + (same ? -0.02 : 0), draw: () => {
+      const sx = Math.round(dxp * T) - cx - 4, sy = Math.round(dyp * T) - cy - 3 - (d.moving && S.moving && S.mt > 0.25 && S.mt < 0.75 ? 1 : 0);
+      ctx.drawImage(ludo(d.dir, df), sx, sy);
+      if (!d.moving && tileAt(m, d.x, d.y) === '"') ctx.drawImage(TILES['"'], 0, 8, 16, 8, Math.round(dxp * T) - cx, Math.round(dyp * T) - cy + 8, 16, 8);
+    } });
+  }
+  const ox = S.moving ? DIRS[S.dir][0] * S.mt : 0, oy = S.moving ? DIRS[S.dir][1] * S.mt : 0;
+  const ppx = Math.round((S.px + ox) * T) - cx, ppy = Math.round((S.py + oy) * T) - cy;
+  const f = S.moving && S.mt < 0.55 ? (S.step % 2 ? 1 : 2) : 0;
+  list.push({ y: S.py + oy + 0.01, draw: () => {
+    drawChar('gud', S.dir, f, ppx, ppy);
+    if (!S.moving && tileAt(m, S.px, S.py) === '"') ctx.drawImage(TILES['"'], 0, 8, 16, 8, ppx, ppy + 8, 16, 8);
+  } });
+  list.sort((a, b) => a.y - b.y).forEach(d => d.draw());
+  if (S.rustle > 0) { ctx.fillStyle = C.P; for (let i = 0; i < 4; i++) ctx.fillRect(ppx + 2 + i * 4, ppy + 10 - Math.round(S.rustle * 20) + (i % 2) * 2, 2, 2); }
+  if (S.loc) { const t = tr(S.loc.text), w = tw(t, 1) + 16; box(4, 4, w, 20, C.Y); dtext(ctx, t, 12, 11, 1, C.K); }
+}
+
+function zoneOf(y) { return y >= 41 ? 'NEW' : y >= 32 ? 'LUCCA' : y >= 21 ? 'ROUTE' : 'FI'; }
+function zoneName(z) { return z === 'NEW' ? L('QUARTIERE NUOVO', 'NEW DISTRICT') : z === 'LUCCA' ? 'LUCCA' : z === 'ROUTE' ? L('VIA DEL SEGNO', 'ROUTE OF THE MARK') : L('FIRENZE', 'FLORENCE'); }
+function sparkle(x, y, ph) {
+  const t = (S.time * 3 + ph) % 3; if (t > 1.6) return;
+  const s = t < 0.8 ? 1 : 2; ctx.fillStyle = C.Y;
+  ctx.fillRect(x - s, y, s * 2 + 1, 1); ctx.fillRect(x, y - s, 1, s * 2 + 1); ctx.fillStyle = C.W; ctx.fillRect(x, y, 1, 1);
+}
+
+
+/* ---------------- SCRIPTS ---------------- */
+const MOVES = [
+  { n: L('ART DIRECTION', 'ART DIRECTION'), p: 28, a: 95, pp: 15, fx: 'artdir' },
+  { n: L('KERNING', 'KERNING'), p: 22, a: 100, pp: 20, fx: 'kerning' },
+  { n: L('LETTERING', 'LETTERING'), p: 34, a: 85, pp: 10, fx: 'lettering' },
+  { n: L('DIRITTI UMANI', 'HUMAN RIGHTS'), p: 45, a: 90, pp: 5, fx: 'rights' }
+];
+const WILD_MOVES = [[L('FASCINO', 'CHARM'), 4], [L('CURIOSITÀ', 'CURIOSITY'), 5], [L('ISPIRAZIONE', 'INSPIRATION'), 3]];
+function heal() { S.hp = S.maxhp; S.pp = MOVES.map(m => m.pp); S.coffee = Math.max(S.coffee, 3); }
+async function afterLose() {
+  heal(); await goTo('centro', 5, 4, 'up');
+  await say('BARISTA: ' + tr(TQ('lose')));
+}
+async function ludoScript() {
+  J.bark();
+  const lines = ['ludo1', 'ludo2', 'ludo3', 'ludo4'].map(k => TQ(k)).filter(Boolean);
+  await say('LUDO: ' + tr(pick(lines)));
+}
+async function itemScript(o) {
+  await say(Array.isArray(o.text) ? o.text : [o.text]);
+  const it = o.item;
+  if (it && it.media && it.media.length) {
+    await say(TQ('seeProject'));
+    const c = await choose([TQ('seeYes'), TQ('seeNo')]);
+    if (c === 0 && window.GUDViewer) { stopSong(); await GUDViewer.open(it, { base: CFG.contentBase }); playSong('town'); }
+  }
+}
+const SCRIPTS = {
+  async prof() {
+    const b = S.badges.filter(id => CV.sections[id]).length, c = S.caught.filter(i => MONS[i] && !MONS[i].legendary).length;
+    if (!b && !c) await say('PROF. SERIF: ' + tr(TQ('profStart')));
+    else if (S.hof && c < NREG()) await say('PROF. SERIF: ' + tr(TQ('profLegend')));
+    else await say('PROF. SERIF: ' + fmt(tr(TQ('profProgress')), { b, B: NBADGE(), c, C: NREG() }));
+  },
+  async leader(n) {
+    const id = n.sec, sec = CV.sections[id], bt = BAT[id], name = tr(n.name);
+    if (!sec) return;
+    if (S.badges.includes(id)) { await say(name + ': ' + tr(sec.summary)); return; }
+    await say(name + ': ' + tr(bt.pre));
+    const r = await battle({ kind: 'trainer', enemy: bt, look: n.look, leader: name });
+    if (r !== 'win') return;
+    await say(name + ': ' + tr(bt.post));
+    S.badges.push(id); J.badge();
+    await say(lf('GUD riceve la {b}!', 'GUD received the {b}!', { b: tr(sec.badge) }));
+    await say(tr(sec.summary));
+    save();
+    if (allBadges()) await say(TQ('allBadges'));
+  },
+  async client() {
+    if (S.hof) { await say('BIG CLIENT: ' + tr(TQ('clientAfter'))); return; }
+    if (!allBadges()) { await say('BIG CLIENT: ' + fmt(tr(TQ('clientEarly')), { b: S.badges.filter(id => CV.sections[id]).length })); return; }
+    await say('BIG CLIENT: ' + tr(TQ('clientPre')));
+    const r = await battle({ kind: 'trainer', enemy: BAT.client, look: 'client', leader: 'BIG CLIENT', boss: true });
+    if (r !== 'win') return;
+    await say('BIG CLIENT: ' + tr(TQ('clientPost')));
+    await hallOfFame();
+  },
+  async heal() {
+    await say('BARISTA: ' + tr(TQ('barista1')));
+    await say(TQ('barista2'));
+    const c = await choose([TXT.yes, TXT.no]);
+    if (c !== 0) { await say(L('Torna quando vuoi!', 'Come back anytime!')); return; }
+    stopSong(); J.heal(); await wait(1.3); heal(); playSong('town');
+    await say(TQ('barista3')); save();
+  },
+  async contacts() {
+    await say(TQ('pcContacts'));
+    await contactsMenu();
+  }
+};
+const fmt = (s, v) => { Object.keys(v).forEach(k => { s = s.split('{' + k + '}').join(String(v[k])); }); return s; };
+const allBadges = () => SECTIONS.length > 0 && SECTIONS.every(s => S.badges.includes(s.id));
+async function contactsMenu() {
+  for (;;) {
+    const c = await choose(CONTACTS.map(k => k.label).concat([L('ESCI', 'EXIT')]), { cancel: true, x: 4, y: 6 });
+    if (c < 0 || c >= CONTACTS.length) return;
+    const k = CONTACTS[c];
+    if (k.show) await say(k.show);
+    try { window.open(k.url, '_blank', 'noopener'); } catch (e) { /* */ }
+  }
+}
+
+/* ---------------- BATTLE ---------------- */
+function tween(o, k, a, b, dur) { return (async () => { const t0 = S.time; for (;;) { const p = Math.min(1, (S.time - t0) / dur); o[k] = a + (b - a) * p; if (p >= 1) return; await wait(0); } })(); }
+const ESPR = {};
+function enemyFrames(key) {
+  if (ESPR[key]) return ESPR[key];
+  let frames;
+  if (key === 'logo') frames = [mk(108, 40, (R, x) => { otext(x, 'LOGO', 6, 6, 4, C.P, C.K, null, C.Y); }, true), mk(108, 40, (R, x) => { otext(x, 'LOGO', 6, 6, 4, C.Y, C.K, null, C.P); }, true)];
+  else if (key === 'client') frames = SPR.clientQ || SPR.client;
+  else frames = SPR.ob[key] || SPR.ob.brief;
+  return (ESPR[key] = frames);
+}
+function enemyScale(c) { return clamp(Math.floor(Math.min(W * 0.46 / c.width, 92 / c.height)), 1, 3); }
+const MONBLINK = {};
+function monBlink(i) { return MONBLINK[i] || (MONBLINK[i] = monSprite(MONS[i], true)); }
+async function wildEncounter() {
+  const reg = MONS.map((m, i) => i).filter(i => !MONS[i].legendary), leg = MONS.map((m, i) => i).filter(i => MONS[i].legendary);
+  if (!reg.length) return;
+  const unc = reg.filter(i => !S.caught.includes(i));
+  let mon;
+  if (!unc.length) { const ul = leg.filter(i => !S.caught.includes(i)); mon = ul.length ? ul[0] : pick(reg.concat(leg)); }
+  else mon = Math.random() < 0.72 ? pick(unc) : pick(reg);
+  run(() => battle({ kind: 'wild', mon }));
+}
+async function battle(cfg) {
+  S.busy = true; J.encounter(); playSong(cfg.boss ? 'boss' : 'battle');
+  for (let i = 0; i < 3; i++) { S.flash = 1; await wait(0.07); S.flash = 0; await wait(0.07); }
+  const wild = cfg.kind === 'wild';
+  const e = wild ? { name: MONS[cfg.mon].n, lv: 18 + cfg.mon * 2, hp: MONS[cfg.mon].legendary ? 70 : 46, max: MONS[cfg.mon].legendary ? 70 : 46, moves: WILD_MOVES, mon: cfg.mon, fx: 'wild' }
+    : { name: tr(cfg.enemy.name), lv: cfg.enemy.lv, hp: cfg.enemy.hp, max: cfg.enemy.hp, moves: cfg.enemy.moves, weak: cfg.enemy.weak, spr: cfg.enemy.spr, fx: cfg.enemy.spr };
+  const B = S.battle = { wild, e, eOff: W, pOff: -W, eShow: e.hp, pShow: S.hp, blinkE: 0, blinkP: 0, eDrop: 0, pDrop: 0, eVis: true, leader: wild ? null : cfg.look, lunge: 0, eLunge: 0, prompt: null, ball: null, fx: null, parts: [], shake: 0, mouth: 0 };
+  if (wild && !S.seen.includes(cfg.mon)) S.seen.push(cfg.mon);
+  S.scene = 'battle';
+  await Promise.all([tween(B, 'eOff', W, 0, 0.6), tween(B, 'pOff', -W, 0, 0.6)]);
+  if (wild) await say(lf('Un GUDMON selvatico: {n}!', 'A wild {n} appeared!', { n: e.name }), { auto: 1.1 });
+  else {
+    await say(lf('{l} vuole lottare!', '{l} wants to battle!', { l: cfg.leader }), { auto: 1.1 });
+    await tween(B, 'eOff', 0, W, 0.3); B.leader = null;
+    await say(lf('{l} manda in campo {n}!', '{l} sent out {n}!', { l: cfg.leader, n: e.name }), { auto: 0.4 });
+    await tween(B, 'eOff', W, 0, 0.3); burst(ecxy()[0], ecxy()[1], 18, [C.Y, C.W, C.P], 90);
+  }
+  await say(L('Vai, GUD!', 'Go, GUD!'), { auto: 0.5 });
+  let result = null;
+  while (!result) {
+    B.prompt = L('Cosa farà GUD?', 'What will GUD do?');
+    const mw = MOBILE ? 128 : 150;
+    const c = await choose([TXT.fight, TXT.bag, wild ? TXT.catchT : L('GUDDEX', 'GUDDEX'), TXT.run], { cols: 2, x: W - mw - 4, y: H - 48, w: mw, h: 46 });
+    B.prompt = null;
+    if (c === 0) {
+      const m = await choose(MOVES.map(mv => mv.n), { cols: 2, x: 4, y: H - 48, w: W - 8, h: 46, cancel: true, info: i => 'PP ' + S.pp[i] + '/' + MOVES[i].pp });
+      if (m < 0) continue;
+      if (S.pp[m] <= 0) { await say(L('Non ci sono più PP per questa mossa!', 'No PP left for this move!')); continue; }
+      result = await playerAttack(m); if (!result) result = await enemyTurn();
+    } else if (c === 1) {
+      const r = await bagInBattle(); if (r === 'used') result = await enemyTurn(); else if (r === 'caught') result = r; else if (r === 'fail') result = await enemyTurn();
+    } else if (c === 2) {
+      if (wild) { result = await throwBook(); if (!result) result = await enemyTurn(); } else await openDex();
+    } else if (wild) { await say(L('Fuga riuscita!', 'Got away safely!'), { auto: 0.7 }); result = 'run'; }
+    else await say(L('Non si scappa da una lotta con un leader!', 'No running from a leader battle!'));
+  }
+  await fadeTo(1);
+  S.scene = 'world'; S.battle = null; playSong('town');
+  await fadeTo(0); S.busy = false;
+  if (result === 'lose') await afterLose();
+  save();
+  return result;
+}
+/* positions */
+function ecxy() { return [Math.round(W * 0.73), H - 102 - 34]; }
+function pcxy() { return [Math.round(W * 0.24), H - 50 - 36]; }
+function burst(x, y, n, cols, spd) {
+  const B = S.battle; if (!B) return;
+  for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, v = rand(spd * 0.3, spd); B.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - spd * 0.3, life: rand(0.3, 0.7), col: pick(cols), s: pick([1, 2, 2, 3]) }); }
+}
+async function playFX(kind, dur, data) {
+  const B = S.battle; if (!B) return;
+  B.fx = { kind, t0: S.time, dur, data: data || {} };
+  await wait(dur);
+  if (B.fx && B.fx.kind === kind) B.fx = null;
+}
+async function playerAttack(m) {
+  const B = S.battle, mv = MOVES[m]; S.pp[m]--;
+  await say(lf('GUD usa {m}!', 'GUD used {m}!', { m: tr(mv.n) }), { auto: 0.3 });
+  await tween(B, 'lunge', 0, 1, 0.1); await tween(B, 'lunge', 1, 0, 0.12);
+  J.throw();
+  await playFX(mv.fx, mv.fx === 'lettering' ? 0.9 : 0.8, { word: tr(mv.n) });
+  const [ex, ey] = ecxy();
+  if (Math.random() * 100 > mv.a) { J.miss(); B.fx = null; await say(L('Ma manca il bersaglio!', 'But it missed!'), { auto: 0.7 }); return null; }
+  const weak = !B.wild && B.e.weak === m, crit = Math.random() < 0.08;
+  let dmg = Math.round(mv.p * rand(0.85, 1) * (weak ? 1.6 : 1) * (crit ? 1.5 : 1)); if (B.wild) dmg = Math.round(dmg * 0.6);
+  (weak ? J.superHit : J.hit)(); B.blinkE = 0.5; B.shake = weak ? 0.35 : 0.2; burst(ex, ey, weak ? 30 : 16, [C.Y, C.P, C.W, C.K], weak ? 150 : 100);
+  B.e.hp = Math.max(0, B.e.hp - dmg); await wait(0.65);
+  if (crit) await say(L('Brutto colpo!', 'A critical hit!'), { auto: 0.6 });
+  if (weak) await say(L('È superefficace!', 'It\'s super effective!'), { auto: 0.7 });
+  if (B.e.hp <= 0) {
+    J.faint(); await tween(B, 'eDrop', 0, 1, 0.45); B.eVis = false;
+    if (B.wild) { await say(lf('{n} si è addormentato. Meglio lasciarlo riposare.', '{n} fell asleep. Better let it rest.', { n: B.e.name })); return 'faint'; }
+    await say(lf('{n} è KO!', '{n} fainted!', { n: B.e.name }), { auto: 0.8 });
+    S.lv++; S.maxhp += 4; S.hp = Math.min(S.maxhp, S.hp + 4); J.lvl();
+    await say(lf('GUD sale al LV {l}!', 'GUD grew to LV {l}!', { l: S.lv }));
+    return 'win';
+  }
+  if (B.wild) await say(lf('{n} si incuriosisce!', '{n} is getting curious!', { n: B.e.name }), { auto: 0.6 });
+  return null;
+}
+async function enemyTurn() {
+  const B = S.battle, mv = pick(B.e.moves);
+  B.mouth = 1.4;
+  await say(lf('{n} usa {m}!', '{n} used {m}!', { n: B.e.name, m: tr(mv[0]) }), { auto: 0.3 });
+  await tween(B, 'eLunge', 0, 1, 0.1); await tween(B, 'eLunge', 1, 0, 0.12);
+  await playFX('e_' + (B.e.fx || 'brief'), 0.9);
+  const [px, py] = pcxy();
+  if (Math.random() < 0.1) { J.miss(); await say(L('GUD lo schiva!', 'GUD dodged it!'), { auto: 0.7 }); return null; }
+  const dmg = Math.round(mv[1] * rand(0.8, 1.15)); J.hit(); B.blinkP = 0.5; B.shake = 0.25; burst(px, py, 12, B.wild ? [C.Y, C.W, C.B] : [C.P, C.K, C.W], 90);
+  S.hp = Math.max(0, S.hp - dmg); await wait(0.6);
+  if (B.wild && dmg <= 5) await say(L('GUD si sente ispirata. Un po\' stanca, ma ispirata.', 'GUD feels inspired. A little tired, but inspired.'), { auto: 0.8 });
+  if (S.hp <= 0) { J.faint(); await tween(B, 'pDrop', 0, 1, 0.45); await say(L('GUD è stremata!', 'GUD is exhausted!')); await say(L('GUD corre al CENTRO GUD...', 'GUD runs to the GUD CENTER...')); return 'lose'; }
+  return null;
+}
+async function bagInBattle() {
+  const B = S.battle;
+  const c = await choose([lf('CAFFÈ x{n}', 'COFFEE x{n}', { n: S.coffee }), L('SKETCHBOOK', 'SKETCHBOOK')], { cancel: true });
+  if (c === 0) {
+    if (S.coffee <= 0) { await say(L('I caffè sono finiti! Ricaricali al CENTRO GUD.', 'Out of coffee! Refill at the GUD CENTER.')); return 'none'; }
+    if (S.hp >= S.maxhp) { await say(L('GUD è già carica a mille.', 'GUD is already fully charged.')); return 'none'; }
+    S.coffee--; S.hp = Math.min(S.maxhp, S.hp + 40); J.heal(); const [px, py] = pcxy(); burst(px, py, 20, [C.Y, C.W], 70);
+    await say(L('GUD beve un CAFFÈ. +40 PS!', 'GUD drinks a COFFEE. +40 HP!'), { auto: 0.8 }); return 'used';
+  }
+  if (c === 1) {
+    if (!B.wild) { await say(L('Non si possono catturare i GUDMON degli altri!', 'You can\'t catch someone else\'s GUDMON!')); return 'none'; }
+    const r = await throwBook(); return r || 'fail';
+  }
+  return 'none';
+}
+async function throwBook() {
+  const B = S.battle, n = B.e.name;
+  await say(L('GUD lancia lo SKETCHBOOK!', 'GUD threw a SKETCHBOOK!'), { auto: 0.3 }); J.throw();
+  B.ball = { t: 0, wig: 0 }; await tween(B.ball, 't', 0, 1, 0.5); B.eVis = false; const [ex, ey] = ecxy(); burst(ex, ey + 14, 14, [C.W, C.Y], 80);
+  const legendary = MONS[B.e.mon] && MONS[B.e.mon].legendary;
+  const ok = Math.random() < (legendary ? 0.3 : 0.45) + 0.5 * (1 - B.e.hp / B.e.max), wig = ok ? 3 : irand(1, 2);
+  for (let i = 0; i < wig; i++) { await wait(0.25); B.ball.wig = 1; J.wiggle(); await wait(0.15); B.ball.wig = -1; await wait(0.15); B.ball.wig = 0; }
+  await wait(0.3);
+  if (ok) {
+    J.catch(); B.ball.stars = true;
+    if (!S.caught.includes(B.e.mon)) S.caught.push(B.e.mon); save();
+    await say(lf('Preso! {n} entra nel GUDDEX.', 'Gotcha! {n} was added to the GUDDEX.', { n }));
+    await dexEntry(B.e.mon);
+    return 'caught';
+  }
+  B.ball = null; B.eVis = true; J.wiggle(); burst(ex, ey, 16, [C.Y, C.W, C.P], 110);
+  await say(lf('Oh no! {n} è uscito dallo sketchbook!', 'Oh no! {n} broke free!', { n }), { auto: 0.8 });
+  return null;
+}
+function hpBar(x, y, w, cur, max) {
+  const f = clamp(cur / max, 0, 1);
+  dtext(ctx, 'PS', x, y, 1, C.P);
+  const bx = x + 14; ctx.fillStyle = C.K; ctx.fillRect(bx, y, w - 14, 7); ctx.fillStyle = C.L; ctx.fillRect(bx + 1, y + 1, w - 16, 5);
+  ctx.fillStyle = f > 0.5 ? C.Y : f > 0.2 ? C.B : (Math.floor(S.time * 6) % 2 ? C.P : C.B);
+  ctx.fillRect(bx + 1, y + 1, Math.round((w - 16) * f), 5);
+}
+function platform(cx, cy, rw) { for (let dy = -5; dy <= 5; dy++) { const hw = Math.round(Math.sqrt(1 - (dy / 5) * (dy / 5)) * rw); ctx.fillStyle = Math.abs(dy) === 5 ? C.K : C.B; ctx.fillRect(cx - hw, cy + dy, hw * 2, 1); } ctx.fillStyle = C.K; ctx.fillRect(cx - rw, cy, 1, 1); ctx.fillRect(cx + rw - 1, cy, 1, 1); }
+let GUDBACK = null;
+function drawBattle() {
+  const B = S.battle; if (!B) return;
+  if (!GUDBACK) GUDBACK = [gudBack(0), gudBack(1)];
+  ctx.fillStyle = C.W; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = C.L; const so = Math.floor(S.time * 6) % 6; for (let y = -6 + so; y < H - 48; y += 6) ctx.fillRect(0, y, W, 2);
+  ctx.save();
+  if (B.shake > 0) ctx.translate(irand(-3, 3), irand(-2, 2));
+  const ey = H - 102, bob = Math.round(Math.sin(S.time * 2.4) * 2), ex = Math.round(W * 0.73 + B.eOff - B.eLunge * 10);
+  platform(Math.round(W * 0.73 + B.eOff), ey - 2, MOBILE ? 44 : 54);
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, ey + 1); ctx.clip();
+  if (B.leader) { const p = person(B.leader, 'down', 0); ctx.drawImage(p, ex - 34, ey - 64 + 2 + bob, 68, 68); }
+  else if (B.eVis && !(B.blinkE > 0 && Math.floor(S.time * 20) % 2)) {
+    const dy = Math.round(B.eDrop * 110);
+    if (B.wild) {
+      const blink = (S.time % 3.1) < 0.14, s = blink ? monBlink(B.e.mon) : SP.mons[B.e.mon];
+      const hop = Math.abs(Math.sin(S.time * 3)) * 4 | 0;
+      ctx.drawImage(s, ex - 44, ey - 88 + 4 + dy - hop, 88, 88);
+    } else {
+      const fr = enemyFrames(B.e.spr);
+      let c = fr[0];
+      if (B.e.spr === 'client') c = B.mouth > 0 && Math.floor(S.time * 8) % 2 ? fr[1] : fr[0];
+      else if (fr.length > 1) c = fr[Math.floor(S.time * 5) % fr.length];
+      const s = B.e.spr === 'logo' || B.e.spr === 'client' ? 1 : enemyScale(c);
+      const sx = B.e.spr === 'bug' && Math.random() < 0.08 ? irand(-3, 3) : 0;
+      ctx.drawImage(c, ex - Math.round(c.width * s / 2) + sx, ey - c.height * s + dy + bob, c.width * s, c.height * s);
+      if (B.e.spr === 'bug' && Math.floor(S.time * 10) % 7 === 0) { ctx.fillStyle = pick([C.P, C.Y, C.K]); ctx.fillRect(ex - 30, ey - irand(10, 60), 60, 2); }
+    }
+  }
+  ctx.restore();
+  if (B.ball) {
+    const t = B.ball.t, sx = W * 0.3, sy = H - 100, tx = W * 0.73, ty = ey - 18;
+    const bx = Math.round(sx + (tx - sx) * t + (B.ball.wig || 0) * 2), by = Math.round(sy + (ty - sy) * t - Math.sin(t * Math.PI) * 50);
+    ctx.fillStyle = C.K; ctx.fillRect(bx - 7, by - 9, 14, 18); ctx.fillStyle = C.Y; ctx.fillRect(bx - 6, by - 8, 12, 16); ctx.fillStyle = C.K; ctx.fillRect(bx - 6, by - 8, 2, 16); ctx.fillStyle = C.P; ctx.fillRect(bx - 2, by - 3, 6, 2);
+    if (B.ball.stars) { ctx.fillStyle = C.Y; for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2 + S.time * 3; ctx.fillRect(Math.round(bx + Math.cos(a) * 16), Math.round(by + Math.sin(a) * 12), 2, 2); } }
+  }
+  if (!B.leader && B.eOff < W * 0.5) {
+    const iw = MOBILE ? 124 : 150; box(6, 8, iw, 44);
+    dtext(ctx, B.e.name.length > 19 ? B.e.name.slice(0, 19) : B.e.name, 13, 14, 1, C.K);
+    dtext(ctx, 'LV' + B.e.lv, 13, 25, 1, C.P);
+    hpBar(13, 36, iw - 16, B.eShow, B.e.max);
+  }
+  const px = Math.round(W * 0.24 + B.pOff + B.lunge * 12), pb = H - 50;
+  platform(Math.round(W * 0.24 + B.pOff), pb - 2, MOBILE ? 40 : 50);
+  if (!(B.blinkP > 0 && Math.floor(S.time * 20) % 2)) {
+    const fr = GUDBACK[Math.floor(S.time * 1.6) % 2];
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, pb); ctx.clip(); ctx.drawImage(fr, px - 34, pb - 66 + Math.round(B.pDrop * 70), 68, 68); ctx.restore();
+  }
+  drawFX(B);
+  B.parts.forEach(p => { ctx.fillStyle = p.col; ctx.fillRect(Math.round(p.x), Math.round(p.y), p.s, p.s); });
+  ctx.restore();
+  const iw = MOBILE ? 118 : 146, ix = W - iw - 6, iy = H - 48 - 42;
+  box(ix, iy, iw, 40);
+  dtext(ctx, 'GUD', ix + 8, iy + 6, 1, C.K); dtext(ctx, 'LV' + S.lv, ix + iw - 8, iy + 6, 1, C.P, 'right');
+  hpBar(ix + 8, iy + 17, iw - 16, B.pShow, S.maxhp);
+  dtext(ctx, Math.round(B.pShow) + '/' + S.maxhp, ix + iw - 8, iy + 28, 1, C.K, 'right');
+  box(4, H - 48, W - 8, 46);
+  if (B.prompt) { const lines = wrap(tr(B.prompt), Math.floor((W - (MOBILE ? 140 : 162) - 16) / 6)); lines.forEach((l, i) => dtext(ctx, l, 12, H - 36 + i * 15, 1, C.K)); }
+}
+/* --- move & attack effects --- */
+const lerp = (a, b, t) => a + (b - a) * t;
+function drawFX(B) {
+  const f = B.fx; if (!f) return;
+  const p = clamp((S.time - f.t0) / f.dur, 0, 1);
+  const [px, py] = pcxy(), [ex, ey] = ecxy();
+  switch (f.kind) {
+    case 'kerning': {
+      const q = Math.min(1, p / 0.55), x = lerp(px + 20, ex, q), y = lerp(py - 10, ey - 6, q) - Math.sin(q * Math.PI) * 40;
+      const gap = p < 0.55 ? 22 : Math.round(lerp(22, -2, (p - 0.55) / 0.45));
+      otext(ctx, 'A', x - 12 - gap / 2, y - 14, 4, C.Y, C.K); otext(ctx, 'V', x - 8 + gap / 2, y - 14, 4, C.P, C.K);
+      if (p > 0.55) { ctx.fillStyle = C.K; ctx.fillRect(Math.round(x) - 1, Math.round(y) - 22, 2, 6); ctx.fillRect(Math.round(x) - 1, Math.round(y) + 16, 2, 6); }
+      if (p > 0.9) { ctx.fillStyle = C.W; ctx.globalAlpha = 0.6; ctx.fillRect(0, 0, W, H - 48); ctx.globalAlpha = 1; }
+      break;
+    }
+    case 'lettering': {
+      const n = 46;
+      for (let i = 0; i <= n * p; i++) {
+        const u = i / n, x = lerp(px + 20, ex, u), y = lerp(py - 6, ey, u) + Math.sin(u * Math.PI * 3) * 16, th = 2 + Math.round(Math.sin(u * Math.PI) * 3);
+        ctx.fillStyle = C.K; ctx.fillRect(Math.round(x) - 1, Math.round(y) - 1, th + 2, th + 2);
+        ctx.fillStyle = C.P; ctx.fillRect(Math.round(x), Math.round(y), th, th);
+      }
+      const u = p, hx = lerp(px + 20, ex, u), hy = lerp(py - 6, ey, u) + Math.sin(u * Math.PI * 3) * 16;
+      ctx.fillStyle = C.Y; ctx.fillRect(Math.round(hx) - 3, Math.round(hy), 7, 1); ctx.fillRect(Math.round(hx), Math.round(hy) - 3, 1, 7);
+      break;
+    }
+    case 'artdir': {
+      const q = Math.min(1, p / 0.7), bw = lerp(W - 20, 70, q), bh = lerp(H - 70, 70, q), cx = lerp(W / 2, ex, q), cy = lerp((H - 48) / 2, ey - 6, q);
+      const x0 = Math.round(cx - bw / 2), y0 = Math.round(cy - bh / 2), x1 = Math.round(cx + bw / 2), y1 = Math.round(cy + bh / 2), L_ = 10;
+      ctx.fillStyle = C.K;
+      [[x0, y0, 1, 1], [x1, y0, -1, 1], [x0, y1, 1, -1], [x1, y1, -1, -1]].forEach(([x, y, sx, sy]) => { ctx.fillRect(sx > 0 ? x : x - L_, y - (sy > 0 ? 0 : 2), L_, 3); ctx.fillRect(x - (sx > 0 ? 0 : 2), sy > 0 ? y : y - L_, 3, L_); });
+      ctx.fillRect(Math.round(cx) - 4, Math.round(cy), 9, 1); ctx.fillRect(Math.round(cx), Math.round(cy) - 4, 1, 9);
+      if (p > 0.75) { ctx.globalAlpha = p > 0.85 ? 0.85 : 0.4; ctx.fillStyle = C.Y; ctx.fillRect(0, 0, W, H - 48); ctx.globalAlpha = 1; otext(ctx, 'CLICK!', cx, cy - 40, 2, C.P, C.K, 'center'); }
+      break;
+    }
+    case 'rights': {
+      const word = f.data.word || 'DIRITTI UMANI', x = lerp(px, ex + 10, Math.min(1, p / 0.85)), y = Math.round(lerp(py - 4, ey - 4, p));
+      ctx.fillStyle = C.P; for (let k = 1; k <= 6; k++) ctx.fillRect(Math.round(x - tw(word, 2) / 2 - k * 9), y + 2 + (k % 3) * 4, 6, 2);
+      otext(ctx, word, x, y, 2, C.Y, C.K, 'center');
+      if (p > 0.85) { ctx.globalAlpha = 0.5; ctx.fillStyle = C.W; ctx.fillRect(0, 0, W, H - 48); ctx.globalAlpha = 1; }
+      break;
+    }
+    case 'e_brief': {
+      for (let k = 0; k < 6; k++) { const q = clamp(p * 1.6 - k * 0.12, 0, 1); if (q <= 0 || q >= 1) continue; const x = lerp(ex, px, q) + Math.sin(q * 9 + k) * 12, y = lerp(ey - 20, py, q) - Math.sin(q * Math.PI) * 30; otext(ctx, '?', x, y, 3, k % 2 ? C.P : C.Y, C.K, 'center'); }
+      break;
+    }
+    case 'e_f24': {
+      const s = SPR.ob.f24[0];
+      for (let k = 0; k < 4; k++) { const q = clamp(p * 1.5 - k * 0.15, 0, 1); if (q <= 0 || q >= 1) continue; ctx.drawImage(s, Math.round(lerp(ex, px, q) - 16 + (k - 1.5) * 12), Math.round(lerp(ey - 10, py - 10, q) - Math.sin(q * Math.PI) * (20 + k * 10))); }
+      break;
+    }
+    case 'e_logo': {
+      const sc = Math.max(1, Math.round(lerp(1, MOBILE ? 5 : 7, p))), col = [C.P, C.Y, C.K][Math.floor(S.time * 14) % 3];
+      otext(ctx, 'LOGO', lerp(ex, px, Math.min(1, p * 1.4)), lerp(ey - 10, py - 7 * sc / 2, Math.min(1, p * 1.4)), sc, col, col === C.K ? C.Y : C.K, 'center');
+      break;
+    }
+    case 'e_bug': {
+      for (let k = 0; k < 5; k++) { ctx.fillStyle = pick([C.P, C.Y, C.K, C.B]); ctx.fillRect(irand(-10, W), irand(0, H - 60), irand(20, 120), irand(1, 4)); }
+      try { const y = irand(10, H - 70), h = irand(4, 14); ctx.drawImage(cvs, 0, y * KS, cvs.width, h * KS, irand(-14, 14), y, W, h); } catch (e) { /* */ }
+      otext(ctx, 'ERROR', px + irand(-4, 4), py - 40, 2, C.P, C.K, 'center');
+      break;
+    }
+    case 'e_voice': {
+      for (let k = 0; k < 14; k++) { const q = clamp(p * 1.4 - k * 0.04, 0, 1); if (q <= 0 || q >= 1) continue; const x = lerp(ex - 20, px + 10, q), h = 4 + Math.abs(Math.sin(k * 1.7 + S.time * 20)) * 18, y = lerp(ey - 10, py, q); ctx.fillStyle = C.K; ctx.fillRect(Math.round(x) - 1, Math.round(y - h / 2) - 1, 5, Math.round(h) + 2); ctx.fillStyle = C.P; ctx.fillRect(Math.round(x), Math.round(y - h / 2), 3, Math.round(h)); }
+      break;
+    }
+    case 'e_email': {
+      const s = SPR.ob.email[Math.floor(S.time * 8) % 2];
+      for (let k = 0; k < 5; k++) { const q = clamp(p * 1.5 - k * 0.12, 0, 1); if (q <= 0 || q >= 1) continue; ctx.drawImage(s, Math.round(px - 18 + (k - 2) * 18 + Math.sin(q * 6 + k) * 6), Math.round(lerp(-30, py - 14, q))); }
+      break;
+    }
+    case 'e_client': {
+      const list = LIST('feedbackWeek'); f.data.txt = f.data.txt || tr(pick(list) || 'MORE WOW!');
+      const lines = wrap(f.data.txt, MOBILE ? 9 : 14), sc = MOBILE ? 2 : 3, q = Math.min(1, p / 0.5), y0 = lerp(-60, H - 48 - lines.length * 8 * sc - 20, q * q);
+      lines.forEach((l, i) => otext(ctx, l, W * 0.3, y0 + i * 8 * sc, sc, [C.P, C.Y, C.K][Math.floor(S.time * 10) % 3], C.K, 'center', C.P));
+      break;
+    }
+    case 'e_wild': {
+      const h = SPR.fx.heartP;
+      for (let k = 0; k < 7; k++) { const q = clamp(p * 1.4 - k * 0.07, 0, 1); if (q <= 0 || q >= 1) continue; ctx.drawImage(h, Math.round(lerp(ex, px, q) + Math.sin(q * 8 + k) * 10), Math.round(lerp(ey - 10, py - 10, q) - Math.sin(q * Math.PI) * 26)); }
+      break;
+    }
+    default: {
+      const s = SPR.ob[f.kind.slice(2)]; if (!s) break; const fr = s[0];
+      for (let k = 0; k < 3; k++) { const q = clamp(p * 1.4 - k * 0.15, 0, 1); if (q <= 0 || q >= 1) continue; ctx.drawImage(fr, Math.round(lerp(ex, px, q) - fr.width / 2), Math.round(lerp(ey - 10, py - 10, q) - Math.sin(q * Math.PI) * 30)); }
+    }
+  }
+}
+function battleUpdate(dt) {
+  const B = S.battle; if (!B) return;
+  B.blinkE -= dt; B.blinkP -= dt; B.shake -= dt; B.mouth -= dt;
+  B.eShow += (B.e.hp - B.eShow) * Math.min(1, dt * 6); B.pShow += (S.hp - B.pShow) * Math.min(1, dt * 6);
+  for (let i = B.parts.length - 1; i >= 0; i--) { const q = B.parts[i]; q.life -= dt; if (q.life <= 0) { B.parts.splice(i, 1); continue; } q.vy += 260 * dt; q.x += q.vx * dt; q.y += q.vy * dt; }
+}
+
+/* ---------------- SCREENS: GUDDEX, CARD, BAG ---------------- */
+function drawBadge(i, x, y, own) {
+  i = ((i % 6) + 6) % 6;
+  ctx.fillStyle = C.K; ctx.fillRect(x, y, 16, 16);
+  if (!own) { ctx.fillStyle = C.L; ctx.fillRect(x + 1, y + 1, 14, 14); ctx.fillStyle = C.B; ctx.fillRect(x + 7, y + 4, 2, 2); ctx.fillRect(x + 7, y + 7, 2, 5); return; }
+  const R = (a, b, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(x + a, y + b, w, h); };
+  R(1, 1, 14, 14, C.Y);
+  if (i === 0) { R(3, 3, 10, 10, C.W); R(3, 6, 10, 1, C.K); R(3, 9, 10, 1, C.K); R(6, 3, 1, 10, C.K); R(9, 3, 1, 10, C.K); }
+  if (i === 1) { for (let k = 0; k < 5; k++) R(7 - k, 3 + k, 2 + k * 2, 1, C.P); for (let k = 0; k < 5; k++) R(3 + k, 8 + k, 10 - k * 2, 1, C.P); R(7, 6, 2, 2, C.K); }
+  if (i === 2) { R(2, 7, 12, 6, C.P); R(2, 4, 3, 3, C.P); R(7, 4, 2, 3, C.P); R(11, 4, 3, 3, C.P); R(7, 10, 2, 3, C.K); }
+  if (i === 3) { R(3, 3, 10, 10, C.K); dtext(ctx, 'G', x + 5, y + 4, 1, C.Y); }
+  if (i === 4) { R(3, 3, 10, 10, C.K); R(4, 4, 8, 8, C.P); R(6, 6, 4, 4, C.W); }
+  if (i === 5) { R(7, 2, 2, 3, C.B); R(6, 5, 4, 2, C.B); R(4, 7, 8, 5, C.B); R(5, 12, 6, 1, C.B); R(6, 8, 1, 2, C.W); }
+}
+function screenBg(title) {
+  ctx.fillStyle = C.W; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = C.P; ctx.fillRect(0, 0, W, 18); ctx.fillStyle = C.K; ctx.fillRect(0, 18, W, 2);
+  dtext(ctx, title, 8, 6, 1, C.W);
+}
+function openDex() {
+  let idx = 0, top = 0;
+  const rows = () => Math.floor((H - 30) / 13);
+  return pushScreen({
+    update() {
+      const n = MONS.length;
+      if (pressed.has('up')) { idx = (idx - 1 + n) % n; J.blip(); }
+      if (pressed.has('down')) { idx = (idx + 1) % n; J.blip(); }
+      if (idx < top) top = idx; if (idx >= top + rows()) top = idx - rows() + 1;
+      if (pressed.has('a')) { if (S.seen.includes(idx) || S.caught.includes(idx)) { J.select(); dexEntry(idx); } else J.bump(); }
+      if (pressed.has('b') || pressed.has('start')) { J.blip(); this.resolve(); }
+    },
+    draw() {
+      const caught = S.caught.filter(i => MONS[i] && !MONS[i].legendary).length, seen = S.seen.filter(i => MONS[i] && !MONS[i].legendary).length;
+      screenBg('GUDDEX'); dtext(ctx, lf('VISTI {s}  PRESI {c}/{n}', 'SEEN {s}  CAUGHT {c}/{n}', { s: seen, c: caught, n: NREG() }), W - 8, 6, 1, C.W, 'right');
+      const listW = W >= 320 ? Math.round(W * 0.58) : W;
+      for (let r = 0; r < rows() && top + r < MONS.length; r++) {
+        const i = top + r, y = 26 + r * 13, known = S.seen.includes(i) || S.caught.includes(i);
+        if (i === idx) { ctx.fillStyle = C.Y; ctx.fillRect(4, y - 3, listW - 8, 13); cursor(8, y, C.P); }
+        dtext(ctx, '#' + pad(i + 1, 3), 16, y, 1, C.P);
+        dtext(ctx, known ? MONS[i].n : (MONS[i].legendary ? '???' : '----------'), 48, y, 1, C.K);
+        if (S.caught.includes(i)) dtext(ctx, '♥', listW - 16, y, 1, C.P);
+      }
+      if (W >= 320) {
+        const known = S.seen.includes(idx) || S.caught.includes(idx), cx = Math.round(W * 0.79);
+        box(Math.round(W * 0.6), 28, Math.round(W * 0.38), 104, C.L);
+        if (known) { ctx.drawImage(SP.mons[idx], cx - 22, 40); dtext(ctx, tr(MONS[idx].type), cx, 96, 1, C.P, 'center'); dtext(ctx, S.caught.includes(idx) ? lf('PRESO', 'CAUGHT', {}) : lf('VISTO', 'SEEN', {}), cx, 110, 1, C.K, 'center'); }
+        else dtext(ctx, '?', cx, 70, 3, C.B, 'center');
+        dtext(ctx, lf('A: SCHEDA  B: ESCI', 'A: ENTRY  B: EXIT', {}), cx, H - 14, 1, C.K, 'center');
+      }
+    }
+  });
+}
+function dexEntry(i) {
+  const m = MONS[i];
+  return pushScreen({
+    update() { if (pressed.has('a') || pressed.has('b') || pressed.has('start')) { J.blip(); this.resolve(); } },
+    draw() {
+      screenBg('GUDDEX #' + pad(i + 1, 3));
+      box(6, 26, 100, 100, C.L); ctx.drawImage(SP.mons[i], 12, 32, 88, 88);
+      const x = 116;
+      dtext(ctx, m.n, x, 32, W >= 320 ? 2 : 1, C.K);
+      dtext(ctx, lf('TIPO: {t}', 'TYPE: {t}', { t: tr(m.type) }), x, W >= 320 ? 52 : 46, 1, C.P);
+      dtext(ctx, S.caught.includes(i) ? lf('♥ PRESO', '♥ CAUGHT', {}) : lf('VISTO', 'SEEN', {}), x, W >= 320 ? 66 : 60, 1, C.K);
+      const lines = wrap(S.caught.includes(i) ? tr(m.d) : lf('Cattura {n} per leggere la sua scheda.', 'Catch {n} to read its entry.', { n: m.n }), Math.floor((W - 20) / 6));
+      lines.forEach((l, k) => dtext(ctx, l, 10, 136 + k * 12, 1, C.K));
+    }
+  });
+}
+function openCard() {
+  let page = 0;
+  return pushScreen({
+    update() {
+      if (pressed.has('a') || pressed.has('right') || pressed.has('left')) { J.blip(); page = 1 - page; }
+      if (pressed.has('b') || pressed.has('start')) { J.blip(); this.resolve(); }
+    },
+    draw() {
+      screenBg(lf('SCHEDA DI GUD  {p}/2', 'GUD CARD  {p}/2', { p: page + 1 }));
+      const cw = Math.floor((W - 20) / 6);
+      if (page === 0) {
+        box(8, 26, 64, 76, C.L); ctx.drawImage(person('gud', 'down', 0), 13, 30, 54, 66);
+        const x = 82, n = Math.floor((W - x - 8) / 6);
+        let y = 30;
+        dtext(ctx, 'GUD', x, y, 2, C.P); y += 20;
+        wrap(CV.full, n).forEach(l => { dtext(ctx, l, x, y, 1, C.K); y += 11; });
+        dtext(ctx, 'LV ' + S.lv + '   PS ' + S.hp + '/' + S.maxhp, x, y + 2, 1, C.K); y += 13;
+        dtext(ctx, lf('BASE: FIRENZE', 'BASE: FLORENCE', {}), x, y + 2, 1, C.K); y += 13;
+        dtext(ctx, 'GUDDEX: ' + S.caught.filter(i => MONS[i] && !MONS[i].legendary).length + '/' + NREG(), x, y + 2, 1, C.K);
+        let yy = 112; wrap(tr(CV.role), cw).forEach(l => { dtext(ctx, l, 10, yy, 1, C.P); yy += 11; });
+        yy += 4; dtext(ctx, lf('MEDAGLIE', 'BADGES', {}), 10, yy, 1, C.K); yy += 11;
+        const per = Math.floor((W - 20) / 20); SECTIONS.forEach((s, i) => drawBadge(s.icon != null ? s.icon : i, 10 + (i % per) * 20, yy + Math.floor(i / per) * 20, S.badges.includes(s.id)));
+      } else {
+        let y = 28;
+        dtext(ctx, lf('FORMAZIONE', 'EDUCATION', {}), 10, y, 1, C.P); y += 13;
+        CV.education.forEach(e => { wrap(tr(e), cw).forEach(l => { dtext(ctx, l, 10, y, 1, C.K); y += 11; }); y += 3; });
+        y += 4; dtext(ctx, lf('LINGUE', 'LANGUAGES', {}), 10, y, 1, C.P); y += 13;
+        wrap(tr(CV.languages), cw).forEach(l => { dtext(ctx, l, 10, y, 1, C.K); y += 11; });
+        y += 6; dtext(ctx, lf('STUDIO', 'STUDIO', {}), 10, y, 1, C.P); y += 13;
+        wrap(tr(CV.studio), cw).forEach(l => { dtext(ctx, l, 10, y, 1, C.K); y += 11; });
+      }
+      dtext(ctx, lf('A: PAGINA  B: ESCI', 'A: PAGE  B: EXIT', {}), W - 8, H - 12, 1, C.B, 'right');
+    }
+  });
+}
+const BAG = [
+  { n: () => lf('CAFFÈ x{n}', 'COFFEE x{n}', { n: S.coffee }), d: L('Ricarica 40 PS. Il carburante ufficiale di GUD.', 'Restores 40 HP. GUD\'s official fuel.'), use: true },
+  { n: () => 'SKETCHBOOK', d: L('Per catturare i GUDMON nell\'erba alta. Infinito, come le idee.', 'Catches GUDMON in the tall grass. Endless, like ideas.') },
+  { n: () => 'GLYPHS', d: L('Strumento chiave: qui nascono i font di Typodiva.', 'Key item: where Typodiva fonts are born.') },
+  { n: () => 'ROBOFONT', d: L('Strumento chiave: per disegnare e ridisegnare lettere.', 'Key item: for drawing and redrawing letters.') },
+  { n: () => 'FONTTOOLS', d: L('Python per i font. Per quando le lettere vanno automatizzate.', 'Python for fonts. For when letters need automating.') },
+  { n: () => 'POSCA', d: L('I pennarelli della Legacy Board di Lucca.', 'The markers of the Lucca Legacy Board.') },
+  { n: () => lf('PASS LUCCA', 'LUCCA PASS', {}), d: L('Pass per Lucca Comics & Games. Validità: 60 anni.', 'Lucca Comics & Games pass. Valid for 60 years.') }
+];
+function openBag() {
+  let idx = 0;
+  return pushScreen({
+    update() {
+      if (pressed.has('up')) { idx = (idx - 1 + BAG.length) % BAG.length; J.blip(); this.msg = null; }
+      if (pressed.has('down')) { idx = (idx + 1) % BAG.length; J.blip(); this.msg = null; }
+      if (pressed.has('a') && BAG[idx].use) {
+        if (S.coffee > 0 && S.hp < S.maxhp) { S.coffee--; S.hp = Math.min(S.maxhp, S.hp + 40); J.heal(); this.msg = lf('GUD beve un caffè. PS {h}/{m}', 'GUD drinks a coffee. HP {h}/{m}', { h: S.hp, m: S.maxhp }); }
+        else { J.bump(); this.msg = S.coffee <= 0 ? lf('Caffè finiti!', 'Out of coffee!', {}) : lf('GUD è già in forma.', 'GUD is already fine.', {}); }
+      }
+      if (pressed.has('b') || pressed.has('start')) { J.blip(); this.resolve(); }
+    },
+    draw() {
+      screenBg(lf('ZAINO', 'BAG', {}));
+      BAG.forEach((it, i) => { const y = 28 + i * 14; if (i === idx) { ctx.fillStyle = C.Y; ctx.fillRect(4, y - 3, W - 8, 13); cursor(8, y, C.P); } dtext(ctx, it.n(), 18, y, 1, C.K); });
+      box(4, H - 52, W - 8, 48);
+      wrap(this.msg || tr(BAG[idx].d), cpl()).slice(0, 3).forEach((l, k) => dtext(ctx, l, 12, H - 42 + k * 12, 1, C.K));
+    }
+  });
+}
+async function startMenu() {
+  await run(async () => {
+    for (;;) {
+      const c = await choose(TXT.menu, { cancel: true, x: W - 104, y: 4, w: 100 });
+      if (c < 0 || c === 6) return;
+      if (c === 0) await openDex();
+      if (c === 1) await openCard();
+      if (c === 2) await openBag();
+      if (c === 3) { openQuickCV(); return; }
+      if (c === 4) { const l = await choose(['ITALIANO', 'ENGLISH'], { cancel: true, idx: LANG === 'en' ? 1 : 0 }); if (l >= 0) { setLang(l === 1 ? 'en' : 'it'); tellParent({ lang: LANG }); } }
+      if (c === 5) { save(); J.select(); await say(TXT.saved); }
+    }
+  });
+}
+
+/* ---------------- QUICK CV (accessible DOM panel) ---------------- */
+let cvOpen = false;
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function quickCVHTML() {
+  const t = o => esc(tr(o));
+  let h = `<header><h2>GUD</h2><p class="full">${esc(CV.full)}</p><p>${t(CV.role)}</p></header>`;
+  SECTION_ORDER.forEach(id => {
+    const s = CV.sections[id];
+    h += `<section><h3>${t(s.title)}</h3><ul>${s.items.map(i => `<li><b>${esc(t(i.t))}</b> ${t(i.d)}</li>`).join('')}</ul></section>`;
+  });
+  h += `<section><h3>${LANG === 'en' ? 'Education' : 'Formazione'}</h3><ul>${CV.education.map(e => `<li>${t(e)}</li>`).join('')}</ul></section>`;
+  h += `<section><h3>${LANG === 'en' ? 'Passions' : 'Passioni'}</h3><ul>${MONS.filter(m => !m.legendary).map(m => `<li><b>${esc(tr(m.type))}</b> ${t(m.d)}</li>`).join('')}</ul></section>`;
+  h += `<section class="contacts"><h3>${LANG === 'en' ? 'Contacts' : 'Contatti'}</h3><p>${CONTACTS.map(k => `<a href="${esc(k.url)}" target="_blank" rel="noopener">${esc(k.show || k.label)}</a>`).join('')}</p></section>`;
+  return h;
+}
+function openQuickCV() {
+  const p = $('cvPanel'); $('cvBody').innerHTML = quickCVHTML(); p.hidden = false; cvOpen = true;
+  $('cvTitle').textContent = LANG === 'en' ? 'QUICK CV' : 'CV RAPIDO';
+  $('cvBody').scrollTop = 0;
+  setTimeout(() => { try { $('cvClose').focus({ preventScroll: true }); } catch (e) { /* */ } }, 30);
+}
+function closeQuickCV() { $('cvPanel').hidden = true; cvOpen = false; try { cvs.focus({ preventScroll: true }); } catch (e) { /* */ } }
+$('cvClose').addEventListener('click', closeQuickCV);
+$('cvBtn').addEventListener('click', () => { AU.init(); cvOpen ? closeQuickCV() : openQuickCV(); });
+function syncLang() {
+  $('cvBtn').textContent = LANG === 'en' ? 'QUICK CV' : 'CV RAPIDO';
+  $('langBtn').textContent = LANG === 'en' ? 'IT' : 'EN';
+  $('langBtn').setAttribute('aria-label', LANG === 'en' ? 'Passa all\'italiano' : 'Switch to English');
+  syncMute();
+}
+$('langBtn').addEventListener('click', () => { AU.init(); setLang(LANG === 'en' ? 'it' : 'en'); try { cvs.focus({ preventScroll: true }); } catch (e) { /* */ } });
+HOOKS.lang.push(() => { syncLang(); if (S.scene !== 'boot' && SECTIONS.length) { buildMaps(); } if (cvOpen) $('cvBody').innerHTML = quickCVHTML(); });
+HOOKS.mute.push(() => syncMute());
+function modalOpen() { return cvOpen || !!(window.GUDViewer && GUDViewer.isOpen()); }
+function closeModals() { if (cvOpen) closeQuickCV(); if (window.GUDViewer && GUDViewer.isOpen()) GUDViewer.close(); }
+function syncMute() { const b = $('muteBtn'); b.textContent = AU.muted ? (LANG === 'en' ? 'SOUND OFF' : 'AUDIO OFF') : (LANG === 'en' ? 'SOUND ON' : 'AUDIO ON'); b.setAttribute('aria-pressed', AU.muted ? 'true' : 'false'); }
+$('muteBtn').addEventListener('click', () => { AU.init(); AU.setMute(!AU.muted); syncMute(); tellParent({ mute: AU.muted }); });
+
+/* ---------------- SCENES ---------------- */
+function drawLang() {
+  ctx.fillStyle = C.K; ctx.fillRect(0, 0, W, H);
+  otext(ctx, 'GUDQUEST', W / 2, 30, W >= 320 ? 4 : 3, C.Y, C.P, 'center');
+  dtext(ctx, 'SCEGLI LA LINGUA', W / 2, H / 2 - 34, 1, C.W, 'center');
+  dtext(ctx, 'CHOOSE YOUR LANGUAGE', W / 2, H / 2 - 22, 1, C.B, 'center');
+}
+function drawTitle() {
+  ctx.fillStyle = C.P; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = C.B; for (let y = 0; y < H; y += 8) ctx.fillRect(0, y + Math.floor(S.time * 8) % 8, W, 2);
+  for (let i = 0; i < 20; i++) if ((Math.floor(S.time * 2) + i) % 4) { ctx.fillStyle = i % 2 ? C.Y : C.W; ctx.fillRect((i * 67 + 13) % W, (i * 41 + 7) % Math.round(H * 0.4), 2, 2); }
+  const sc = W >= 380 ? 7 : W >= 320 ? 6 : 4, ty = MOBILE ? 34 : 22;
+  otext(ctx, 'GUDQUEST', W / 2, ty, sc, C.Y, C.K, 'center', C.K);
+  const by = ty + sc * 7 + 10;
+  ctx.fillStyle = C.K; ctx.fillRect(0, by, W, 22);
+  dtext(ctx, tr(TQ('subtitle')) || 'PINK ADVENTURE', W / 2, by + 4, tw(tr(TQ('subtitle')), 2) < W - 8 ? 2 : 1, C.W, 'center');
+  dtext(ctx, tr(TQ('tagline')), W / 2, by + 30, 1, C.K, 'center');
+  const gy = H - (MOBILE ? 118 : 104), f = Math.floor(S.time * 4) % 4;
+  ctx.fillStyle = C.L; ctx.fillRect(0, gy + 64, W, H - gy - 64);
+  ctx.drawImage(gud('run', f), Math.round(W * 0.3) - 34, gy - 4, 68, 68);
+  const b = Math.abs(Math.sin(S.time * 3)) * 6;
+  ctx.drawImage(SP.mons[0], Math.round(W * 0.68) - 22, gy + 20 - Math.round(b));
+  if (S.titleWait && Math.floor(S.time * 2) % 2) otext(ctx, tr(TXT.pressStart), W / 2, H - 22, 1, C.P, C.W, 'center');
+  dtext(ctx, '(C) 2026 GUD / ERGONAUTH', W / 2, H - 10, 1, C.B, 'center');
+}
+function drawIntro() {
+  ctx.fillStyle = C.W; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = C.L; for (let y = 0; y < H - 50; y += 6) ctx.fillRect(0, y, W, 2);
+  const cx = Math.round(W / 2), by = Math.round((H - 50) * 0.75);
+  platform(cx, by, 50);
+  ctx.drawImage(person(S.introWho || 'prof', 'down', 0), cx - 51, by - 96, 102, 102);
+  if (S.introWho === 'gud') ctx.drawImage(SP.mons[1], cx + 40, by - 46);
+  else ctx.drawImage(SP.mons[0], cx + 40, by - 46);
+}
+function drawHof() {
+  ctx.fillStyle = C.P; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = C.B; for (let y = 0; y < H; y += 8) ctx.fillRect(0, y + Math.floor(S.time * 6) % 8, W, 2);
+  for (let i = 0; i < 30; i++) if ((Math.floor(S.time * 3) + i) % 5) { ctx.fillStyle = i % 3 ? C.Y : C.W; ctx.fillRect((i * 53 + 7) % W, (i * 37 + 11) % (H - 50), 2, 2); }
+  const sc = W >= 320 ? 3 : 2;
+  otext(ctx, 'HALL OF FAME', W / 2, 8, sc, C.Y, C.K, 'center', C.K);
+  const top = 8 + sc * 7 + 8, cx = Math.round(W / 2);
+  const R = (a, b, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(a, b, w, h); };
+  disc(R, cx, top + 34, 34, C.Y); disc(R, cx, top + 34, 30, C.W);
+  ctx.drawImage(gud('victory', Math.floor(S.time * 4) % 2), cx - 34, top, 68, 68);
+  const nb = SECTIONS.length; SECTIONS.forEach((s, i) => drawBadge(s.icon != null ? s.icon : i, Math.round(cx - nb * 10 + i * 20), top + 74, true));
+  const team = S.caught.slice(0, 6), n = team.length, gap = Math.min(46, Math.floor((W - 16) / Math.max(1, n)));
+  team.forEach((i, k) => ctx.drawImage(SP.mons[i], Math.round(W / 2 - (n * gap) / 2 + k * gap + (gap - 44) / 2), top + 94 + Math.round(Math.sin(S.time * 4 + k) * 2)));
+}
+async function hallOfFame() {
+  S.hof = true; save();
+  await fadeTo(1); S.scene = 'hof'; playSong('hof'); await fadeTo(0);
+  await say([TQ('hof1'), CV.role, TQ('hof2')]);
+  const c = await choose([L('CONTATTI', 'CONTACTS'), L('CONTINUA A ESPLORARE', 'KEEP EXPLORING')]);
+  if (c === 0) await contactsMenu();
+  await fadeTo(1); heal(); S.scene = 'world'; S.map = 'centro'; S.px = 5; S.py = 5; S.dir = 'up'; playSong('town'); await fadeTo(0); save();
+}
+async function enterWorld() {
+  await fadeTo(1); S.scene = 'world'; playSong('town'); S.zone = null;
+  const m = curMap(); S.loc = m.outdoor ? null : { text: m.title, t: 0 };
+  await fadeTo(0); save();
+}
+async function newGame() {
+  Object.assign(S, { lv: 30, hp: 120, maxhp: 120, pp: MOVES.map(m => m.pp), coffee: 3, badges: [], caught: [], seen: [], hof: false, introDone: false });
+  await fadeTo(1); S.scene = 'intro'; S.introWho = 'prof'; playSong('town'); await fadeTo(0);
+  const PI = LIST('questIntro');
+  for (let i = 0; i < PI.length; i++) { if (i === 2) S.introWho = 'gud'; await say(i < 2 ? 'PROF. SERIF: ' + tr(PI[i]) : PI[i]); }
+  await say(TQ(MOBILE ? 'hintMobile' : 'hint'));
+  S.introDone = true; S.map = 'home'; S.px = 5; S.py = 5; S.dir = 'down';
+  await enterWorld();
+}
+async function main() {
+  await loadContent(); applyContent(); SP.mons = MONS.map(m => monSprite(m)); buildMaps();
+  const sv = load();
+  if (sv) Object.assign(S, sv);
+  if (!MAPS[S.map]) { S.map = 'home'; S.px = 5; S.py = 5; }
+  if (!store.get('gud_lang') && !EMBED) {
+    S.scene = 'lang';
+    const c = await choose(['ITALIANO', 'ENGLISH'], { x: Math.round(W / 2 - 52), y: Math.round(H / 2), w: 104 });
+    setLang(c === 1 ? 'en' : 'it');
+  }
+  syncLang();
+  for (;;) {
+    S.scene = 'title'; playSong('title'); S.titleWait = true; await waitPress(); S.titleWait = false;
+    const has = !!load();
+    const opts = has ? [TXT.cont, TXT.newGame, TXT.quick] : [TXT.newGame, TXT.quick];
+    const c = await choose(opts, { cancel: true, x: Math.round(W / 2 - 62), y: H - (MOBILE ? 92 : 78), w: 124 });
+    if (c < 0) continue;
+    const o = opts[c];
+    if (o === TXT.quick) { openQuickCV(); continue; }
+    if (o === TXT.cont) { Object.assign(S, load()); if (!MAPS[S.map]) { S.map = 'home'; S.px = 5; S.py = 5; } await enterWorld(); return; }
+    await newGame(); return;
+  }
+}
+
+/* ---------------- LOOP ---------------- */
+function update(dt) {
+  S.time += dt;
+  for (let i = S.timers.length - 1; i >= 0; i--) { const t = S.timers[i]; t.t -= dt; if (t.t <= 0) { S.timers.splice(i, 1); t.res(); } }
+  if (modalOpen() || S.paused) { pressed.clear(); return; }
+  ensureSong();
+  if (pressed.has('select')) openQuickCV();
+  const hadUI = S.ui.length > 0;
+  if (hadUI) updateUI(dt);
+  if (S.scene === 'world') { if (hadUI) { const keep = new Set(pressed); pressed.clear(); worldUpdate(dt); keep.forEach(k => pressed.add(k)); } else worldUpdate(dt); }
+  if (S.scene === 'battle') battleUpdate(dt);
+  pressed.clear();
+}
+function render() {
+  ctx.setTransform(KS, 0, 0, KS, 0, 0); ctx.imageSmoothingEnabled = false;
+  if (S.scene === 'lang') drawLang(); else if (S.scene === 'title') drawTitle(); else if (S.scene === 'intro') drawIntro();
+  else if (S.scene === 'world') drawWorld(); else if (S.scene === 'battle') drawBattle(); else if (S.scene === 'hof') drawHof();
+  else { ctx.fillStyle = C.K; ctx.fillRect(0, 0, W, H); }
+  drawUI();
+  if (S.flash) { ctx.fillStyle = C.K; ctx.fillRect(0, 0, W, H); }
+  if (S.fade > 0) { ctx.globalAlpha = S.fade; ctx.fillStyle = C.K; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; }
+}
+let last = 0;
+function frame(t) {
+  requestAnimationFrame(frame);
+  if (!last) last = t; let dt = (t - last) / 1000; last = t;
+  if (dt <= 0) return; if (dt > 0.05) dt = 0.05;
+  try { update(dt); render(); } catch (e) { console.error(e); }
+}
+
+/* ---------------- BOOT ---------------- */
+buildSprites(); buildTiles(); buildFurniture();
+SP.sign = signSprite(); SP.monument = monumentSprite(); SP.tower = towerSprite(); SP.mons = [];
+resize();
+if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+window.addEventListener('resize', resize);
+syncMute();
+requestAnimationFrame(frame);
+main();
+window.GUDQ = { S, MAPS, get CV() { return CV; }, press, held, say, battle, hallOfFame, openQuickCV, setLang, heal, goTo, playFX, get MONS() { return MONS; } };
+
+})();
+
+</script>
+</body>
+</html>

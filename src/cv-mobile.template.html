@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>GUDQUEST · Pink Version</title>
+<meta name="description" content="GUD's interactive CV: a handheld-RPG in pixel art.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+/*@@CSS@@*/
+/*@@CVCSS@@*/
+html,body{position:fixed;inset:0;touch-action:none}
+#app{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+#topbar{height:calc(40px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 8px 0}
+.brand{font-size:9px}
+.tbtn{font-size:8px;padding:8px 6px;min-height:30px}
+#cvBody{font-size:19px;padding:12px}
+#pad{flex:0 0 auto;display:grid;grid-template-columns:132px 1fr 132px;align-items:center;gap:6px;
+  padding:12px 12px calc(12px + env(safe-area-inset-bottom));background:var(--k);border-top:3px solid var(--p);touch-action:none}
+.dpad{position:relative;width:126px;height:126px;display:grid;grid-template-columns:42px 42px 42px;grid-template-rows:42px 42px 42px}
+.dpad button{background:var(--w);border:3px solid var(--w);box-shadow:3px 3px 0 var(--b);border-radius:0;padding:0;display:flex;align-items:center;justify-content:center;touch-action:none}
+.dpad svg{width:16px;height:16px;fill:var(--k);shape-rendering:crispEdges;pointer-events:none}
+.dpad .c{background:var(--w);border-color:var(--w);box-shadow:none}
+[data-k=up]{grid-column:2;grid-row:1}[data-k=left]{grid-column:1;grid-row:2}[data-k=right]{grid-column:3;grid-row:2}[data-k=down]{grid-column:2;grid-row:3}
+.dpad .c{grid-column:2;grid-row:2}
+.mid{display:flex;flex-direction:column;gap:12px;align-items:center}
+.mid button{font-family:var(--pix);font-size:7px;color:var(--w);background:var(--k);border:2px solid var(--b);border-radius:0;padding:8px 6px;width:100%;max-width:84px;touch-action:none}
+.ab{position:relative;height:126px}
+.ab button{position:absolute;width:58px;height:58px;font-family:var(--pix);font-size:16px;border-radius:0;touch-action:none}
+.ab [data-k=a]{right:0;top:12px;background:var(--y);color:var(--k);border:3px solid var(--y);box-shadow:3px 3px 0 var(--p)}
+.ab [data-k=b]{left:0;top:56px;background:var(--p);color:var(--w);border:3px solid var(--p);box-shadow:3px 3px 0 var(--w)}
+#pad button.on{transform:translate(3px,3px);box-shadow:none;filter:invert(1)}
+@media (max-height:600px){#pad{padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom))}.dpad{transform:scale(.85);transform-origin:left center}.ab{transform:scale(.85);transform-origin:right center}}
+@media (max-width:340px){#pad{grid-template-columns:118px 1fr 118px}.dpad{transform:scale(.9);transform-origin:left center}.ab{transform:scale(.9);transform-origin:right center}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">GUDQUEST <b>&hearts;&#xFE0E;</b></div>
+    <div class="tools">
+      <button id="cvBtn" class="tbtn hack" type="button">CV RAPIDO</button>
+      <button id="langBtn" class="tbtn" type="button">EN</button>
+      <button id="muteBtn" class="tbtn" type="button" aria-pressed="false">AUDIO ON</button>
+    </div>
+  </header>
+  <main id="stage">
+    <canvas id="game" tabindex="0" aria-label="GUDQUEST, interactive CV game. Use the Quick CV button for a text version."></canvas>
+<!--@@CVPANEL@@-->
+  </main>
+  <nav id="pad" aria-label="Game controls">
+    <div class="dpad">
+      <button data-k="up" type="button" aria-label="Up"><svg viewBox="0 0 9 9"><path d="M4 2h1v1h1v1h1v1h1v1H1V5h1V4h1V3h1z"/></svg></button>
+      <button data-k="left" type="button" aria-label="Left"><svg viewBox="0 0 9 9"><path d="M2 4h1V3h1V2h1V1h1v7H5V7H4V6H3V5H2z"/></svg></button>
+      <span class="c" aria-hidden="true"></span>
+      <button data-k="right" type="button" aria-label="Right"><svg viewBox="0 0 9 9"><path d="M7 4H6V3H5V2H4V1H3v7h1V7h1V6h1V5h1z"/></svg></button>
+      <button data-k="down" type="button" aria-label="Down"><svg viewBox="0 0 9 9"><path d="M4 7h1V6h1V5h1V4h1V3H1v1h1v1h1v1h1z"/></svg></button>
+    </div>
+    <div class="mid">
+      <button data-k="select" type="button" aria-label="Quick CV">SELECT</button>
+      <button data-k="start" type="button" aria-label="Start menu">START</button>
+    </div>
+    <div class="ab">
+      <button data-k="b" type="button" aria-label="B, back">B</button>
+      <button data-k="a" type="button" aria-label="A, talk and confirm">A</button>
+    </div>
+  </nav>
+</div>
+<script>window.GUD_CONFIG={layout:'mobile',assetBase:'../../assets/'};</script>
+<script>
+/*@@ENGINE@@*/
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{
+ "name": "GUD Girlpop Palette",
+ "colors": [
+  {
+   "name": "Electric Yellow",
+   "hex": "#FFE600",
+   "rgb": [
+    255,
+    230,
+    0
+   ]
+  },
+  {
+   "name": "Hot Pink",
+   "hex": "#FF1493",
+   "rgb": [
+    255,
+    20,
+    147
+   ]
+  },
+  {
+   "name": "Bubblegum Pink",
+   "hex": "#FF85C8",
+   "rgb": [
+    255,
+    133,
+    200
+   ]
+  },
+  {
+   "name": "Pale Pink",
+   "hex": "#FFD6EA",
+   "rgb": [
+    255,
+    214,
+    234
+   ]
+  },
+  {
+   "name": "Almost Black",
+   "hex": "#111111",
+   "rgb": [
+    17,
+    17,
+    17
+   ]
+  },
+  {
+   "name": "Off White",
+   "hex": "#FFF9F1",
+   "rgb": [
+    255,
+    249,
+    241
+   ]
+  }
+ ]
+}

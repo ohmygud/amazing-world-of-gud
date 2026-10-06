@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GUD Brand Kit</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../assets/gud/favicon.png">
+<style>@font-face{font-family:'GUD Pixel';src:url(../fonts/GUDPixel-Regular.woff2) format('woff2'),url(../fonts/GUDPixel-Regular.woff) format('woff');font-display:swap}
+@font-face{font-family:'VT323';src:url(../fonts/VT323-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap}
+@font-face{font-family:'VT323';src:url(../fonts/VT323-latin-ext.woff2) format('woff2');unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap}
+@font-face{font-family:'Press Start 2P';src:url(../fonts/PressStart2P-latin.woff2) format('woff2');font-display:swap}
+:root{--y:#FFE600;--p:#FF1493;--b:#FF85C8;--l:#FFD6EA;--k:#111111;--w:#FFF9F1;
+--pix:'GUD Pixel','Press Start 2P',ui-monospace,Menlo,Consolas,monospace;--body:'VT323',ui-monospace,Menlo,Consolas,monospace}
+html.embed #topbar{display:none!important}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--l);-webkit-text-size-adjust:100%;overscroll-behavior:none}
+body{font-family:var(--body);color:var(--k);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--l)}
+#topbar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--k);border-bottom:3px solid var(--p)}
+.brand{font-family:var(--pix);color:var(--y);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:1px}
+.brand b{color:var(--p);font-weight:400}
+.tools{display:flex;gap:6px;flex:0 0 auto}
+.tbtn{font-family:var(--pix);line-height:1;border:2px solid var(--w);background:var(--k);color:var(--w);box-shadow:2px 2px 0 var(--p);border-radius:0}
+.tbtn.hack{background:var(--y);color:var(--k);border-color:var(--y)}
+.tbtn:active{transform:translate(2px,2px);box-shadow:none}
+.tbtn:focus-visible,.btn:focus-visible,.cb:focus-visible{outline:3px dashed var(--y);outline-offset:2px}
+.tbtn[hidden]{display:none}
+#stage{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;
+ background-color:var(--l);background-image:linear-gradient(45deg,var(--b) 25%,transparent 25%,transparent 75%,var(--b) 75%),linear-gradient(45deg,var(--b) 25%,transparent 25%,transparent 75%,var(--b) 75%);
+ background-size:8px 8px;background-position:0 0,4px 4px}
+canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;outline:none;touch-action:none}
+#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,214,234,.6);z-index:5}
+#overlay[hidden]{display:none}
+.panel{position:relative;width:100%;max-height:100%;overflow:auto;background:var(--w);border:4px solid var(--k);box-shadow:8px 8px 0 var(--p);text-align:center;-webkit-user-select:text;user-select:text}
+.panel.dark{background:var(--k);color:var(--w);box-shadow:8px 8px 0 var(--y)}
+.title{font-family:var(--pix);font-weight:400;margin:0;line-height:1.25;color:var(--y);
+ text-shadow:2px 0 var(--k),-2px 0 var(--k),0 2px var(--k),0 -2px var(--k),2px 2px var(--k),-2px -2px var(--k),2px -2px var(--k),-2px 2px var(--k),5px 5px 0 var(--p)}
+.title span{display:inline-block}
+.title.mid{color:var(--p);text-shadow:2px 0 var(--w),-2px 0 var(--w),0 2px var(--w),0 -2px var(--w),4px 4px 0 var(--y)}
+.panel.dark .title.big{color:var(--p);text-shadow:2px 0 var(--w),-2px 0 var(--w),0 2px var(--w),0 -2px var(--w),5px 5px 0 var(--y)}
+.sub{font-family:var(--body);font-style:italic;color:var(--p);margin:.4em 0 .6em}
+.msg p{margin:.35em 0;line-height:1.05}
+.msg .lead{font-family:var(--pix);color:var(--p);line-height:1.5}
+.panel.dark .msg .lead{color:var(--y)}
+.score{font-family:var(--pix);color:var(--p);margin:.8em 0}
+.hint{font-family:var(--pix);color:var(--k);opacity:.75;margin:.9em 0 0;line-height:1.6}
+.btn{font-family:var(--pix);border:3px solid var(--k);background:var(--p);color:var(--w);box-shadow:4px 4px 0 var(--k);border-radius:0;margin-top:.6em}
+.btn.primary{background:var(--y);color:var(--k)}
+.panel.dark .btn{border-color:var(--w);box-shadow:4px 4px 0 var(--p)}
+.btn:active{transform:translate(4px,4px);box-shadow:none}
+.blink{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{background:var(--p);color:var(--w)}}
+#hack{position:absolute;z-index:10;top:10px;right:10px}
+#hack[hidden]{display:none}
+.hackbox{background:var(--k);border:3px solid var(--y);box-shadow:6px 6px 0 var(--p);padding:12px;color:var(--y);font-family:var(--pix);width:250px;max-width:calc(100vw - 20px)}
+.hackbox .ht{font-size:10px;margin:0 0 10px;letter-spacing:1px}
+.hackbox .ht i{font-style:normal;animation:cur 0.8s steps(1) infinite}
+@keyframes cur{50%{opacity:0}}
+.hackbox input{width:100%;font-family:var(--pix);font-size:16px;background:var(--k);color:var(--y);caret-color:var(--p);border:2px dashed var(--p);padding:8px;border-radius:0;outline:none;text-transform:lowercase;-webkit-user-select:text;user-select:text}
+.hackbox .row{display:flex;gap:8px;margin-top:10px}
+.hackbox .row button{flex:1;font-family:var(--pix);font-size:10px;padding:8px 4px;border:2px solid var(--y);background:var(--y);color:var(--k);border-radius:0}
+.hackbox .row button+button{background:var(--k);color:var(--y)}
+#hackMsg{min-height:12px;margin-top:8px;font-size:9px;color:var(--p)}
+.shake{animation:shake .35s steps(2)}
+@keyframes shake{25%{transform:translate(-6px,0)}50%{transform:translate(6px,0)}75%{transform:translate(-3px,0)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.blink,.hackbox .ht i{animation:none}}
+
+html,body{height:auto;overflow:auto;overscroll-behavior:auto;background:var(--l)}
+body{-webkit-user-select:text;user-select:text;font-size:21px;line-height:1.15;padding:0 0 60px}
+.top{background:var(--p);border-bottom:4px solid var(--k);padding:28px 16px 30px;text-align:center;color:var(--w);position:relative}
+.top img{width:136px;height:136px;image-rendering:pixelated}
+.top h1{font:400 clamp(22px,6vw,48px)/1.2 var(--pix);margin:8px 0 6px;color:var(--y);text-shadow:3px 0 var(--k),-3px 0 var(--k),0 3px var(--k),0 -3px var(--k),6px 6px 0 var(--k)}
+.top p{margin:0 auto;max-width:640px}
+.lang{position:absolute;top:12px;right:12px;font:400 9px var(--pix);background:var(--k);color:var(--y);border:0;padding:9px;cursor:pointer}
+.dl{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.b{display:inline-flex;align-items:center;gap:8px;font:400 10px/1 var(--pix);background:var(--y);color:var(--k);border:3px solid var(--k);padding:12px 14px;box-shadow:4px 4px 0 var(--k);text-decoration:none}
+.b.w{background:var(--w)}
+.b:active{transform:translate(4px,4px);box-shadow:none}
+.b:focus-visible{outline:3px dashed var(--y);outline-offset:3px}
+main{max-width:1100px;margin:0 auto;padding:0 16px}
+section{margin:34px 0 0}
+h2{font:400 15px/1.3 var(--pix);color:var(--p);text-shadow:2px 2px 0 var(--k);margin:0 0 6px}
+h2+p{margin:0 0 16px}
+h3{font:400 10px/1.3 var(--pix);margin:20px 0 10px}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.sw div{border:3px solid var(--k);background:var(--w);box-shadow:4px 4px 0 var(--k)}
+.sw i{display:block;height:96px;border-bottom:3px solid var(--k)}
+.sw p{margin:0;padding:8px;font-size:18px}
+.sw b{display:block;font:400 9px/1.4 var(--pix)}
+.sw button{font:400 8px var(--pix);background:var(--k);color:var(--y);border:0;padding:5px 6px;margin-top:4px;cursor:pointer}
+.type{background:var(--w);border:3px solid var(--k);box-shadow:5px 5px 0 var(--p);padding:16px;margin:0 0 16px;overflow:hidden}
+.type .n{font:400 9px var(--pix);color:var(--p);margin:0 0 8px}
+.type .big{font-size:clamp(28px,6vw,56px);line-height:1.2;margin:0;word-break:break-word}
+.type .abc{font-size:22px;margin:8px 0 0;word-break:break-all}
+.gp{font-family:'GUD Pixel'}.vt{font-family:'VT323'}.ps{font-family:'Press Start 2P'}
+pre{background:var(--k);color:var(--y);padding:12px;overflow:auto;font:18px/1.2 var(--body);border:3px solid var(--k);white-space:pre-wrap}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
+.gal figure{margin:0;background:var(--w);border:3px solid var(--k);padding:10px;text-align:center}
+.gal img{width:100%;max-width:136px;aspect-ratio:1;object-fit:contain;image-rendering:pixelated;background:repeating-conic-gradient(#fff 0 25%,#ffe9f4 0 50%) 0 0/16px 16px}
+.gal figcaption{font:400 8px/1.4 var(--pix);margin-top:6px;word-break:break-all}
+.gal a{color:var(--k);text-decoration:none}
+.ic{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.ic a{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--w);border:2px solid var(--k);padding:8px 4px;text-decoration:none;color:var(--k);font:400 7px/1.3 var(--pix);text-align:center;word-break:break-all}
+.ic img{width:56px;height:56px;object-fit:contain;image-rendering:pixelated}
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.rules div{background:var(--k);color:var(--w);padding:14px;border:3px solid var(--k);box-shadow:4px 4px 0 var(--p)}
+.rules b{display:block;font:400 9px/1.4 var(--pix);color:var(--y);margin:0 0 6px}
+.foot{text-align:center;font:400 8px/1.8 var(--pix);margin:40px 0 0}
+@media (max-width:600px){.top{padding-top:44px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="lang" id="lang" type="button">EN</button>
+  <img src="../assets/gud/gif/gud-idle.gif" alt="GUD">
+  <h1>GUD BRAND KIT</h1>
+  <p data-it="Palette, font, icone e il personaggio di GUD: tutto quello che serve per restare dentro l'Amazing World of GUD." data-en="Palette, fonts, icons and the GUD character: everything you need to stay inside the Amazing World of GUD."></p>
+  <div class="dl">
+    <a class="b" href="../downloads/gud-character-pack.zip" download>⬇ <span data-it="PACCHETTO PERSONAGGIO" data-en="CHARACTER PACK"></span></a>
+    <a class="b w" href="../downloads/gud-brand-kit.zip" download>⬇ BRAND KIT</a>
+  </div>
+</header>
+<main>
+  <section>
+    <h2 data-it="PALETTE" data-en="PALETTE"></h2>
+    <p data-it="Sei colori, niente sfumature. Disponibile come CSS, JSON, GPL (GIMP, Aseprite, Inkscape) e ASE (Adobe)." data-en="Six colours, no gradients. Available as CSS, JSON, GPL (GIMP, Aseprite, Inkscape) and ASE (Adobe)."></p>
+    <div class="sw" id="sw"></div>
+  </section>
+  <section>
+    <h2 data-it="CARATTERI" data-en="TYPE"></h2>
+    <p data-it="GUD Pixel per titoli e interfaccia, VT323 per i testi, Press Start 2P come riserva. Tutti inclusi nel kit." data-en="GUD Pixel for titles and UI, VT323 for body copy, Press Start 2P as fallback. All included in the kit."></p>
+    <div class="type"><p class="n">GUD PIXEL · <span data-it="TITOLI E UI · 5×7 · DISEGNATO PER GUD" data-en="TITLES & UI · 5×7 · MADE FOR GUD"></span></p><p class="big gp">THANK GUD IT'S FRIDAY</p><p class="abc gp">ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 ÀÈÉÌÒÙ !?.,:;'"()-+*/&amp;@#%€$♥</p></div>
+    <div class="type"><p class="n">VT323 · <span data-it="TESTI" data-en="BODY COPY"></span> · SIL OFL</p><p class="big vt" data-it="Un mondo con troppe cose belle da fare." data-en="A world with too many beautiful things to do."></p><p class="abc vt">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 àèéìòù</p></div>
+    <div class="type"><p class="n">PRESS START 2P · <span data-it="RISERVA" data-en="FALLBACK"></span> · SIL OFL</p><p class="big ps" style="font-size:clamp(16px,3.4vw,30px)">GUDQUEST</p></div>
+    <pre>--pix: 'GUD Pixel', 'Press Start 2P', monospace;
+--body: 'VT323', monospace;
+/* pixel art: always integer scale */
+image-rendering: pixelated;</pre>
+  </section>
+  <section>
+    <h2 data-it="IL PERSONAGGIO" data-en="THE CHARACTER"></h2>
+    <p data-it="Una sola GUD, ovunque: 34×34 pixel. Ogni posa esiste in PNG (1×, 4×, 8×), SVG, GIF animata e sprite sheet con JSON per i frame." data-en="One GUD, everywhere: 34×34 pixels. Every pose comes as PNG (1×, 4×, 8×), SVG, animated GIF and sprite sheet with frame JSON."></p>
+    <div class="gal" id="gifs"></div>
+    <h3 data-it="POSE SINGOLE (SVG)" data-en="SINGLE POSES (SVG)"></h3>
+    <div class="ic" id="poses"></div>
+  </section>
+  <section>
+    <h2 data-it="ICONE" data-en="ICONS"></h2>
+    <p data-it="Tutte le icone usate nel sito e nei giochi, in SVG e PNG. Clicca per aprire." data-en="Every icon used across the site and games, in SVG and PNG. Click to open."></p>
+    <div id="icons"></div>
+  </section>
+  <section>
+    <h2 data-it="REGOLE D'ORO" data-en="GOLDEN RULES"></h2>
+    <div class="rules">
+      <div><b data-it="SCALA INTERA" data-en="INTEGER SCALE"></b><span data-it="Ingrandisci i pixel solo ×2, ×3, ×4… mai valori decimali." data-en="Scale pixels only ×2, ×3, ×4… never fractions."></span></div>
+      <div><b data-it="CONTORNO NERO" data-en="BLACK OUTLINE"></b><span data-it="Ogni sprite ha il suo contorno #111111: tienilo." data-en="Every sprite has its #111111 outline: keep it."></span></div>
+      <div><b data-it="NIENTE SFUMATURE" data-en="NO GRADIENTS"></b><span data-it="Colori pieni, ombre spostate di 4 o 8 px." data-en="Flat colours, hard shadows offset by 4 or 8 px."></span></div>
+      <div><b data-it="LA REGOLA" data-en="THE RULE"></b><span data-it="Qualunque cosa tu faccia, non fare il logo più grande." data-en="Whatever you do, don't make the logo bigger."></span></div>
+    </div>
+  </section>
+  <p class="foot">© GUD · OHMYGUD.COM</p>
+</main>
+<script>window.GUD_KIT={"palette": [{"name": "Electric Yellow", "hex": "#FFE600", "rgb": [255, 230, 0]}, {"name": "Hot Pink", "hex": "#FF1493", "rgb": [255, 20, 147]}, {"name": "Bubblegum Pink", "hex": "#FF85C8", "rgb": [255, 133, 200]}, {"name": "Pale Pink", "hex": "#FFD6EA", "rgb": [255, 214, 234]}, {"name": "Almost Black", "hex": "#111111", "rgb": [17, 17, 17]}, {"name": "Off White", "hex": "#FFF9F1", "rgb": [255, 249, 241]}], "gifs": ["gud-back-walk", "gud-battle-back", "gud-beach", "gud-duck", "gud-front-walk", "gud-idle", "gud-left-walk", "gud-run", "gud-shoot", "gud-victory"], "poses": ["battle-back-0", "battle-back-1", "side-beach-0", "side-beach-1", "side-beachjump-0", "side-collect-0", "side-defeat-0", "side-duck-0", "side-duck-1", "side-hurt-0", "side-idle-0", "side-idle-1", "side-jump-0", "side-jumpshoot-0", "side-run-0", "side-run-1", "side-run-2", "side-run-3", "side-shoot-0", "side-shoot-1", "side-shoot-2", "side-shoot-3", "side-victory-0", "side-victory-1", "walk-down-0", "walk-down-1", "walk-down-2", "walk-left-0", "walk-left-1", "walk-left-2", "walk-right-0", "walk-right-1", "walk-right-2", "walk-up-0", "walk-up-1", "walk-up-2"], "icons": {"mons": ["archivia", "balloona", "codella", "concetta", "critiko", "curatrix", "glypho", "gudheart", "inklina", "kernix", "pennina", "poppy", "proffy"], "npc": ["barista", "boy", "client", "critic", "girl", "guard", "libr", "ludo", "mom", "prof", "punk", "teach"], "bonus": ["cat", "coffee", "dog", "oki", "polase", "salad", "water"], "obstacles": ["brief", "bug", "call-0", "call-1", "contradictory", "email-0", "email-1", "f24", "internet", "link404", "malessere", "martini", "overtime", "parmigiana", "pranzo", "update", "urgent", "voice"], "bosses": ["bigclient", "bigclient-yell", "hangover", "hangover-yell"], "fx": ["cal", "cloud", "heart", "heartP", "ice", "olive", "palm", "sun", "umbrella", "wave"], "ui": ["arrow-down", "arrow-left", "arrow-right", "arrow-up", "close", "cv", "download", "globe", "hack", "heart", "image", "link", "mute", "play", "sound", "star", "tricks", "video"]}};</script>
+<script>
+(function () {
+  'use strict';
+  const K = window.GUD_KIT || { palette: [], gifs: [], poses: [], icons: {} };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const GROUPS = { mons: ['GUDMON', 'GUDMON'], npc: ['PERSONAGGI', 'CHARACTERS'], bonus: ['BONUS', 'BONUSES'], obstacles: ['OSTACOLI', 'OBSTACLES'], bosses: ['BOSS', 'BOSSES'], fx: ['EFFETTI', 'EFFECTS'], ui: ['INTERFACCIA', 'INTERFACE'] };
+  let LANG = (function () { try { return localStorage.getItem('gud_lang'); } catch (e) { return null; } })() || ((navigator.language || '').toLowerCase().indexOf('it') === 0 ? 'it' : 'en');
+  $('sw').innerHTML = K.palette.map(c => `<div><i style="background:${c.hex}"></i><p><b>${esc(c.name)}</b>${c.hex}<br>RGB ${c.rgb.join(' ')}<br><button type="button" data-hex="${c.hex}">COPY</button></p></div>`).join('');
+  $('gifs').innerHTML = K.gifs.map(g => `<figure><a href="../assets/gud/gif/${g}.gif" target="_blank"><img src="../assets/gud/gif/${g}.gif" alt="${g}" loading="lazy"></a><figcaption>${g.replace('gud-', '').toUpperCase()}</figcaption></figure>`).join('');
+  $('poses').innerHTML = K.poses.map(p => `<a href="../assets/gud/svg/${p}.svg" target="_blank"><img src="../assets/gud/svg/${p}.svg" alt="" loading="lazy">${p}</a>`).join('');
+  function groups() {
+    $('icons').innerHTML = Object.keys(K.icons).map(g => `<h3>${(GROUPS[g] || [g.toUpperCase(), g.toUpperCase()])[LANG === 'it' ? 0 : 1]} (${K.icons[g].length})</h3><div class="ic">${K.icons[g].map(n => `<a href="../assets/icons/${g}/${n}.svg" target="_blank"><img src="../assets/icons/${g}/${n}.svg" alt="" loading="lazy">${n}</a>`).join('')}</div>`).join('');
+  }
+  function apply() {
+    document.documentElement.lang = LANG;
+    document.querySelectorAll('[data-it]').forEach(el => { el.textContent = el.getAttribute('data-' + LANG); });
+    $('lang').textContent = LANG === 'it' ? 'EN' : 'IT';
+    groups();
+  }
+  function $(id) { return document.getElementById(id); }
+  $('lang').addEventListener('click', () => { LANG = LANG === 'it' ? 'en' : 'it'; try { localStorage.setItem('gud_lang', LANG); } catch (e) { /* */ } apply(); });
+  document.addEventListener('click', e => { const b = e.target.closest('[data-hex]'); if (!b) return; const h = b.dataset.hex; (navigator.clipboard ? navigator.clipboard.writeText(h) : Promise.reject()).then(() => { b.textContent = 'OK!'; setTimeout(() => b.textContent = 'COPY', 1200); }, () => { b.textContent = h; }); });
+  apply();
+})();
+</script>
+</body>
+</html>

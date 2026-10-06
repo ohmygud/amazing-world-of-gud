@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GUD · CV</title>
+<meta name="description" content="CV of GUD (Giulia Ursenna Dorati Gherardi): creative director, type designer, teacher, curator, writer. Florence.">
+<link rel="icon" href="../assets/gud/favicon.png" type="image/png">
+<style>
+/*@@CSS@@*/
+/*@@VIEWERCSS@@*/
+html,body{height:auto;overflow:auto;background:var(--l)}
+body{font-family:var(--body);font-size:21px;line-height:1.15;color:var(--k);-webkit-user-select:text;user-select:text}
+.wrap{max-width:1040px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 48px max(16px,env(safe-area-inset-left))}
+.tools{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:12px}
+.tb{font-family:var(--pix);font-size:9px;background:var(--k);color:var(--w);border:2px solid var(--k);box-shadow:3px 3px 0 var(--p);padding:9px 10px;border-radius:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.tb.y{background:var(--y);color:var(--k)}
+.tb:focus-visible,.see:focus-visible,.contacts a:focus-visible{outline:3px dashed var(--p);outline-offset:2px}
+html.embed .tools .lang{display:none}
+.hero{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;background:var(--w);border:4px solid var(--k);box-shadow:8px 8px 0 var(--p);padding:20px 22px}
+.hero .av{width:136px;height:136px;background:var(--y) url(../assets/gud/sheets/gud-idle@4x.png) 0 0/272px 136px;image-rendering:pixelated;border:4px solid var(--k);animation:idle 1.4s steps(2) infinite}
+@keyframes idle{to{background-position:-272px 0}}
+.hero h1{margin:0;font-family:var(--pix);font-weight:400;font-size:clamp(28px,6vw,48px);color:var(--p);text-shadow:3px 3px 0 var(--k);letter-spacing:2px}
+.hero .full{margin:6px 0 2px;font-size:25px}
+.hero .role{margin:0;font-size:22px;color:#444}
+.contacts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.contacts a{font-family:var(--pix);font-size:9px;background:var(--k);color:var(--y);padding:8px 10px;text-decoration:none;border:2px solid var(--k)}
+.contacts a:hover{background:var(--p);color:var(--w)}
+section.sec{margin-top:34px}
+.sec>h2{display:flex;align-items:center;gap:12px;margin:0 0 14px;font-family:var(--pix);font-weight:400;font-size:clamp(14px,2.6vw,19px);letter-spacing:1px}
+.sec>h2 .n{background:var(--p);color:var(--w);padding:7px 9px;font-size:11px;border:2px solid var(--k)}
+.sec>h2 .t{background:var(--y);padding:8px 12px;border:3px solid var(--k);box-shadow:4px 4px 0 var(--k)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--w);border:3px solid var(--k);padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:4px 4px 0 var(--b)}
+.card h3{margin:0;font-family:var(--pix);font-weight:400;font-size:11px;line-height:1.5;color:var(--p)}
+.card p{margin:0}
+.thumb{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border:3px solid var(--k);background:var(--k);image-rendering:auto}
+.thumb.icon{display:flex;align-items:center;justify-content:center;color:var(--y);font-family:var(--pix);font-size:10px;gap:8px}
+.see{align-self:flex-start;margin-top:auto;font-family:var(--pix);font-size:9px;background:var(--y);color:var(--k);border:2px solid var(--k);box-shadow:3px 3px 0 var(--k);padding:8px 10px;border-radius:0;cursor:pointer}
+.see:hover{background:var(--p);color:var(--w)}
+.summary{margin:-4px 0 14px;font-size:22px;color:#333;max-width:820px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.box{background:var(--w);border:3px solid var(--k);padding:14px;box-shadow:4px 4px 0 var(--b)}
+.box ul{margin:0;padding:0;list-style:none}
+.box li{margin:0 0 8px;padding-left:16px;position:relative}
+.box li:before{content:'';position:absolute;left:1px;top:8px;width:7px;height:7px;background:var(--p)}
+.pass{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.pass div{display:flex;gap:10px;align-items:flex-start;background:var(--w);border:3px solid var(--k);padding:10px}
+.pass i{flex:0 0 auto;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-style:normal;font-family:var(--pix);font-size:14px;border:3px solid var(--k);box-shadow:2px 2px 0 var(--k)}
+.pass b{display:block;font-family:var(--pix);font-weight:400;font-size:9px;color:var(--p);margin-bottom:4px}
+.pass span{font-size:18px;line-height:1.05}
+.foot{margin-top:40px;text-align:center;font-family:var(--pix);font-size:9px}
+.foot a{color:var(--p)}
+@media (max-width:640px){ .hero{grid-template-columns:1fr;text-align:center}.hero .av{margin:0 auto;width:102px;height:102px;background-size:204px 102px}@keyframes idle{to{background-position:-204px 0}} .contacts{justify-content:center} .two{grid-template-columns:1fr} body{font-size:20px} }
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff}
+  .tools,.see,.foot,.gv{display:none!important}
+  .hero,.card,.box,.pass div{box-shadow:none;border-width:2px}
+  .hero .av{animation:none;width:68px;height:68px;background-size:136px 68px}
+  .cards{grid-template-columns:1fr 1fr}
+  .thumb{display:none}
+  section.sec{break-inside:avoid-page;margin-top:18px}
+  .card{break-inside:avoid}
+  body{font-size:15px}
+  .contacts a{background:#fff;color:#111;border:1px solid #111}
+}
+@media (prefers-reduced-motion:reduce){.hero .av{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tools"><a class="tb y" id="toQuest" href="../index.html#quest" target="_top"></a><button class="tb lang" id="lang" type="button">EN</button><button class="tb" id="print" type="button"></button></div>
+  <main id="cv"></main>
+  <p class="foot" id="foot"></p>
+</div>
+<script>/*@@CONTENT@@*/</script>
+<script>
+/*@@VIEWERJS@@*/
+</script>
+<script>
+(function () {
+  'use strict';
+  if (/[?&]embed=1/.test(location.search)) document.documentElement.classList.add('embed');
+  const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* */ } } };
+  let C = window.GUD_DEFAULT_CONTENT, LANG = store.get('gud_lang') || ((navigator.language || '').toLowerCase().indexOf('it') === 0 ? 'it' : 'en');
+  const BASE = '../content/';
+  const tr = o => (o == null ? '' : typeof o === 'string' ? o : (o[LANG] || o.it || o.en || ''));
+  const TX = k => tr(((C.text || {}).cv || {})[k] || ((window.GUD_DEFAULT_CONTENT.text || {}).cv || {})[k]);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const COL = { P: ['#FF1493', '#FFF9F1'], Y: ['#FFE600', '#111111'], B: ['#FF85C8', '#111111'], W: ['#FFF9F1', '#FF1493'], K: ['#111111', '#FFE600'], L: ['#FFD6EA', '#111111'] };
+  const ITEMS = {};
+  function src(s) { return /^(https?:|data:|\/)/i.test(s) ? s : BASE + s; }
+  function thumb(it) {
+    const m = (it.media || []).find(x => x && x.src); if (!m) return '';
+    const k = GUDViewer.kindOf(m);
+    if (k === 'image') return `<img class="thumb" loading="lazy" src="${esc(src(m.src))}" alt="${esc(tr(m.caption) || tr(it.t))}">`;
+    if (k === 'youtube') return `<img class="thumb" loading="lazy" src="https://i.ytimg.com/vi/${esc(GUDViewer.ytId(m.src))}/hqdefault.jpg" alt="${esc(tr(it.t))}">`;
+    return `<div class="thumb icon">${k === 'web' ? 'WEB' : k === 'vimeo' ? 'VIMEO' : 'VIDEO'} ▶</div>`;
+  }
+  function render() {
+    document.documentElement.lang = LANG;
+    const p = C.profile || {};
+    let h = `<header class="hero"><div class="av" role="img" aria-label="GUD"></div><div><h1>${esc(p.name || 'GUD')}</h1><p class="full">${esc(p.full || '')}</p><p class="role">${esc(tr(p.role))}</p>
+      <div class="contacts">${(C.contacts || []).map(k => `<a href="${esc(k.url)}" target="_blank" rel="noopener">${esc(k.show || k.label)}</a>`).join('')}</div></div></header>`;
+    (C.sections || []).forEach((s, si) => {
+      h += `<section class="sec" aria-labelledby="s-${esc(s.id)}"><h2 id="s-${esc(s.id)}"><span class="n">${String(si + 1).padStart(2, '0')}</span><span class="t">${esc(tr(s.title))}</span></h2>`;
+      if (tr(s.summary)) h += `<p class="summary">${esc(tr(s.summary))}</p>`;
+      h += '<div class="cards">' + (s.items || []).map(it => {
+        const key = s.id + '/' + it.id; ITEMS[key] = it;
+        const has = (it.media || []).some(m => m && m.src);
+        return `<article class="card">${has ? thumb(it) : ''}<h3>${esc(tr(it.t))}</h3><p>${esc(tr(it.d))}</p>${has ? `<button class="see" type="button" data-k="${esc(key)}">${esc(TX('open'))} ▶</button>` : ''}</article>`;
+      }).join('') + '</div></section>';
+    });
+    h += `<section class="sec"><div class="two"><div class="box"><h2 style="font-family:var(--pix);font-weight:400;font-size:12px;margin:0 0 10px">${esc(TX('education'))}</h2><ul>${(p.education || []).map(e => `<li>${esc(tr(e))}</li>`).join('')}</ul></div>
+      <div class="box"><h2 style="font-family:var(--pix);font-weight:400;font-size:12px;margin:0 0 10px">${esc(TX('languages'))}</h2><p style="margin:0">${esc(tr(p.languages))}</p></div></div></section>`;
+    const mons = (C.mons || []).filter(m => !m.legendary);
+    if (mons.length) h += `<section class="sec"><h2><span class="t">${esc(TX('passions'))}</span></h2><div class="pass">${mons.map(m => { const c = COL[m.c] || COL.P; return `<div><i style="background:${c[0]};color:${c[1]}">${esc(m.l)}</i><p style="margin:0"><b>${esc(tr(m.type))}</b><span>${esc(tr(m.d))}</span></p></div>`; }).join('')}</div></section>`;
+    document.getElementById('cv').innerHTML = h;
+    document.getElementById('toQuest').textContent = TX('playQuest') + ' ▶';
+    document.getElementById('print').textContent = TX('print');
+    document.getElementById('lang').textContent = LANG === 'it' ? 'EN' : 'IT';
+    document.getElementById('foot').innerHTML = '© GUD · ERGONAUTH S.A.S. · <a href="../index.html" target="_top">THE AMAZING WORLD OF GUD</a>';
+    document.title = 'GUD · ' + (LANG === 'it' ? 'Curriculum' : 'CV');
+  }
+  document.getElementById('cv').addEventListener('click', e => { const b = e.target.closest('.see'); if (b) GUDViewer.open(ITEMS[b.dataset.k], { base: BASE }); });
+  document.getElementById('print').addEventListener('click', () => window.print());
+  document.getElementById('lang').addEventListener('click', () => { LANG = LANG === 'it' ? 'en' : 'it'; store.set('gud_lang', LANG); render(); });
+  window.addEventListener('message', e => { const d = e.data; if (d && d.gud === 1 && d.lang && d.lang !== LANG) { LANG = d.lang; render(); } });
+  window.addEventListener('storage', e => { if (e.key === 'gud_lang' && e.newValue) { LANG = e.newValue; render(); } });
+  render();
+  if (location.protocol !== 'file:') fetch(BASE + 'content.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.sections) { C = j; render(); } }).catch(() => {});
+})();
+</script>
+</body>
+</html>

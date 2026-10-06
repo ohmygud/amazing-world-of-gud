@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GUD · Trucchi / Cheat Sheet</title>
+<meta name="description" content="Survival instructions for extremely creative people. Controls and secret codes for Thank GUD It's Friday.">
+<style>/*@@CSS@@*/
+
+:root{--y:#FFE600;--p:#FF1493;--b:#FF85C8;--l:#FFD6EA;--k:#111111;--w:#FFF9F1;
+--pix:'GUD Pixel','Press Start 2P',ui-monospace,Menlo,Consolas,monospace;--body:'VT323',ui-monospace,Menlo,Consolas,monospace}
+html.embed body{padding-top:10px}
+.lang{position:absolute;top:8px;right:8px;z-index:2;font-family:var(--pix);font-size:9px;background:var(--k);color:var(--y);border:0;padding:8px;cursor:pointer}
+html.embed .lang{display:none}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--y);color:var(--k);height:auto;overflow:auto;overflow-x:hidden;overscroll-behavior:auto}
+body{-webkit-user-select:text;user-select:text}
+body{font-family:var(--body);font-size:20px;line-height:1.1;-webkit-text-size-adjust:100%;overflow-x:hidden;
+ padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.gcs{position:relative;max-width:760px;margin:0 auto}
+/* pixel border: stepped corners */
+.px{position:relative;background:var(--w);
+ box-shadow:0 -4px 0 0 var(--p),0 4px 0 0 var(--p),-4px 0 0 0 var(--p),4px 0 0 0 var(--p),8px 8px 0 0 var(--k);margin:4px 4px 22px}
+.book{position:relative;background:var(--y);box-shadow:0 -6px 0 0 var(--p),0 6px 0 0 var(--p),-6px 0 0 0 var(--p),6px 0 0 0 var(--p),0 0 0 6px var(--k),10px 10px 0 6px var(--k);margin:6px 6px 24px;padding:22px 18px 18px}
+h1,h2,h3{font-family:var(--pix);font-weight:400;margin:0;line-height:1.35}
+.head{text-align:center;padding:4px 0 6px}
+.head h1{font-size:clamp(16px,4.6vw,28px);color:var(--w);
+ text-shadow:3px 0 var(--k),-3px 0 var(--k),0 3px var(--k),0 -3px var(--k),3px 3px var(--k),-3px -3px var(--k),3px -3px var(--k),-3px 3px var(--k),6px 6px 0 var(--p)}
+.head p{margin:12px 0 0;font-size:22px;font-style:italic;color:var(--p)}
+.tag{display:inline-block;font-family:var(--pix);font-size:8px;background:var(--k);color:var(--y);padding:6px 8px;margin-bottom:14px;letter-spacing:1px}
+section{padding:16px 16px 14px}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sec-h .n{font-family:var(--pix);font-size:10px;background:var(--p);color:var(--w);padding:6px 7px}
+.sec-h h2{font-size:clamp(11px,2.6vw,15px)}
+table{width:100%;border-collapse:collapse;font-size:21px}
+td{padding:7px 6px;border-bottom:3px dotted var(--b);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td:last-child{font-family:var(--pix);font-size:10px;text-align:right;color:var(--p)}
+kbd{display:inline-block;min-width:30px;text-align:center;font-family:var(--pix);font-size:10px;background:var(--k);color:var(--w);padding:7px 7px 6px;margin:0 3px 2px 0;box-shadow:0 3px 0 var(--p)}
+kbd.y{background:var(--y);color:var(--k);box-shadow:0 3px 0 var(--k)}
+.note{font-size:19px;margin:10px 0 0;opacity:.85}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.col{padding:12px;border:3px solid var(--k)}
+.col h3{font-size:10px;margin-bottom:8px}
+.good{background:var(--y)}
+.good h3{color:var(--k)}
+.bad{background:var(--k);color:var(--w)}
+.bad h3{color:var(--p)}
+.col p{margin:0;font-size:22px}
+.cheat-h{text-align:center;margin:6px 0 14px}
+.cheat-h h2{font-size:clamp(13px,3.2vw,20px);color:var(--p);text-shadow:2px 2px 0 var(--k)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--k);color:var(--w);padding:12px 12px 12px;position:relative;box-shadow:5px 5px 0 var(--p);display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .lbl{font-family:var(--pix);font-size:7px;color:var(--b);letter-spacing:1px}
+.card code{font-family:var(--pix);font-size:clamp(12px,2.4vw,15px);color:var(--y);word-break:break-all;-webkit-user-select:all;user-select:all}
+.card p{margin:0;font-size:19px;color:var(--w);flex:1}
+.copy{font-family:var(--pix);font-size:9px;border:0;background:var(--y);color:var(--k);padding:9px 8px;cursor:pointer;box-shadow:3px 3px 0 var(--w);border-radius:0;min-height:36px}
+.copy:active{transform:translate(3px,3px);box-shadow:none}
+.copy.ok{background:var(--p);color:var(--w)}
+.copy:focus-visible{outline:3px dashed var(--y);outline-offset:3px}
+.how{text-align:center;font-size:19px;margin:14px 0 0}
+.gold{text-align:center;padding:22px 14px 18px;background:var(--k);color:var(--w)}
+.gold h2{font-size:clamp(12px,3vw,18px);color:var(--y)}
+.gold .big{font-size:clamp(15px,4.4vw,28px);margin-top:12px;line-height:1.4;animation:flash 1.1s steps(1) infinite}
+@keyframes flash{0%{color:var(--p)}33%{color:var(--y)}66%{color:var(--w)}}
+.heart{display:block;width:44px;height:40px;margin:16px auto 0;animation:beat .8s steps(2) infinite;shape-rendering:crispEdges}
+@keyframes beat{50%{transform:scale(1.18)}}
+.deco{position:absolute;pointer-events:none;shape-rendering:crispEdges}
+.deco.s1{top:-6px;left:10px;width:22px;animation:tw 1.2s steps(2) infinite}
+.deco.s2{top:30px;right:12px;width:16px;animation:tw 1.6s steps(2) infinite .3s}
+.deco.h1{bottom:-4px;right:30px;width:20px;animation:tw 1s steps(2) infinite .5s}
+@keyframes tw{50%{opacity:.15}}
+.foot{text-align:center;font-family:var(--pix);font-size:8px;margin-top:4px;line-height:1.8}
+@media (max-width:640px){
+ .cards{grid-template-columns:1fr}
+ .two{grid-template-columns:1fr}
+ .book{padding:18px 10px 12px}
+ section{padding:14px 10px 12px}
+ td:last-child{font-size:9px}
+}
+@media (prefers-reduced-motion:reduce){.gold .big,.heart,.deco{animation:none}.gold .big{color:var(--p)}}
+</style>
+</head>
+<body>
+<div class="gcs">
+ <div class="book"><button class="lang" id="lang" type="button">EN</button>
+  <svg class="deco s1" viewBox="0 0 7 7" aria-hidden="true"><path fill="#FF1493" d="M3 0h1v2h1v1h2v1H5v1H4v2H3V5H2V4H0V3h2V2h1z"/></svg>
+  <svg class="deco s2" viewBox="0 0 7 7" aria-hidden="true"><path fill="#111" d="M3 0h1v2h1v1h2v1H5v1H4v2H3V5H2V4H0V3h2V2h1z"/></svg>
+  <svg class="deco h1" viewBox="0 0 7 6" aria-hidden="true"><path fill="#FF1493" d="M1 0h2v1h1V0h2v1h1v2H6v1H5v1H4v1H3V5H2V4H1V3H0V1h1z"/></svg>
+  <header class="head">
+   <span class="tag" data-it="LIBRETTO D'ISTRUZIONI &middot; MODELLO GUD-1985" data-en="INSTRUCTION BOOKLET &middot; MODEL GUD-1985"></span>
+   <h1 data-it="I TRUCCHI DI GUD" data-en="THE GUD CHEAT SHEET"></h1>
+   <p data-it="Istruzioni di sopravvivenza per persone estremamente creative." data-en="Survival instructions for extremely creative people."></p>
+  </header>
+ </div>
+
+ <section class="px" aria-labelledby="a">
+  <div class="sec-h"><span class="n">A</span><h2 id="a" data-it="SOPRAVVIVI ALLA SETTIMANA" data-en="SURVIVE THE WEEK"></h2></div>
+  <table>
+   <tr><td><kbd>&larr;</kbd><kbd>&rarr;</kbd></td><td data-it="MUOVITI" data-en="MOVE"></td></tr>
+   <tr><td><kbd>&uarr;</kbd> / <kbd data-it="SPAZIO" data-en="SPACE"></kbd></td><td data-it="SALTA" data-en="JUMP"></td></tr>
+   <tr><td><kbd>&darr;</kbd></td><td data-it="SCHIVA" data-en="DODGE"></td></tr>
+   <tr><td><kbd>K</kbd></td><td data-it="SPARA" data-en="SHOOT"></td></tr>
+   <tr><td><kbd class="y">HACK</kbd></td><td data-it="CODICE SEGRETO" data-en="ENTER SECRET CODE"></td></tr>
+  </table>
+  <p class="note" data-it="Da telefono usa i comandi sullo schermo." data-en="On mobile, use the on-screen controls."></p>
+ </section>
+
+ <section class="px" aria-labelledby="b">
+  <div class="sec-h"><span class="n">B</span><h2 id="b" data-it="PRENDI &amp; EVITA" data-en="COLLECT &amp; AVOID"></h2></div>
+  <div class="two">
+   <div class="col good"><h3 data-it="PRENDI LE COSE BELLE" data-en="COLLECT THE GOOD STUFF"></h3><p data-it="Caffè. Gatti. Cani." data-en="Coffee. Cats. Dogs."></p></div>
+   <div class="col bad"><h3 data-it="EVITA LE COSE BRUTTE" data-en="AVOID THE BAD STUFF"></h3><p data-it="Email. Call. Feedback. Scadenze. Clienti." data-en="Emails. Calls. Feedback. Deadlines. Clients."></p></div>
+  </div>
+ </section>
+
+ <section class="px" aria-labelledby="c">
+  <div class="sec-h"><span class="n">C</span><h2 id="c" data-it="HACK SEGRETI" data-en="SECRET HACKS"></h2></div>
+  <div class="cheat-h"><h2 data-it="PSSST... VUOI BARARE?" data-en="PSSST... WANNA CHEAT?"></h2></div>
+  <div class="cards">
+   <div class="card"><span class="lbl" data-it="CODICE 01" data-en="CODE 01"></span><code>boss</code><p data-it="Salta dritto al boss finale del giorno." data-en="Skip straight to the current final boss."></p><button class="copy" type="button" data-code="boss" data-al="boss"></button></div>
+   <div class="card"><span class="lbl" data-it="CODICE 02" data-en="CODE 02"></span><code>tequila</code><p data-it="Sblocca subito la modalità weekend." data-en="Unlock Weekend Mode immediately."></p><button class="copy" type="button" data-code="tequila" data-al="tequila"></button></div>
+   <div class="card"><span class="lbl" data-it="CODICE 03" data-en="CODE 03"></span><code>ilovegud</code><p data-it="Apri subito il posto felice segreto di GUD. Chi batte il boss del weekend lo trova da sola." data-en="Open GUD's secret happy place right away. Beat the weekend boss and you'll find it anyway."></p><button class="copy" type="button" data-code="ilovegud" data-al="ilovegud"></button></div>
+  </div>
+  <p class="how"><span data-it="Premi" data-en="Press"></span> <kbd class="y">HACK</kbd> <span data-it="e scrivi il codice." data-en="and type the code."></span></p>
+ </section>
+
+ <section class="px gold" aria-labelledby="d">
+  <div class="sec-h" style="justify-content:center"><span class="n">D</span><h2 id="d" data-it="LA REGOLA D'ORO" data-en="THE GOLDEN RULE"></h2></div>
+  <p class="big" style="font-family:var(--pix);margin-bottom:0"><span data-it="QUALUNQUE COSA TU FACCIA..." data-en="WHATEVER YOU DO..."></span><br><span data-it="NON FARE IL LOGO PIÙ GRANDE." data-en="DON'T MAKE THE LOGO BIGGER."></span></p>
+  <svg class="heart" viewBox="0 0 11 10" aria-hidden="true"><path fill="#111" d="M1 0h3v1h1v1h1V1h1V0h3v1h1v4h-1v1H9v1H8v1H7v1H6v1H5V9H4V8H3V7H2V6H1V5H0V1h1z"/><path fill="#FF1493" d="M2 1h2v1h1v1h1V2h1V1h2v1h1v3H9v1H8v1H7v1H6v1H5V8H4V7H3V6H2V5H1V2h1z"/><path fill="#FFF9F1" d="M2 2h1v1H2z"/></svg>
+ </section>
+ <p class="foot">&copy; GUD ARCADE &middot; <span data-it="NON È UN VERO TRUCCO. ANZI SÌ." data-en="NOT A REAL CHEAT. WELL, ACTUALLY, YES."></span></p>
+</div>
+<span id="live" class="sr" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></span>
+<script>
+(function(){
+  'use strict';
+  var EMBED=/[?&]embed=1/.test(location.search); if(EMBED) document.documentElement.classList.add('embed');
+  var q=(location.search.match(/[?&]lang=(it|en)/)||[])[1];
+  var LANG=q||(function(){try{return localStorage.getItem('gud_lang');}catch(e){return null;}})()||((navigator.language||'').toLowerCase().indexOf('it')===0?'it':'en');
+  var L={copy:{it:'COPIA',en:'COPY'},ok:{it:'COPIATO!',en:'COPIED!'},sel:{it:'SELEZIONALO',en:'SELECT IT'},al:{it:'Copia il codice ',en:'Copy code '},live:{it:'Codice copiato',en:'Code copied'},nolive:{it:'Copia non disponibile, seleziona il codice',en:'Copy not available, select the code manually'}};
+  function t(k){return L[k][LANG];}
+  function apply(){
+    document.documentElement.lang=LANG;
+    document.querySelectorAll('[data-it]').forEach(function(el){el.innerHTML=el.getAttribute('data-'+LANG);});
+    document.querySelectorAll('.copy').forEach(function(b){ if(!b.classList.contains('ok')) b.textContent=t('copy'); b.setAttribute('aria-label',t('al')+b.getAttribute('data-al')); });
+    document.getElementById('lang').textContent=LANG==='it'?'EN':'IT';
+  }
+  function setLang(l){ LANG=l==='en'?'en':'it'; try{localStorage.setItem('gud_lang',LANG);}catch(e){} apply(); }
+  document.getElementById('lang').addEventListener('click',function(){ setLang(LANG==='it'?'en':'it'); });
+  window.addEventListener('message',function(e){ var d=e.data; if(!d||d.gud!==1) return; if(location.protocol!=='file:'&&e.origin!==location.origin) return; if(d.lang&&d.lang!==LANG){LANG=d.lang;apply();} });
+  window.addEventListener('storage',function(e){ if(e.key==='gud_lang'&&e.newValue&&e.newValue!==LANG){LANG=e.newValue;apply();} });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&EMBED){ try{parent.postMessage({gud:1,close:1},location.protocol==='file:'?'*':location.origin);}catch(x){} } });
+  apply();
+
+  function fallbackCopy(text){
+    var ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly','');
+    ta.style.position='fixed'; ta.style.top='-1000px'; ta.style.opacity='0'; document.body.appendChild(ta);
+    ta.select(); ta.setSelectionRange(0,text.length);
+    var ok=false; try{ ok=document.execCommand('copy'); }catch(e){ ok=false; }
+    document.body.removeChild(ta); return ok;
+  }
+  function done(btn,ok){
+    btn.textContent = ok ? t('ok') : t('sel');
+    btn.classList.toggle('ok', ok);
+    document.getElementById('live').textContent = ok ? t('live') : t('nolive');
+    if(!ok){ var r=document.createRange(); r.selectNodeContents(btn.parentNode.querySelector('code')); var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+    clearTimeout(btn._t); btn._t=setTimeout(function(){ btn.textContent=t('copy'); btn.classList.remove('ok'); },1600);
+  }
+  document.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var code=btn.getAttribute('data-code');
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(code).then(function(){ done(btn,true); }, function(){ done(btn,fallbackCopy(code)); });
+      } else done(btn,fallbackCopy(code));
+    });
+  });
+})();
+</script>
+</body>
+</html>

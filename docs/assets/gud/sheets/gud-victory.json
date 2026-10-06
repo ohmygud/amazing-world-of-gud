@@ -1,0 +1,24 @@
+{
+ "image": "gud-victory@1x.png",
+ "frameWidth": 34,
+ "frameHeight": 34,
+ "fps": 4,
+ "loop": true,
+ "frames": [
+  {
+   "x": 0,
+   "y": 0,
+   "w": 34,
+   "h": 34,
+   "source": "side-victory-0"
+  },
+  {
+   "x": 34,
+   "y": 0,
+   "w": 34,
+   "h": 34,
+   "source": "side-victory-1"
+  }
+ ],
+ "note": "Multiply x/y/w/h by the scale of the @2x / @4x sheets."
+}

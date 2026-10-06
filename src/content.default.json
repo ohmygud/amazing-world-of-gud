@@ -1,0 +1,1677 @@
+{
+  "version": 1,
+  "settings": {
+    "adminCode": "gudmin"
+  },
+  "contacts": [
+    {
+      "id": "site",
+      "label": "OHMYGUD.COM",
+      "url": "https://ohmygud.com",
+      "show": ""
+    },
+    {
+      "id": "mail",
+      "label": "EMAIL",
+      "url": "mailto:goldengud@gmail.com",
+      "show": "goldengud@gmail.com"
+    },
+    {
+      "id": "ig",
+      "label": "INSTAGRAM @TYPODIVA",
+      "url": "https://www.instagram.com/typodiva/",
+      "show": ""
+    },
+    {
+      "id": "in",
+      "label": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/ohmygud/",
+      "show": ""
+    }
+  ],
+  "profile": {
+    "name": "GUD",
+    "full": "Giulia Ursenna Dorati Gherardi",
+    "role": {
+      "it": "Creative director, type designer, docente, curatrice, autrice. Firenze.",
+      "en": "Creative director, type designer, teacher, curator, writer. Florence."
+    },
+    "education": [
+      {
+        "it": "ISIA Firenze, 2015. Diploma Accademico di I livello in Disegno Industriale.",
+        "en": "ISIA Florence, 2015. First-level Academic Diploma in Industrial Design."
+      },
+      {
+        "it": "IED Firenze, 2016. Specializzazione in Grafica per l'Editoria.",
+        "en": "IED Florence, 2016. Specialisation in Editorial Graphic Design."
+      },
+      {
+        "it": "IED Firenze, 2018. Master in Typography, Calligraphy & Font Design.",
+        "en": "IED Florence, 2018. Master in Typography, Calligraphy & Font Design."
+      }
+    ],
+    "languages": {
+      "it": "Italiano madrelingua. Inglese C1.",
+      "en": "Italian native. English C1."
+    },
+    "studio": {
+      "it": "Ergonauth S.a.s., Firenze. Fondatrice e Creative Director dal 2016.",
+      "en": "Ergonauth S.a.s., Florence. Founder and Creative Director since 2016."
+    }
+  },
+  "sections": [
+    {
+      "id": "teaching",
+      "builtin": true,
+      "icon": 0,
+      "title": {
+        "it": "Insegnamento",
+        "en": "Teaching"
+      },
+      "place": {
+        "it": "ACCADEMIA",
+        "en": "ACADEMY"
+      },
+      "badge": {
+        "it": "MEDAGLIA GRIGLIA",
+        "en": "GRID BADGE"
+      },
+      "sign": {
+        "it": "ACCADEMIA. Si insegna come si progetta.",
+        "en": "ACADEMY. Teach the way you design."
+      },
+      "summary": {
+        "it": "GUD insegna dal 2016: IED, TheSign, Lorenzo de' Medici, ISIA Firenze. Con i suoi studenti progetta per aziende e istituzioni vere.",
+        "en": "GUD has been teaching since 2016: IED, TheSign, Lorenzo de' Medici, ISIA Florence. With her students she designs for real companies and institutions."
+      },
+      "leader": {
+        "name": {
+          "it": "PROF. GRID",
+          "en": "PROF. GRID"
+        },
+        "look": "teach"
+      },
+      "npc": {
+        "look": "boy",
+        "say": {
+          "it": "Con la prof GUD abbiamo fatto progetti veri: Jaguar Land Rover, Artribune, Mondadori.",
+          "en": "With GUD we did real projects: Jaguar Land Rover, Artribune, Mondadori."
+        }
+      },
+      "battle": {
+        "enemy": "brief",
+        "hp": 70,
+        "lv": 31,
+        "weak": 0,
+        "name": {
+          "it": "BRIEF IN MILANESE",
+          "en": "MILANESE BRIEF"
+        },
+        "moves": [
+          {
+            "n": {
+              "it": "SPIEGONE",
+              "en": "LONG RANT"
+            },
+            "p": 10
+          },
+          {
+            "n": {
+              "it": "NON SO COSA VOGLIO",
+              "en": "NO IDEA WHAT I WANT"
+            },
+            "p": 12
+          },
+          {
+            "n": {
+              "it": "MA ANCHE NO",
+              "en": "OR NOT"
+            },
+            "p": 9
+          }
+        ],
+        "pre": {
+          "it": "Per insegnare devi saper tradurre un BRIEF IN MILANESE. Vediamo!",
+          "en": "To teach, you must decode a MILANESE BRIEF. Let's see!"
+        },
+        "post": {
+          "it": "Brava. Hai il metodo.",
+          "en": "Well done. You have the method."
+        }
+      },
+      "items": [
+        {
+          "id": "ied",
+          "t": "IED FIRENZE",
+          "d": {
+            "it": "Master in Graphic Design (New Media). Docente di Graphic Design, 2020-2024.",
+            "en": "Master in Graphic Design (New Media). Graphic Design teacher, 2020-2024."
+          },
+          "media": []
+        },
+        {
+          "id": "thesign",
+          "t": "THESIGN ACADEMY",
+          "d": {
+            "it": "Comics & Arts Academy, corso di Graphic Design. Docente di Visual Design & Typography, 2022-2026.",
+            "en": "Comics & Arts Academy, Graphic Design course. Visual Design & Typography teacher, 2022-2026."
+          },
+          "media": []
+        },
+        {
+          "id": "ldm",
+          "t": "LORENZO DE' MEDICI",
+          "d": {
+            "it": "Istituto Lorenzo de' Medici. Graphic Design, Web Design, Portfolio Review e Visual Design, 2022-2024.",
+            "en": "Lorenzo de' Medici Institute. Graphic Design, Web Design, Portfolio Review and Visual Design, 2022-2024."
+          },
+          "media": []
+        },
+        {
+          "id": "isia",
+          "t": "ISIA FIRENZE",
+          "d": {
+            "it": "Workshop \"Brividi\": progettazione grafica, metodologia, orientamento. 2016-2026.",
+            "en": "\"Brividi\" workshop: graphic design, methodology, orientation. 2016-2026."
+          },
+          "media": []
+        },
+        {
+          "id": "chinese",
+          "t": "CHINESE PRE ACADEMY",
+          "d": {
+            "it": "Chinese Pre Academy School, docente di Visual Art, 2019/2020.",
+            "en": "Chinese Pre Academy School, Visual Art teacher, 2019/2020."
+          },
+          "media": []
+        },
+        {
+          "id": "workshop",
+          "t": "WORKSHOP",
+          "d": {
+            "it": "Workshop di lettering, tipografia e progettazione grafica in tutta Italia, dal 2017.",
+            "en": "Lettering, typography and graphic design workshops across Italy, since 2017."
+          },
+          "media": []
+        },
+        {
+          "id": "metodo",
+          "t": "METODO",
+          "d": {
+            "it": "Ricerca teorica, sperimentazione e pratica professionale. Il designer come autore di sistemi ed esperienze.",
+            "en": "Theory, experimentation and professional practice. The designer as an author of systems and experiences."
+          },
+          "media": []
+        }
+      ]
+    },
+    {
+      "id": "studio",
+      "builtin": true,
+      "icon": 1,
+      "title": {
+        "it": "Studio e clienti",
+        "en": "Studio and clients"
+      },
+      "place": {
+        "it": "STUDIO ERGONAUTH",
+        "en": "ERGONAUTH STUDIO"
+      },
+      "badge": {
+        "it": "MEDAGLIA VETTORE",
+        "en": "VECTOR BADGE"
+      },
+      "sign": {
+        "it": "STUDIO ERGONAUTH. Firenze, dal 2016.",
+        "en": "ERGONAUTH STUDIO. Florence, since 2016."
+      },
+      "summary": {
+        "it": "Ergonauth è lo studio di GUD dal 2016. Tra clienti e partner: Disney, Mondadori, Jaguar Land Rover, Artribune, Comune di Firenze.",
+        "en": "Ergonauth has been GUD's studio since 2016. Clients and partners include Disney, Mondadori, Jaguar Land Rover, Artribune and the City of Florence."
+      },
+      "leader": {
+        "name": {
+          "it": "IL COMMERCIALISTA",
+          "en": "THE ACCOUNTANT"
+        },
+        "look": "boy"
+      },
+      "npc": {
+        "look": "girl",
+        "say": {
+          "it": "Qui si fa art direction, branding, naming, lettering. E si beve molto caffè.",
+          "en": "Here we do art direction, branding, naming, lettering. And drink a lot of coffee."
+        }
+      },
+      "battle": {
+        "enemy": "f24",
+        "hp": 74,
+        "lv": 32,
+        "weak": 3,
+        "name": {
+          "it": "F24",
+          "en": "TAX FORM F24"
+        },
+        "moves": [
+          {
+            "n": {
+              "it": "SCADENZA",
+              "en": "DEADLINE"
+            },
+            "p": 12
+          },
+          {
+            "n": {
+              "it": "RAVVEDIMENTO",
+              "en": "LATE FEE"
+            },
+            "p": 10
+          },
+          {
+            "n": {
+              "it": "BOLLO",
+              "en": "STAMP DUTY"
+            },
+            "p": 8
+          }
+        ],
+        "pre": {
+          "it": "Aprire uno studio è bellissimo. Poi arrivano gli F24.",
+          "en": "Opening a studio is wonderful. Then the tax forms arrive."
+        },
+        "post": {
+          "it": "Conti in ordine. Ti meriti questa.",
+          "en": "Books balanced. You earned this."
+        }
+      },
+      "items": [
+        {
+          "id": "ergonauth",
+          "t": "ERGONAUTH S.A.S.",
+          "d": {
+            "it": "Studio fondato a Firenze nel 2016. GUD è socia fondatrice, CEO e Creative Director.",
+            "en": "Studio founded in Florence in 2016. GUD is co-founder, CEO and Creative Director."
+          },
+          "media": []
+        },
+        {
+          "id": "disney",
+          "t": "THE WALT DISNEY COMPANY",
+          "d": {
+            "it": "Milano, 2018-2019. Lettering artist e illustratrice per Art of Hand Lettering.",
+            "en": "Milan, 2018-2019. Lettering artist and illustrator for Art of Hand Lettering."
+          },
+          "media": []
+        },
+        {
+          "id": "mondadori",
+          "t": "GRUPPO MONDADORI",
+          "d": {
+            "it": "Con TheSign Academy, 2024. Direzione artistica.",
+            "en": "With TheSign Academy, 2024. Art direction."
+          },
+          "media": []
+        },
+        {
+          "id": "jlr",
+          "t": "JAGUAR LAND ROVER",
+          "d": {
+            "it": "Con IED Firenze, 2023. Art direction per i 75 anni del Defender: la livrea.",
+            "en": "With IED Florence, 2023. Art direction for the Defender 75th anniversary livery."
+          },
+          "media": []
+        },
+        {
+          "id": "artribune",
+          "t": "ARTRIBUNE",
+          "d": {
+            "it": "Con il Master in Graphic Design di IED Firenze, 2023. Art direction.",
+            "en": "With the IED Florence Master in Graphic Design, 2023. Art direction."
+          },
+          "media": []
+        },
+        {
+          "id": "firenze",
+          "t": "COMUNE DI FIRENZE",
+          "d": {
+            "it": "Estate Fiorentina 2022. Visual design della campagna istituzionale: la prima campagna in Italia realizzata con l'intelligenza artificiale.",
+            "en": "Estate Fiorentina 2022. Visual design of the city campaign: the first Italian campaign made with artificial intelligence."
+          },
+          "media": []
+        },
+        {
+          "id": "spencer",
+          "t": "SPENCER",
+          "d": {
+            "it": "Con IED Firenze, 2021. Project management: il visual storytelling dei volontari Covid-19.",
+            "en": "With IED Florence, 2021. Project management: visual storytelling of Covid-19 volunteers."
+          },
+          "media": []
+        },
+        {
+          "id": "branding",
+          "t": "BRANDING E NAMING",
+          "d": {
+            "it": "Identità e naming per aziende e agenzie, come NTC.",
+            "en": "Identity and naming for companies and agencies, such as NTC."
+          },
+          "media": []
+        }
+      ]
+    },
+    {
+      "id": "lucca",
+      "builtin": true,
+      "icon": 2,
+      "title": {
+        "it": "Lucca Comics & Games",
+        "en": "Lucca Comics & Games"
+      },
+      "place": {
+        "it": "LUCCA CREA",
+        "en": "LUCCA CREA"
+      },
+      "badge": {
+        "it": "MEDAGLIA MURA",
+        "en": "WALLS BADGE"
+      },
+      "sign": {
+        "it": "LUCCA C&G. La città del fumetto e del gioco.",
+        "en": "LUCCA C&G. The city of comics and games."
+      },
+      "summary": {
+        "it": "Dal 2023 GUD guida la comunicazione di Lucca Crea. Per i 60 anni del festival ha firmato art direction, progetto e mostra.",
+        "en": "Since 2023 GUD has led communication for Lucca Crea. For the festival's 60th anniversary she signed art direction, project and exhibition."
+      },
+      "leader": {
+        "name": {
+          "it": "IL GUARDIANO DELLE MURA",
+          "en": "THE WALL KEEPER"
+        },
+        "look": "guard"
+      },
+      "npc": {
+        "look": "punk",
+        "say": {
+          "it": "Nella Legacy Board ognuno scrive il suo evento canonico con i Posca.",
+          "en": "On the Legacy Board everyone writes their canon event with Posca markers."
+        }
+      },
+      "battle": {
+        "enemy": "logo",
+        "hp": 80,
+        "lv": 35,
+        "weak": 1,
+        "name": {
+          "it": "LOGO PIÙ GRANDE",
+          "en": "BIGGER LOGO"
+        },
+        "moves": [
+          {
+            "n": {
+              "it": "PIÙ GRANDE!",
+              "en": "BIGGER!"
+            },
+            "p": 12
+          },
+          {
+            "n": {
+              "it": "ANCORA!",
+              "en": "MORE!"
+            },
+            "p": 11
+          },
+          {
+            "n": {
+              "it": "FA POP?",
+              "en": "DOES IT POP?"
+            },
+            "p": 10
+          }
+        ],
+        "pre": {
+          "it": "Sulle mura si passa solo se resisti al LOGO PIÙ GRANDE!",
+          "en": "You only pass the walls if you resist the BIGGER LOGO!"
+        },
+        "post": {
+          "it": "Le mura sono tue. Buon compleanno, Lucca.",
+          "en": "The walls are yours. Happy birthday, Lucca."
+        }
+      },
+      "items": [
+        {
+          "id": "luccacrea",
+          "t": "LUCCA CREA",
+          "d": {
+            "it": "Dal 2023: art director, communication consultant e project manager.",
+            "en": "Since 2023: art director, communication consultant and project manager."
+          },
+          "media": []
+        },
+        {
+          "id": "lcg60",
+          "t": "LCG60",
+          "d": {
+            "it": "Art direction, project management e curatela per i 60 anni di Lucca Comics & Games, 2025-2026.",
+            "en": "Art direction, project management and curation for the 60th anniversary of Lucca Comics & Games, 2025-2026."
+          },
+          "media": []
+        },
+        {
+          "id": "legacy",
+          "t": "LUCCA LEGACY",
+          "d": {
+            "it": "A Comics & Games Story. Mostra inaugurata il 3 ottobre 2026: Legacy Board, The Vault, Tree of Strips, Cover Story. Progetto visivo e cura editoriale.",
+            "en": "A Comics & Games Story. Exhibition opened on 3 October 2026: Legacy Board, The Vault, Tree of Strips, Cover Story. Visual design and editorial curation."
+          },
+          "media": []
+        },
+        {
+          "id": "talk",
+          "t": "TALK LCG 2023",
+          "d": {
+            "it": "Relatrice: intelligenza artificiale e progettazione grafica.",
+            "en": "Speaker: artificial intelligence and graphic design."
+          },
+          "media": []
+        },
+        {
+          "id": "comms",
+          "t": "COMUNICAZIONE",
+          "d": {
+            "it": "Comunicazione istituzionale e LinkedIn per Lucca Crea e Lucca Comics & Games.",
+            "en": "Institutional communication and LinkedIn for Lucca Crea and Lucca Comics & Games."
+          },
+          "media": []
+        }
+      ]
+    },
+    {
+      "id": "type",
+      "builtin": true,
+      "icon": 3,
+      "title": {
+        "it": "Type design",
+        "en": "Type design"
+      },
+      "place": {
+        "it": "FONDERIA TYPODIVA",
+        "en": "TYPODIVA FOUNDRY"
+      },
+      "badge": {
+        "it": "MEDAGLIA GLIFO",
+        "en": "GLYPH BADGE"
+      },
+      "sign": {
+        "it": "FONDERIA TYPODIVA. Lettere fuse ogni giorno.",
+        "en": "TYPODIVA FOUNDRY. Letters cast daily."
+      },
+      "summary": {
+        "it": "Typodiva è lo spazio tipografico di GUD: lettere disegnate, strumenti costruiti in codice, una comunità a TypeThursday.",
+        "en": "Typodiva is GUD's typographic space: drawn letters, tools built in code, a community at TypeThursday."
+      },
+      "leader": {
+        "name": {
+          "it": "IL FONT PIRATA",
+          "en": "THE FONT PIRATE"
+        },
+        "look": "punk"
+      },
+      "npc": {
+        "look": "girl",
+        "say": {
+          "it": "Ogni lettera qui dentro è stata disegnata, spaziata, provata. Poi ridisegnata.",
+          "en": "Every letter in here was drawn, spaced, tested. Then redrawn."
+        }
+      },
+      "battle": {
+        "enemy": "bug",
+        "hp": 78,
+        "lv": 34,
+        "weak": 1,
+        "name": {
+          "it": "SOFTWARE BUG",
+          "en": "SOFTWARE BUG"
+        },
+        "moves": [
+          {
+            "n": {
+              "it": "CRASH",
+              "en": "CRASH"
+            },
+            "p": 12
+          },
+          {
+            "n": {
+              "it": "KERNING ROTTO",
+              "en": "BROKEN KERNING"
+            },
+            "p": 11
+          },
+          {
+            "n": {
+              "it": "FONT MANCANTE",
+              "en": "MISSING FONT"
+            },
+            "p": 10
+          }
+        ],
+        "pre": {
+          "it": "Ho piratato un font! E mi porto dietro un BUG.",
+          "en": "I pirated a font! And I brought a BUG."
+        },
+        "post": {
+          "it": "Va bene, restituisco il font. Con licenza.",
+          "en": "Fine, I'll return the font. Licensed."
+        }
+      },
+      "items": [
+        {
+          "id": "typodiva",
+          "t": "TYPODIVA",
+          "d": {
+            "it": "Il marchio di type design di GUD.",
+            "en": "GUD's type design label."
+          },
+          "media": []
+        },
+        {
+          "id": "master",
+          "t": "MASTER",
+          "d": {
+            "it": "Master in Typography, Calligraphy & Font Design, IED Firenze, 2018.",
+            "en": "Master in Typography, Calligraphy & Font Design, IED Florence, 2018."
+          },
+          "media": []
+        },
+        {
+          "id": "tools",
+          "t": "STRUMENTI",
+          "d": {
+            "it": "Glyphs, RoboFont, fontTools. E codice, taaaanto codice.",
+            "en": "Glyphs, RoboFont, fontTools. And code, lots of code."
+          },
+          "media": []
+        },
+        {
+          "id": "typethursday",
+          "t": "TYPETHURSDAY FIRENZE",
+          "d": {
+            "it": "Dialogue Lead dal 2019. Autrice e ideatrice di TGITT.",
+            "en": "Dialogue Lead since 2019. Author and creator of TGITT."
+          },
+          "media": []
+        },
+        {
+          "id": "ohmyfont",
+          "t": "OHMYFONT",
+          "d": {
+            "it": "Un corso di tipografia: programma e progetto didattico.",
+            "en": "A typography course: syllabus and teaching project."
+          },
+          "media": []
+        },
+        {
+          "id": "tarot",
+          "t": "TYPOGRAPHY TAROT",
+          "d": {
+            "it": "22 Arcani Maggiori, 22 principi tipografici.",
+            "en": "22 Major Arcana, 22 typographic principles."
+          },
+          "media": []
+        },
+        {
+          "id": "codetools",
+          "t": "TOOL IN CODICE",
+          "d": {
+            "it": "FONTain, visualizzatore tipografico ad acqua. Un generatore di schermate Televideo. Un generatore di cruciverba.",
+            "en": "FONTain, a typographic water visualiser. A Televideo screen generator. A crossword generator."
+          },
+          "media": []
+        }
+      ]
+    },
+    {
+      "id": "gallery",
+      "builtin": true,
+      "icon": 4,
+      "title": {
+        "it": "Curatela e arte",
+        "en": "Curation and art"
+      },
+      "place": {
+        "it": "GALLERIA",
+        "en": "GALLERY"
+      },
+      "badge": {
+        "it": "MEDAGLIA CORNICE",
+        "en": "FRAME BADGE"
+      },
+      "sign": {
+        "it": "GALLERIA. Curatela e arte.",
+        "en": "GALLERY. Curation and art."
+      },
+      "summary": {
+        "it": "GUD cura mostre e progetti culturali: dal segno di Roberto Innocenti al fumetto italiano contemporaneo.",
+        "en": "GUD curates exhibitions and cultural projects: from Roberto Innocenti's drawings to contemporary Italian comics."
+      },
+      "leader": {
+        "name": {
+          "it": "LA CRITICA",
+          "en": "THE CRITIC"
+        },
+        "look": "critic"
+      },
+      "npc": {
+        "look": "boy",
+        "say": {
+          "it": "Quel piedistallo vuoto è un'opera concettuale. Si intitola \"Brief Chiaro\".",
+          "en": "That empty pedestal is a conceptual work. It is called \"Clear Brief\"."
+        }
+      },
+      "battle": {
+        "enemy": "voice",
+        "hp": 76,
+        "lv": 33,
+        "weak": 2,
+        "name": {
+          "it": "VOCALE 4 MIN",
+          "en": "4-MIN VOICE NOTE"
+        },
+        "moves": [
+          {
+            "n": {
+              "it": "PREAMBOLO",
+              "en": "PREAMBLE"
+            },
+            "p": 9
+          },
+          {
+            "n": {
+              "it": "ALLORA, NIENTE...",
+              "en": "SO, ANYWAY..."
+            },
+            "p": 11
+          },
+          {
+            "n": {
+              "it": "RIASSUNTO",
+              "en": "RECAP"
+            },
+            "p": 12
+          }
+        ],
+        "pre": {
+          "it": "Prima di parlare d'arte, ascolta il mio VOCALE di 4 minuti.",
+          "en": "Before we talk art, listen to my 4-minute VOICE NOTE."
+        },
+        "post": {
+          "it": "Concettualmente ineccepibile.",
+          "en": "Conceptually flawless."
+        }
+      },
+      "items": [
+        {
+          "id": "innocenti",
+          "t": "ROBERTO INNOCENTI",
+          "d": {
+            "it": "Dal Sogno al Segno, Scandicci. Curatela e art direction della mostra.",
+            "en": "Dal Sogno al Segno, Scandicci. Curation and art direction of the exhibition."
+          },
+          "media": []
+        },
+        {
+          "id": "nerosubianco",
+          "t": "NERO SU BIANCO",
+          "d": {
+            "it": "Serate di fumetto italiano contemporaneo al Caffè Letterario Le Murate, Firenze. (WIP)",
+            "en": "Contemporary Italian comics evenings at Caffè Letterario Le Murate, Florence. (WIP)"
+          },
+          "media": []
+        },
+        {
+          "id": "skynmap",
+          "t": "SKYN MAP",
+          "d": {
+            "it": "Web app artistica: trasforma i segni della pelle in costellazioni. Project by GUD.",
+            "en": "Artistic web app: turns skin marks into constellations. Project by GUD."
+          },
+          "media": []
+        },
+        {
+          "id": "why",
+          "t": "WHY FESTIVAL",
+          "d": {
+            "it": "Professionista e divulgatrice.",
+            "en": "Professional and speaker."
+          },
+          "media": []
+        },
+        {
+          "id": "tgif",
+          "t": "THANK GUD IT'S FRIDAY",
+          "d": {
+            "it": "Un arcade pixel art girlpop: GUD sopravvive alla settimana lavorativa. Lo trovi sul sito.",
+            "en": "A girlpop pixel arcade: GUD survives the working week. Find it on the website."
+          },
+          "media": []
+        }
+      ]
+    },
+    {
+      "id": "library",
+      "builtin": true,
+      "icon": 5,
+      "title": {
+        "it": "Scrittura",
+        "en": "Writing"
+      },
+      "place": {
+        "it": "BIBLIOTECA",
+        "en": "LIBRARY"
+      },
+      "badge": {
+        "it": "MEDAGLIA INCHIOSTRO",
+        "en": "INK BADGE"
+      },
+      "sign": {
+        "it": "BIBLIOTECA. Le parole di GUD.",
+        "en": "LIBRARY. GUD's words."
+      },
+      "summary": {
+        "it": "GUD scrive da sempre: saggi sulla tipografia, prosa lirica, rubriche, testi per la cultura.",
+        "en": "GUD has always written: essays on typography, lyric prose, columns, texts for culture."
+      },
+      "leader": {
+        "name": {
+          "it": "LA BIBLIOTECARIA",
+          "en": "THE LIBRARIAN"
+        },
+        "look": "libr"
+      },
+      "npc": {
+        "look": "critic",
+        "say": {
+          "it": "Shhh. Qui si legge GUD.",
+          "en": "Shhh. We are reading GUD."
+        }
+      },
+      "battle": {
+        "enemy": "email",
+        "hp": 72,
+        "lv": 31,
+        "weak": 2,
+        "name": {
+          "it": "EMAIL NON LETTA",
+          "en": "UNREAD EMAIL"
+        },
+        "moves": [
+          {
+            "n": {
+              "it": "RE: RE: RE:",
+              "en": "RE: RE: RE:"
+            },
+            "p": 11
+          },
+          {
+            "n": {
+              "it": "CC: TUTTI",
+              "en": "CC: ALL"
+            },
+            "p": 12
+          },
+          {
+            "n": {
+              "it": "PROMEMORIA",
+              "en": "REMINDER"
+            },
+            "p": 9
+          }
+        ],
+        "pre": {
+          "it": "Silenzio! Prima rispondi a questa EMAIL NON LETTA.",
+          "en": "Silence! First answer this UNREAD EMAIL."
+        },
+        "post": {
+          "it": "Puoi prendere in prestito tutti i libri che vuoi.",
+          "en": "You may borrow every book you like."
+        }
+      },
+      "items": [
+        {
+          "id": "fontdipotere",
+          "t": "FONT DI POTERE",
+          "d": {
+            "it": "Tipografia, norma e dissidenza visiva nel design contemporaneo. Saggio, ISIA Journal, Firenze.",
+            "en": "Typography, norm and visual dissent in contemporary design. Essay, ISIA Journal, Florence."
+          },
+          "media": []
+        },
+        {
+          "id": "goblet",
+          "t": "THE CRYSTAL GOBLET",
+          "d": {
+            "it": "Prosa lirica. Un archivio di scrittura attivo dal 2009, anche su ohmygud.com.",
+            "en": "Lyric prose. A writing archive active since 2009, also on ohmygud.com."
+          },
+          "media": []
+        },
+        {
+          "id": "kuore",
+          "t": "POSTA DEL KUORE",
+          "d": {
+            "it": "La rubrica di consigli firmata Vodka Madonna.",
+            "en": "The advice column signed Vodka Madonna."
+          },
+          "media": []
+        },
+        {
+          "id": "copy",
+          "t": "COPYWRITING",
+          "d": {
+            "it": "Testi editoriali e istituzionali per la cultura, dalla critica ai social.",
+            "en": "Editorial and institutional writing for culture, from criticism to social media."
+          },
+          "media": []
+        },
+        {
+          "id": "lingue",
+          "t": "LINGUE",
+          "d": {
+            "it": "Italiano madrelingua. Inglese C1.",
+            "en": "Italian native. English C1."
+          },
+          "media": []
+        }
+      ]
+    }
+  ],
+  "mons": [
+    {
+      "id": "kernix",
+      "n": "KERNIX",
+      "l": "K",
+      "c": "P",
+      "a": "glasses",
+      "type": {
+        "it": "TIPO",
+        "en": "TYPE"
+      },
+      "d": {
+        "it": "Ama lo spazio tra le lettere più delle lettere stesse. La tipografia è il primo amore di GUD.",
+        "en": "Loves the space between letters more than the letters. Typography is GUD's first love."
+      }
+    },
+    {
+      "id": "glypho",
+      "n": "GLYPHO",
+      "l": "G",
+      "c": "Y",
+      "a": "spark",
+      "type": {
+        "it": "DESIGN",
+        "en": "DESIGN"
+      },
+      "d": {
+        "it": "Nasce in Glyphs, cresce in RoboFont, si allena con fontTools. È il type design di Typodiva.",
+        "en": "Born in Glyphs, raised in RoboFont, trained with fontTools. It is Typodiva's type design."
+      }
+    },
+    {
+      "id": "inklina",
+      "n": "INKLINA",
+      "l": "L",
+      "c": "B",
+      "a": "nib",
+      "type": {
+        "it": "MANO",
+        "en": "HAND"
+      },
+      "d": {
+        "it": "Disegna lettere a mano libera. Ha fatto la lettering artist per Disney.",
+        "en": "Draws letters by hand. Worked as a lettering artist for Disney."
+      }
+    },
+    {
+      "id": "balloona",
+      "n": "BALLOONA",
+      "l": "F",
+      "c": "W",
+      "a": "bubble",
+      "type": {
+        "it": "FUMETTO",
+        "en": "COMICS"
+      },
+      "d": {
+        "it": "Vive tra le vignette del fumetto italiano. Habitat naturale: Lucca.",
+        "en": "Lives inside Italian comics panels. Natural habitat: Lucca."
+      }
+    },
+    {
+      "id": "poppy",
+      "n": "POPPY",
+      "l": "P",
+      "c": "Y",
+      "a": "crown",
+      "type": {
+        "it": "POP",
+        "en": "POP"
+      },
+      "d": {
+        "it": "Mangia pop culture a colazione: icone, giochi, cosplay. Alta e bassa cultura nello stesso piatto.",
+        "en": "Eats pop culture for breakfast: icons, games, cosplay. High and low culture on the same plate."
+      }
+    },
+    {
+      "id": "critiko",
+      "n": "CRITIKO",
+      "l": "C",
+      "c": "K",
+      "a": "glasses",
+      "type": {
+        "it": "TEORIA",
+        "en": "THEORY"
+      },
+      "d": {
+        "it": "Legge teoria letteraria e critica. Quando ti guarda, ti sta analizzando.",
+        "en": "Reads literary and critical theory. When it looks at you, it is analysing you."
+      }
+    },
+    {
+      "id": "concetta",
+      "n": "CONCETTA",
+      "l": "A",
+      "c": "W",
+      "a": "beret",
+      "type": {
+        "it": "ARTE",
+        "en": "ART"
+      },
+      "d": {
+        "it": "Arte concettuale: l'idea prima dell'oggetto. A volte è solo un piedistallo vuoto.",
+        "en": "Conceptual art: the idea before the object. Sometimes just an empty pedestal."
+      }
+    },
+    {
+      "id": "codella",
+      "n": "CODELLA",
+      "l": "/",
+      "c": "B",
+      "a": "spark",
+      "type": {
+        "it": "CODICE",
+        "en": "CODE"
+      },
+      "d": {
+        "it": "Scrive codice per creare strumenti: FONTain, Televideo, cruciverba, automazioni. E questo gioco.",
+        "en": "Writes code to make tools: FONTain, Televideo, crosswords, automations. And this game."
+      }
+    },
+    {
+      "id": "proffy",
+      "n": "PROFFY",
+      "l": "I",
+      "c": "P",
+      "a": "cap",
+      "type": {
+        "it": "SCUOLA",
+        "en": "SCHOOL"
+      },
+      "d": {
+        "it": "Insegna dal 2016. Trasforma i brief in metodo e gli studenti in progettisti.",
+        "en": "Teaching since 2016. Turns briefs into method and students into designers."
+      }
+    },
+    {
+      "id": "archivia",
+      "n": "ARCHIVIA",
+      "l": "R",
+      "c": "B",
+      "a": "book",
+      "type": {
+        "it": "ARCHIVIO",
+        "en": "ARCHIVE"
+      },
+      "d": {
+        "it": "Colleziona archivi: 60 anni di poster, premi e interviste di Lucca Comics & Games.",
+        "en": "Collects archives: 60 years of Lucca Comics & Games posters, awards and interviews."
+      }
+    },
+    {
+      "id": "curatrix",
+      "n": "CURATRIX",
+      "l": "M",
+      "c": "Y",
+      "a": "beret",
+      "type": {
+        "it": "MOSTRE",
+        "en": "SHOWS"
+      },
+      "d": {
+        "it": "Cura mostre: mette in fila le storie e le fa respirare nello spazio.",
+        "en": "Curates exhibitions: lines up stories and lets them breathe in space."
+      }
+    },
+    {
+      "id": "pennina",
+      "n": "PENNINA",
+      "l": "W",
+      "c": "P",
+      "a": "nib",
+      "type": {
+        "it": "PAROLE",
+        "en": "WORDS"
+      },
+      "d": {
+        "it": "Scrive prosa lirica, critica e una posta del cuore. Archivio attivo dal 2009.",
+        "en": "Writes lyric prose, criticism and an agony aunt column. Archive active since 2009."
+      }
+    },
+    {
+      "id": "gudheart",
+      "n": "GUDHEART",
+      "l": "♥",
+      "c": "Y",
+      "a": "crown",
+      "legendary": true,
+      "type": {
+        "it": "AMORE",
+        "en": "LOVE"
+      },
+      "d": {
+        "it": "Leggendario. Il segreto di GUD: fare le cose con amore. E con un po' di ironia.",
+        "en": "Legendary. GUD's secret: do things with love. And a little irony."
+      }
+    }
+  ],
+  "lists": {
+    "welcome": [
+      {
+        "it": "Un mondo in cui ci sono troppe cose belle da fare per preoccuparsi del portfolio.",
+        "en": "A world with far too many beautiful things to do to worry about a portfolio."
+      },
+      {
+        "it": "Qui si disegnano lettere, si curano mostre, si insegna, si scrive. E si sopravvive alla settimana lavorativa.",
+        "en": "Here we draw letters, curate exhibitions, teach and write. And survive the working week."
+      },
+      {
+        "it": "Il portfolio arriverà. Intanto, gioca.",
+        "en": "The portfolio will come. Meanwhile, play."
+      }
+    ],
+    "tgifIntro": [
+      {
+        "it": "Cerchi GUD?",
+        "en": "Looking for GUD?"
+      },
+      {
+        "it": "Aiuta la tua art director preferita a sopravvivere alla settimana lavorativa.",
+        "en": "Help your favourite art director survive the working week."
+      },
+      {
+        "it": "La tua missione? Portarla al venerdì. Possibilmente viva.",
+        "en": "Your mission? Get her to Friday. Alive, preferably."
+      }
+    ],
+    "feedbackWeek": [
+      {
+        "it": "FAI IL LOGO PIÙ GRANDE!",
+        "en": "MAKE THE LOGO BIGGER!"
+      },
+      {
+        "it": "SI PUÒ FARE PIÙ POP?",
+        "en": "CAN WE MAKE IT POP?"
+      },
+      {
+        "it": "SOLO UNA PICCOLA MODIFICA.",
+        "en": "JUST ONE SMALL CHANGE."
+      },
+      {
+        "it": "PIÙ WOW!",
+        "en": "MORE WOW!"
+      },
+      {
+        "it": "NON LO SENTO.",
+        "en": "I DON'T FEEL IT."
+      },
+      {
+        "it": "PROVIAMO UN ALTRO FONT?",
+        "en": "CAN WE TRY ANOTHER FONT?"
+      },
+      {
+        "it": "È URGENTE.",
+        "en": "IT'S URGENT."
+      },
+      {
+        "it": "MIO CUGINO LO FA.",
+        "en": "MY COUSIN CAN DO IT."
+      },
+      {
+        "it": "CE LO MANDI PER IERI?",
+        "en": "CAN WE HAVE IT BY YESTERDAY?"
+      },
+      {
+        "it": "FEEDBACK NON RICHIESTO.",
+        "en": "FEEDBACK NON RICHIESTO."
+      },
+      {
+        "it": "NON SO COSA VOGLIO, MA QUESTO NO.",
+        "en": "NON SO COSA VOGLIO, MA QUESTO NO."
+      },
+      {
+        "it": "CI SIAMO QUASI, CAMBIAMO TUTTO.",
+        "en": "CI SIAMO QUASI, CAMBIAMO TUTTO."
+      }
+    ],
+    "feedbackWeekend": [
+      {
+        "it": "MANGIA, CHE SEI SCIUPATA!",
+        "en": "MANGIA, CHE SEI SCIUPATA!"
+      },
+      {
+        "it": "UN ALTRO PO' DI PASTA?",
+        "en": "A LITTLE MORE PASTA?"
+      },
+      {
+        "it": "ULTIMO GIRO, GIURO.",
+        "en": "LAST ROUND, I SWEAR."
+      },
+      {
+        "it": "CHI HA CHIUSO LE TENDE?",
+        "en": "WHO CLOSED THE CURTAINS?"
+      },
+      {
+        "it": "SONO LE 3 DI NOTTE.",
+        "en": "IT'S 3 AM."
+      },
+      {
+        "it": "MAI PIÙ.",
+        "en": "NEVER AGAIN."
+      },
+      {
+        "it": "HAI MESSO LA MAGLIA?",
+        "en": "ARE YOU WEARING A JUMPER?"
+      },
+      {
+        "it": "DOMANI DIETA.",
+        "en": "DIET STARTS TOMORROW."
+      }
+    ],
+    "beach": [
+      {
+        "it": "SI VEDE CHE AMI GUD E VUOI VEDERLA FELICE.",
+        "en": "SI VEDE CHE AMI GUD E VUOI VEDERLA FELICE."
+      },
+      {
+        "it": "MANDALE QUESTO SCREEN E CHIEDILE IL SUO IBAN.",
+        "en": "MANDALE QUESTO SCREEN E CHIEDILE IL SUO IBAN."
+      },
+      {
+        "it": "VEDRAI CHE LO SARÀ ANCORA DI PIÙ.",
+        "en": "VEDRAI CHE LO SARÀ ANCORA DI PIÙ."
+      }
+    ],
+    "questIntro": [
+      {
+        "it": "Ciao! Benvenuto nel mondo della comunicazione visiva!",
+        "en": "Hello there! Welcome to the world of visual communication!"
+      },
+      {
+        "it": "Mi chiamo PROF. SERIF. Studio le lettere. Quelle che prendono vita le chiamiamo GUDMON.",
+        "en": "My name is PROF. SERIF. I study letters. The ones that come alive we call GUDMON."
+      },
+      {
+        "it": "Questa è GUD. Art director, type designer, docente, curatrice, autrice.",
+        "en": "This is GUD. Art director, type designer, teacher, curator, writer."
+      },
+      {
+        "it": "Il suo sito è in costruzione. La sua storia invece è qui, in questa città.",
+        "en": "Her website is under construction. Her story, though, is right here in this town."
+      },
+      {
+        "it": "Entra negli edifici e parla con tutti. Vinci le medaglie. Cattura i GUDMON nell'erba alta: sono le sue passioni.",
+        "en": "Enter the buildings and talk to everyone. Win the badges. Catch GUDMON in the tall grass: they are her passions."
+      },
+      {
+        "it": "Il viaggio nel CV di GUD sta per cominciare!",
+        "en": "Your journey through GUD's CV is about to begin!"
+      }
+    ]
+  },
+  "text": {
+    "welcome": {
+      "kicker": {
+        "it": "BENVENUTO NELL'",
+        "en": "WELCOME TO THE"
+      },
+      "title": {
+        "it": "AMAZING WORLD OF GUD",
+        "en": "AMAZING WORLD OF GUD"
+      },
+      "cta": {
+        "it": "ENTRA",
+        "en": "ENTER"
+      },
+      "skip": {
+        "it": "Vai dritto al CV",
+        "en": "Skip to the CV"
+      }
+    },
+    "site": {
+      "exploreCv": {
+        "it": "ESPLORA IL CV",
+        "en": "EXPLORE THE CV"
+      },
+      "tricks": {
+        "it": "TRUCCHI",
+        "en": "TRICKS"
+      },
+      "chooseTitle": {
+        "it": "COME VUOI LEGGERE IL CV?",
+        "en": "HOW DO YOU WANT TO READ THE CV?"
+      },
+      "questDesc": {
+        "it": "Il CV come un gioco di ruolo da Game Boy. Esplora, lotta, cattura le passioni di GUD.",
+        "en": "The CV as a handheld RPG. Explore, battle, catch GUD's passions."
+      },
+      "plainName": {
+        "it": "BANALE CV",
+        "en": "BORING CV"
+      },
+      "plainDesc": {
+        "it": "Il CV come lo vorrebbe un recruiter. Pulito, veloce, stampabile.",
+        "en": "The CV a recruiter would want. Clean, quick, printable."
+      },
+      "backToTgif": {
+        "it": "TORNA A TGIF",
+        "en": "BACK TO TGIF"
+      }
+    },
+    "tgif": {
+      "subtitle": {
+        "it": "E se non lo è, usa l'immaginazione.",
+        "en": "And if it's not, use your imagination."
+      },
+      "start": {
+        "it": "PREMI START",
+        "en": "PRESS START"
+      },
+      "hint": {
+        "it": "← → MUOVI · ↑ / SPAZIO SALTA · ↓ SCHIVA · K SPARA",
+        "en": "← → MOVE · ↑ / SPACE JUMP · ↓ DODGE · K SHOOT"
+      },
+      "hintMobile": {
+        "it": "USA I TASTI SULLO SCHERMO",
+        "en": "USE THE ON-SCREEN BUTTONS"
+      },
+      "weekWinTitle": {
+        "it": "CONGRATULAZIONI!",
+        "en": "CONGRATULATIONS!"
+      },
+      "weekWin1": {
+        "it": "Sei sopravvissuta a un'altra settimana lavorativa.",
+        "en": "You survived another working week."
+      },
+      "weekWin2": {
+        "it": "BIG CLIENT è stato sconfitto. I tuoi diritti umani sono stati temporaneamente ripristinati.",
+        "en": "BIG CLIENT has been defeated. Your human rights have been temporarily restored."
+      },
+      "weekWin3": {
+        "it": "Ma sei pronta per la sfida finale?",
+        "en": "But are you ready for the ultimate challenge?"
+      },
+      "weekWin4": {
+        "it": "IL WEEKEND.",
+        "en": "THE WEEKEND."
+      },
+      "weekWinCta": {
+        "it": "ENTRA NEL WEEKEND",
+        "en": "ENTER WEEKEND MODE"
+      },
+      "weekLoseTitle": {
+        "it": "VENERDÌ TARDI",
+        "en": "LATE FRIDAY"
+      },
+      "weekLoseSub": {
+        "it": "RIUNIONE ACCETTATA",
+        "en": "MEETING ACCEPTED"
+      },
+      "weekLose1": {
+        "it": "\"Congratulazioni. Il tuo weekend è stato riprogrammato a mai.\"",
+        "en": "\"Congratulations. Your weekend has been successfully rescheduled to never.\""
+      },
+      "wkndWinTitle": {
+        "it": "CE L'HAI FATTA!",
+        "en": "YOU DID IT!"
+      },
+      "wkndWin1": {
+        "it": "Sei sopravvissuta al weekend.",
+        "en": "You survived the weekend."
+      },
+      "wkndWin2": {
+        "it": "Contro ogni previsione, sei pronta per lunedì.",
+        "en": "Against all odds, you are ready for Monday."
+      },
+      "wkndWinUnlock": {
+        "it": "Hai sbloccato il posto felice segreto di GUD.",
+        "en": "You unlocked GUD's secret happy place."
+      },
+      "wkndWinCta": {
+        "it": "LIVELLO SEGRETO ♥",
+        "en": "SECRET LEVEL ♥"
+      },
+      "wkndLoseTitle": {
+        "it": "GAME OVER.",
+        "en": "GAME OVER."
+      },
+      "wkndLose1": {
+        "it": "È lunedì.",
+        "en": "Monday is here."
+      },
+      "wkndLose2": {
+        "it": "Il tuo corpo è presente. La tua anima è ancora all'aperitivo.",
+        "en": "Your body is present. Your soul is still at the aperitivo."
+      },
+      "retry": {
+        "it": "RIPROVA",
+        "en": "TRY AGAIN"
+      },
+      "again": {
+        "it": "GIOCA ANCORA",
+        "en": "PLAY AGAIN"
+      },
+      "score": {
+        "it": "PUNTI",
+        "en": "SCORE"
+      },
+      "best": {
+        "it": "RECORD",
+        "en": "BEST"
+      },
+      "energy": {
+        "it": "ENERGIA",
+        "en": "ENERGY"
+      },
+      "goodLuck": {
+        "it": "09:00 - IN BOCCA AL LUPO",
+        "en": "09:00 - GOOD LUCK"
+      },
+      "freedom": {
+        "it": "10:00 - LIBERTÀ?",
+        "en": "10:00 - FREEDOM?"
+      },
+      "again2": {
+        "it": "DI NUOVO",
+        "en": "AGAIN"
+      },
+      "almost": {
+        "it": "CI SIAMO QUASI...",
+        "en": "ALMOST THERE..."
+      },
+      "why": {
+        "it": "08:00 - PERCHÉ?",
+        "en": "08:00 - WHY?"
+      },
+      "warning": {
+        "it": "ATTENZIONE!",
+        "en": "WARNING!"
+      },
+      "approaching": {
+        "it": "IN ARRIVO",
+        "en": "APPROACHING"
+      },
+      "defeated": {
+        "it": "SCONFITTO!",
+        "en": "DEFEATED!"
+      },
+      "secret": {
+        "it": "LIVELLO SEGRETO: ILOVEGUD",
+        "en": "SECRET LEVEL: ILOVEGUD"
+      }
+    },
+    "quest": {
+      "subtitle": {
+        "it": "PINK ADVENTURE",
+        "en": "PINK ADVENTURE"
+      },
+      "tagline": {
+        "it": "UN CV INTERATTIVO",
+        "en": "AN INTERACTIVE CV"
+      },
+      "hint": {
+        "it": "Frecce: muovi. A (Z/Spazio): parla. B (X): indietro. START (Invio): menu.",
+        "en": "Arrows: move. A (Z/Space): talk. B (X): back. START (Enter): menu."
+      },
+      "hintMobile": {
+        "it": "Croce: muovi. A: parla. B: indietro. START: menu.",
+        "en": "D-pad: move. A: talk. B: back. START: menu."
+      },
+      "signFirenze": {
+        "it": "FIRENZE. Dove tutto è cominciato.",
+        "en": "FLORENCE. Where it all began."
+      },
+      "signHome": {
+        "it": "Casa di GUD.",
+        "en": "GUD's house."
+      },
+      "signCentro": {
+        "it": "CENTRO GUD. Caffè, pause e contatti.",
+        "en": "GUD CENTER. Coffee, breaks and contacts."
+      },
+      "signRoute": {
+        "it": "VIA DEL SEGNO. Attenzione: erba alta. Ci vivono i GUDMON selvatici!",
+        "en": "ROUTE OF THE MARK. Warning: tall grass. Wild GUDMON live here!"
+      },
+      "signLucca": {
+        "it": "LUCCA. Città del fumetto e del gioco.",
+        "en": "LUCCA. City of comics and games."
+      },
+      "signNew": {
+        "it": "QUARTIERE NUOVO. Qui GUD sta costruendo.",
+        "en": "NEW DISTRICT. GUD is building here."
+      },
+      "signTower": {
+        "it": "TORRE GUINIGI. Sì, in cima ci sono gli alberi.",
+        "en": "GUINIGI TOWER. Yes, there are trees on top."
+      },
+      "tower": {
+        "it": "La Torre Guinigi. Da quassù si vede tutta la storia di Lucca Comics.",
+        "en": "The Guinigi Tower. From up here you can see all of Lucca Comics' history."
+      },
+      "monument": {
+        "it": "MONUMENTO ALLA G. Per qualcuno è una lettera. Per GUD è un'identità.",
+        "en": "MONUMENT TO THE G. For some, a letter. For GUD, an identity."
+      },
+      "npcTourist": {
+        "it": "Il David? No, io sono qui per il kerning perfetto.",
+        "en": "The David? No, I came for the perfect kerning."
+      },
+      "npcBrividi": {
+        "it": "Ho fatto il workshop Brividi all'ISIA. Brividi, appunto.",
+        "en": "I took the Brividi workshop at ISIA. Chills, indeed."
+      },
+      "npcGrass": {
+        "it": "Nell'erba alta vivono i GUDMON: sono le passioni di GUD! Usa lo SKETCHBOOK per catturarli.",
+        "en": "GUDMON live in the tall grass: they are GUD's passions! Use the SKETCHBOOK to catch them."
+      },
+      "npcDex": {
+        "it": "Ogni GUDMON catturato entra nel GUDDEX. Premi START per vederlo.",
+        "en": "Every GUDMON you catch goes into the GUDDEX. Press START to see it."
+      },
+      "npcCosplay": {
+        "it": "Mi sono vestito da BIG CLIENT. Nessuno ha riso.",
+        "en": "I came dressed as BIG CLIENT. Nobody laughed."
+      },
+      "npcGuard": {
+        "it": "Lucca Comics & Games ha 60 anni. GUD ne ha graficato la festa.",
+        "en": "Lucca Comics & Games turned 60. GUD designed the party."
+      },
+      "profStart": {
+        "it": "Premi START per aprire il menu: GUDDEX, scheda di GUD, zaino e CV rapido. Le medaglie si vincono negli edifici di Firenze e di Lucca.",
+        "en": "Press START to open the menu: GUDDEX, GUD's card, bag and quick CV. Badges are won in the buildings of Florence and Lucca."
+      },
+      "profProgress": {
+        "it": "Hai {b} medaglie su {B} e {c} GUDMON su {C}. Ottimo lavoro!",
+        "en": "You have {b} of {B} badges and {c} of {C} GUDMON. Great work!"
+      },
+      "profLegend": {
+        "it": "Sei nella Hall of Fame! Si dice che, catturati tutti i GUDMON, ne appaia uno leggendario.",
+        "en": "You made the Hall of Fame! Legend says that once every GUDMON is caught, a legendary one appears."
+      },
+      "mom": {
+        "it": "GUD! Il tuo ufficio è tutta la città, a quanto pare. Ricordati di mangiare: stasera parmigiana.",
+        "en": "GUD! Your office is the whole town, apparently. Remember to eat: parmigiana tonight."
+      },
+      "homeShelf": {
+        "it": "Libri di tipografia. Tanti. Troppi? Mai troppi.",
+        "en": "Typography books. Many. Too many? Never."
+      },
+      "homePoster": {
+        "it": "Un poster: THANK GUD IT'S FRIDAY. Un arcade girlpop: si gioca sul sito di GUD.",
+        "en": "A poster: THANK GUD IT'S FRIDAY. A girlpop arcade: play it on GUD's website."
+      },
+      "homeWindow": {
+        "it": "Fuori c'è Firenze. E una scadenza.",
+        "en": "Outside: Florence. And a deadline."
+      },
+      "homeBoard": {
+        "it": "Una bacheca: moodboard, post-it, un biglietto per Lucca.",
+        "en": "A pinboard: moodboard, post-its, a ticket to Lucca."
+      },
+      "homeBed": {
+        "it": "Il letto di GUD. Ci dorme poco: troppe idee.",
+        "en": "GUD's bed. She barely sleeps: too many ideas."
+      },
+      "homePc": {
+        "it": "Il PC di GUD. Una cartella si chiama definitivo_v8_ultimo.",
+        "en": "GUD's PC. A folder is called final_v8_really_final."
+      },
+      "homeTv": {
+        "it": "In TV: un'art director attraversa Firenze cercando il weekend.",
+        "en": "On TV: an art director crosses Florence looking for the weekend."
+      },
+      "homePlant": {
+        "it": "Una pianta. Sopravvive. Come GUD.",
+        "en": "A plant. It survives. Like GUD."
+      },
+      "barista1": {
+        "it": "Benvenuta al CENTRO GUD! Qui ci si ricarica.",
+        "en": "Welcome to the GUD CENTER! This is where we recharge."
+      },
+      "barista2": {
+        "it": "Vuoi un caffè e una sigaretta?",
+        "en": "Would you like a coffee and a cigarette?"
+      },
+      "barista3": {
+        "it": "GUD è di nuovo in forma. Torna quando vuoi!",
+        "en": "GUD is back in shape. Come back anytime!"
+      },
+      "recruiter": {
+        "it": "Ho sentito che GUD è disponibile per nuovi progetti. Il PC a destra ha tutti i suoi contatti.",
+        "en": "I heard GUD is open to new projects. The PC on the right has all her contacts."
+      },
+      "pcContacts": {
+        "it": "PC di GUD. Contatti per nuovi progetti, docenze e collaborazioni:",
+        "en": "GUD's PC. Contacts for new projects, teaching and collaborations:"
+      },
+      "centroPoster": {
+        "it": "Un poster: \"Il riposo fa parte del progetto.\"",
+        "en": "A poster: \"Rest is part of the project.\""
+      },
+      "clientEarly": {
+        "it": "Ah, sei tu. Torna quando avrai tutte le medaglie. Ne hai {b}. Io intanto scrivo a tutti in CC.",
+        "en": "Oh, it's you. Come back with every badge. You have {b}. Meanwhile I'll email everyone in CC."
+      },
+      "clientPre": {
+        "it": "Pensavi di aver finito? Ultimo giro di revisioni!",
+        "en": "Thought you were done? One last round of revisions!"
+      },
+      "clientPost": {
+        "it": "Va bene. Approvato. Così com'è.",
+        "en": "Fine. Approved. As it is."
+      },
+      "clientAfter": {
+        "it": "Approvato. Non lo ripeterò.",
+        "en": "Approved. I won't say it twice."
+      },
+      "allBadges": {
+        "it": "Tutte le medaglie! BIG CLIENT ti aspetta a Lucca, sotto la Torre Guinigi.",
+        "en": "All the badges! BIG CLIENT is waiting in Lucca, below the Guinigi Tower."
+      },
+      "hof1": {
+        "it": "Congratulazioni! GUD e il suo team entrano nella HALL OF FAME!",
+        "en": "Congratulations! GUD and her team enter the HALL OF FAME!"
+      },
+      "hof2": {
+        "it": "Hai esplorato tutto il CV di GUD. Il sito è in costruzione, ma GUD è disponibile per nuovi progetti, docenze e collaborazioni.",
+        "en": "You explored GUD's whole CV. The website is under construction, but GUD is available for new projects, teaching and collaborations."
+      },
+      "lose": {
+        "it": "Un caffè e una pausa, e GUD è di nuovo in piedi. Riprova!",
+        "en": "A coffee and a break, and GUD is back on her feet. Try again!"
+      },
+      "seeProject": {
+        "it": "Vuoi vedere il progetto?",
+        "en": "Want to see the project?"
+      },
+      "seeYes": {
+        "it": "SÌ, MOSTRA",
+        "en": "YES, SHOW ME"
+      },
+      "seeNo": {
+        "it": "NO",
+        "en": "NO"
+      },
+      "ludo1": {
+        "it": "Bau! (Il ciuffo al vento, lo sguardo di chi ha già capito tutto.)",
+        "en": "Woof! (Crest in the wind, the look of someone who already gets it.)"
+      },
+      "ludo2": {
+        "it": "Ludo ti segue ovunque. Anche dai clienti. Soprattutto dai clienti.",
+        "en": "Ludo follows you everywhere. Even to clients. Especially to clients."
+      },
+      "ludo3": {
+        "it": "Ludo annusa il kerning e approva.",
+        "en": "Ludo sniffs the kerning and approves."
+      },
+      "ludo4": {
+        "it": "Ludo chiede un biscotto. Poi un altro. Poi il portfolio può aspettare.",
+        "en": "Ludo asks for a treat. Then another one. The portfolio can wait."
+      }
+    },
+    "cv": {
+      "title": {
+        "it": "CURRICULUM",
+        "en": "CURRICULUM"
+      },
+      "print": {
+        "it": "STAMPA / PDF",
+        "en": "PRINT / PDF"
+      },
+      "education": {
+        "it": "Formazione",
+        "en": "Education"
+      },
+      "languages": {
+        "it": "Lingue",
+        "en": "Languages"
+      },
+      "passions": {
+        "it": "Passioni",
+        "en": "Passions"
+      },
+      "contacts": {
+        "it": "Contatti",
+        "en": "Contacts"
+      },
+      "open": {
+        "it": "VEDI PROGETTO",
+        "en": "SEE PROJECT"
+      },
+      "playQuest": {
+        "it": "Preferisci giocarlo? Apri GUDQUEST",
+        "en": "Rather play it? Open GUDQUEST"
+      }
+    }
+  }
+}

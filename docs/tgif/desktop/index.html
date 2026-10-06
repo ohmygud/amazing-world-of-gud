@@ -1,0 +1,1876 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thank GUD It's Friday</title>
+<meta name="description" content="An 80s girlpop pixel arcade survival game. Get GUD to Friday. Alive, preferably.">
+<style>
+@font-face{font-family:'GUD Pixel';src:url(../../fonts/GUDPixel-Regular.woff2) format('woff2'),url(../../fonts/GUDPixel-Regular.woff) format('woff');font-display:swap}
+@font-face{font-family:'VT323';src:url(../../fonts/VT323-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap}
+@font-face{font-family:'VT323';src:url(../../fonts/VT323-latin-ext.woff2) format('woff2');unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap}
+@font-face{font-family:'Press Start 2P';src:url(../../fonts/PressStart2P-latin.woff2) format('woff2');font-display:swap}
+:root{--y:#FFE600;--p:#FF1493;--b:#FF85C8;--l:#FFD6EA;--k:#111111;--w:#FFF9F1;
+--pix:'GUD Pixel','Press Start 2P',ui-monospace,Menlo,Consolas,monospace;--body:'VT323',ui-monospace,Menlo,Consolas,monospace}
+html.embed #topbar{display:none!important}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--l);-webkit-text-size-adjust:100%;overscroll-behavior:none}
+body{font-family:var(--body);color:var(--k);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--l)}
+#topbar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--k);border-bottom:3px solid var(--p)}
+.brand{font-family:var(--pix);color:var(--y);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:1px}
+.brand b{color:var(--p);font-weight:400}
+.tools{display:flex;gap:6px;flex:0 0 auto}
+.tbtn{font-family:var(--pix);line-height:1;border:2px solid var(--w);background:var(--k);color:var(--w);box-shadow:2px 2px 0 var(--p);border-radius:0}
+.tbtn.hack{background:var(--y);color:var(--k);border-color:var(--y)}
+.tbtn:active{transform:translate(2px,2px);box-shadow:none}
+.tbtn:focus-visible,.btn:focus-visible,.cb:focus-visible{outline:3px dashed var(--y);outline-offset:2px}
+.tbtn[hidden]{display:none}
+#stage{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;
+ background-color:var(--l);background-image:linear-gradient(45deg,var(--b) 25%,transparent 25%,transparent 75%,var(--b) 75%),linear-gradient(45deg,var(--b) 25%,transparent 25%,transparent 75%,var(--b) 75%);
+ background-size:8px 8px;background-position:0 0,4px 4px}
+canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;outline:none;touch-action:none}
+#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,214,234,.6);z-index:5}
+#overlay[hidden]{display:none}
+.panel{position:relative;width:100%;max-height:100%;overflow:auto;background:var(--w);border:4px solid var(--k);box-shadow:8px 8px 0 var(--p);text-align:center;-webkit-user-select:text;user-select:text}
+.panel.dark{background:var(--k);color:var(--w);box-shadow:8px 8px 0 var(--y)}
+.title{font-family:var(--pix);font-weight:400;margin:0;line-height:1.25;color:var(--y);
+ text-shadow:2px 0 var(--k),-2px 0 var(--k),0 2px var(--k),0 -2px var(--k),2px 2px var(--k),-2px -2px var(--k),2px -2px var(--k),-2px 2px var(--k),5px 5px 0 var(--p)}
+.title span{display:inline-block}
+.title.mid{color:var(--p);text-shadow:2px 0 var(--w),-2px 0 var(--w),0 2px var(--w),0 -2px var(--w),4px 4px 0 var(--y)}
+.panel.dark .title.big{color:var(--p);text-shadow:2px 0 var(--w),-2px 0 var(--w),0 2px var(--w),0 -2px var(--w),5px 5px 0 var(--y)}
+.sub{font-family:var(--body);font-style:italic;color:var(--p);margin:.4em 0 .6em}
+.msg p{margin:.35em 0;line-height:1.05}
+.msg .lead{font-family:var(--pix);color:var(--p);line-height:1.5}
+.panel.dark .msg .lead{color:var(--y)}
+.score{font-family:var(--pix);color:var(--p);margin:.8em 0}
+.hint{font-family:var(--pix);color:var(--k);opacity:.75;margin:.9em 0 0;line-height:1.6}
+.btn{font-family:var(--pix);border:3px solid var(--k);background:var(--p);color:var(--w);box-shadow:4px 4px 0 var(--k);border-radius:0;margin-top:.6em}
+.btn.primary{background:var(--y);color:var(--k)}
+.panel.dark .btn{border-color:var(--w);box-shadow:4px 4px 0 var(--p)}
+.btn:active{transform:translate(4px,4px);box-shadow:none}
+.blink{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{background:var(--p);color:var(--w)}}
+#hack{position:absolute;z-index:10;top:10px;right:10px}
+#hack[hidden]{display:none}
+.hackbox{background:var(--k);border:3px solid var(--y);box-shadow:6px 6px 0 var(--p);padding:12px;color:var(--y);font-family:var(--pix);width:250px;max-width:calc(100vw - 20px)}
+.hackbox .ht{font-size:10px;margin:0 0 10px;letter-spacing:1px}
+.hackbox .ht i{font-style:normal;animation:cur 0.8s steps(1) infinite}
+@keyframes cur{50%{opacity:0}}
+.hackbox input{width:100%;font-family:var(--pix);font-size:16px;background:var(--k);color:var(--y);caret-color:var(--p);border:2px dashed var(--p);padding:8px;border-radius:0;outline:none;text-transform:lowercase;-webkit-user-select:text;user-select:text}
+.hackbox .row{display:flex;gap:8px;margin-top:10px}
+.hackbox .row button{flex:1;font-family:var(--pix);font-size:10px;padding:8px 4px;border:2px solid var(--y);background:var(--y);color:var(--k);border-radius:0}
+.hackbox .row button+button{background:var(--k);color:var(--y)}
+#hackMsg{min-height:12px;margin-top:8px;font-size:9px;color:var(--p)}
+.shake{animation:shake .35s steps(2)}
+@keyframes shake{25%{transform:translate(-6px,0)}50%{transform:translate(6px,0)}75%{transform:translate(-3px,0)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.blink,.hackbox .ht i{animation:none}}
+
+/* ---- DESKTOP LAYOUT ---- */
+#topbar{height:38px;padding:0 10px}
+.brand{font-size:10px}
+.tbtn{font-size:9px;padding:7px 9px}
+#overlay{padding:16px}
+.panel{max-width:640px;padding:22px 26px 20px}
+.title{font-size:clamp(18px,3.4vw,30px)}
+.title.big{font-size:clamp(18px,3.4vw,30px)}
+.title.mid{font-size:clamp(11px,1.6vw,15px);margin-top:12px}
+.sub{font-size:22px}
+.msg{font-size:21px}
+.msg .lead{font-size:11px}
+.score{font-size:10px}
+.hint{font-size:8px}
+.btn{font-size:13px;padding:14px 20px}
+@media (max-height:420px){.panel{padding:12px 16px}.msg{font-size:18px}.sub{font-size:18px}.title{font-size:18px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">THANK GUD IT'S FRIDAY <b>&hearts;&#xFE0E;</b></div>
+    <div class="tools">
+      <button id="menuBtn" class="tbtn" type="button" hidden>MENU</button>
+      <button id="langBtn" class="tbtn" type="button">EN</button>
+      <button id="muteBtn" class="tbtn" type="button" aria-pressed="false">SOUND ON</button>
+      <button id="hackBtn" class="tbtn hack" type="button">HACK</button>
+    </div>
+  </header>
+  <main id="stage">
+    <canvas id="game" tabindex="0" aria-label="Thank GUD It's Friday — arcade game. Arrows move, Up or Space jump, Down dodge, K shoot."></canvas>
+    <div id="overlay" hidden></div>
+  <div id="hack" hidden>
+    <form id="hackForm" class="hackbox" autocomplete="off" role="dialog" aria-label="Secret code">
+      <p class="ht">&gt; ENTER CODE<i>_</i></p>
+      <input id="hackInput" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="20" aria-label="Secret code">
+      <div class="row"><button type="submit">OK</button><button type="button" id="hackClose">ESC</button></div>
+      <div id="hackMsg" aria-live="polite"></div>
+    </form>
+  </div>
+
+  </main>
+</div>
+<script>window.GUD_CONFIG={layout:'desktop',assetBase:'../../assets/',contentBase:'../../content/',adminUrl:'../../admin/'};</script>
+<script src="../../assets/manifest.js"></script>
+<script>window.GUD_DEFAULT_CONTENT={"version":1,"settings":{"adminCode":"gudmin"},"contacts":[{"id":"site","label":"OHMYGUD.COM","url":"https://ohmygud.com","show":""},{"id":"mail","label":"EMAIL","url":"mailto:goldengud@gmail.com","show":"goldengud@gmail.com"},{"id":"ig","label":"INSTAGRAM @TYPODIVA","url":"https://www.instagram.com/typodiva/","show":""},{"id":"in","label":"LINKEDIN","url":"https://www.linkedin.com/in/ohmygud/","show":""}],"profile":{"name":"GUD","full":"Giulia Ursenna Dorati Gherardi","role":{"it":"Creative director, type designer, docente, curatrice, autrice. Firenze.","en":"Creative director, type designer, teacher, curator, writer. Florence."},"education":[{"it":"ISIA Firenze, 2015. Diploma Accademico di I livello in Disegno Industriale.","en":"ISIA Florence, 2015. First-level Academic Diploma in Industrial Design."},{"it":"IED Firenze, 2016. Specializzazione in Grafica per l'Editoria.","en":"IED Florence, 2016. Specialisation in Editorial Graphic Design."},{"it":"IED Firenze, 2018. Master in Typography, Calligraphy & Font Design.","en":"IED Florence, 2018. Master in Typography, Calligraphy & Font Design."}],"languages":{"it":"Italiano madrelingua. Inglese C1.","en":"Italian native. English C1."},"studio":{"it":"Ergonauth S.a.s., Firenze. Fondatrice e Creative Director dal 2016.","en":"Ergonauth S.a.s., Florence. Founder and Creative Director since 2016."}},"sections":[{"id":"teaching","builtin":true,"icon":0,"title":{"it":"Insegnamento","en":"Teaching"},"place":{"it":"ACCADEMIA","en":"ACADEMY"},"badge":{"it":"MEDAGLIA GRIGLIA","en":"GRID BADGE"},"sign":{"it":"ACCADEMIA. Si insegna come si progetta.","en":"ACADEMY. Teach the way you design."},"summary":{"it":"GUD insegna dal 2016: IED, TheSign, Lorenzo de' Medici, ISIA Firenze. Con i suoi studenti progetta per aziende e istituzioni vere.","en":"GUD has been teaching since 2016: IED, TheSign, Lorenzo de' Medici, ISIA Florence. With her students she designs for real companies and institutions."},"leader":{"name":{"it":"PROF. GRID","en":"PROF. GRID"},"look":"teach"},"npc":{"look":"boy","say":{"it":"Con la prof GUD abbiamo fatto progetti veri: Jaguar Land Rover, Artribune, Mondadori.","en":"With GUD we did real projects: Jaguar Land Rover, Artribune, Mondadori."}},"battle":{"enemy":"brief","hp":70,"lv":31,"weak":0,"name":{"it":"BRIEF IN MILANESE","en":"MILANESE BRIEF"},"moves":[{"n":{"it":"SPIEGONE","en":"LONG RANT"},"p":10},{"n":{"it":"NON SO COSA VOGLIO","en":"NO IDEA WHAT I WANT"},"p":12},{"n":{"it":"MA ANCHE NO","en":"OR NOT"},"p":9}],"pre":{"it":"Per insegnare devi saper tradurre un BRIEF IN MILANESE. Vediamo!","en":"To teach, you must decode a MILANESE BRIEF. Let's see!"},"post":{"it":"Brava. Hai il metodo.","en":"Well done. You have the method."}},"items":[{"id":"ied","t":"IED FIRENZE","d":{"it":"Master in Graphic Design (New Media). Docente di Graphic Design, 2020-2024.","en":"Master in Graphic Design (New Media). Graphic Design teacher, 2020-2024."},"media":[]},{"id":"thesign","t":"THESIGN ACADEMY","d":{"it":"Comics & Arts Academy, corso di Graphic Design. Docente di Visual Design & Typography, 2022-2026.","en":"Comics & Arts Academy, Graphic Design course. Visual Design & Typography teacher, 2022-2026."},"media":[]},{"id":"ldm","t":"LORENZO DE' MEDICI","d":{"it":"Istituto Lorenzo de' Medici. Graphic Design, Web Design, Portfolio Review e Visual Design, 2022-2024.","en":"Lorenzo de' Medici Institute. Graphic Design, Web Design, Portfolio Review and Visual Design, 2022-2024."},"media":[]},{"id":"isia","t":"ISIA FIRENZE","d":{"it":"Workshop \"Brividi\": progettazione grafica, metodologia, orientamento. 2016-2026.","en":"\"Brividi\" workshop: graphic design, methodology, orientation. 2016-2026."},"media":[]},{"id":"chinese","t":"CHINESE PRE ACADEMY","d":{"it":"Chinese Pre Academy School, docente di Visual Art, 2019/2020.","en":"Chinese Pre Academy School, Visual Art teacher, 2019/2020."},"media":[]},{"id":"workshop","t":"WORKSHOP","d":{"it":"Workshop di lettering, tipografia e progettazione grafica in tutta Italia, dal 2017.","en":"Lettering, typography and graphic design workshops across Italy, since 2017."},"media":[]},{"id":"metodo","t":"METODO","d":{"it":"Ricerca teorica, sperimentazione e pratica professionale. Il designer come autore di sistemi ed esperienze.","en":"Theory, experimentation and professional practice. The designer as an author of systems and experiences."},"media":[]}]},{"id":"studio","builtin":true,"icon":1,"title":{"it":"Studio e clienti","en":"Studio and clients"},"place":{"it":"STUDIO ERGONAUTH","en":"ERGONAUTH STUDIO"},"badge":{"it":"MEDAGLIA VETTORE","en":"VECTOR BADGE"},"sign":{"it":"STUDIO ERGONAUTH. Firenze, dal 2016.","en":"ERGONAUTH STUDIO. Florence, since 2016."},"summary":{"it":"Ergonauth è lo studio di GUD dal 2016. Tra clienti e partner: Disney, Mondadori, Jaguar Land Rover, Artribune, Comune di Firenze.","en":"Ergonauth has been GUD's studio since 2016. Clients and partners include Disney, Mondadori, Jaguar Land Rover, Artribune and the City of Florence."},"leader":{"name":{"it":"IL COMMERCIALISTA","en":"THE ACCOUNTANT"},"look":"boy"},"npc":{"look":"girl","say":{"it":"Qui si fa art direction, branding, naming, lettering. E si beve molto caffè.","en":"Here we do art direction, branding, naming, lettering. And drink a lot of coffee."}},"battle":{"enemy":"f24","hp":74,"lv":32,"weak":3,"name":{"it":"F24","en":"TAX FORM F24"},"moves":[{"n":{"it":"SCADENZA","en":"DEADLINE"},"p":12},{"n":{"it":"RAVVEDIMENTO","en":"LATE FEE"},"p":10},{"n":{"it":"BOLLO","en":"STAMP DUTY"},"p":8}],"pre":{"it":"Aprire uno studio è bellissimo. Poi arrivano gli F24.","en":"Opening a studio is wonderful. Then the tax forms arrive."},"post":{"it":"Conti in ordine. Ti meriti questa.","en":"Books balanced. You earned this."}},"items":[{"id":"ergonauth","t":"ERGONAUTH S.A.S.","d":{"it":"Studio fondato a Firenze nel 2016. GUD è socia fondatrice, CEO e Creative Director.","en":"Studio founded in Florence in 2016. GUD is co-founder, CEO and Creative Director."},"media":[]},{"id":"disney","t":"THE WALT DISNEY COMPANY","d":{"it":"Milano, 2018-2019. Lettering artist e illustratrice per Art of Hand Lettering.","en":"Milan, 2018-2019. Lettering artist and illustrator for Art of Hand Lettering."},"media":[]},{"id":"mondadori","t":"GRUPPO MONDADORI","d":{"it":"Con TheSign Academy, 2024. Direzione artistica.","en":"With TheSign Academy, 2024. Art direction."},"media":[]},{"id":"jlr","t":"JAGUAR LAND ROVER","d":{"it":"Con IED Firenze, 2023. Art direction per i 75 anni del Defender: la livrea.","en":"With IED Florence, 2023. Art direction for the Defender 75th anniversary livery."},"media":[]},{"id":"artribune","t":"ARTRIBUNE","d":{"it":"Con il Master in Graphic Design di IED Firenze, 2023. Art direction.","en":"With the IED Florence Master in Graphic Design, 2023. Art direction."},"media":[]},{"id":"firenze","t":"COMUNE DI FIRENZE","d":{"it":"Estate Fiorentina 2022. Visual design della campagna istituzionale: la prima campagna in Italia realizzata con l'intelligenza artificiale.","en":"Estate Fiorentina 2022. Visual design of the city campaign: the first Italian campaign made with artificial intelligence."},"media":[]},{"id":"spencer","t":"SPENCER","d":{"it":"Con IED Firenze, 2021. Project management: il visual storytelling dei volontari Covid-19.","en":"With IED Florence, 2021. Project management: visual storytelling of Covid-19 volunteers."},"media":[]},{"id":"branding","t":"BRANDING E NAMING","d":{"it":"Identità e naming per aziende e agenzie, come NTC.","en":"Identity and naming for companies and agencies, such as NTC."},"media":[]}]},{"id":"lucca","builtin":true,"icon":2,"title":{"it":"Lucca Comics & Games","en":"Lucca Comics & Games"},"place":{"it":"LUCCA CREA","en":"LUCCA CREA"},"badge":{"it":"MEDAGLIA MURA","en":"WALLS BADGE"},"sign":{"it":"LUCCA C&G. La città del fumetto e del gioco.","en":"LUCCA C&G. The city of comics and games."},"summary":{"it":"Dal 2023 GUD guida la comunicazione di Lucca Crea. Per i 60 anni del festival ha firmato art direction, progetto e mostra.","en":"Since 2023 GUD has led communication for Lucca Crea. For the festival's 60th anniversary she signed art direction, project and exhibition."},"leader":{"name":{"it":"IL GUARDIANO DELLE MURA","en":"THE WALL KEEPER"},"look":"guard"},"npc":{"look":"punk","say":{"it":"Nella Legacy Board ognuno scrive il suo evento canonico con i Posca.","en":"On the Legacy Board everyone writes their canon event with Posca markers."}},"battle":{"enemy":"logo","hp":80,"lv":35,"weak":1,"name":{"it":"LOGO PIÙ GRANDE","en":"BIGGER LOGO"},"moves":[{"n":{"it":"PIÙ GRANDE!","en":"BIGGER!"},"p":12},{"n":{"it":"ANCORA!","en":"MORE!"},"p":11},{"n":{"it":"FA POP?","en":"DOES IT POP?"},"p":10}],"pre":{"it":"Sulle mura si passa solo se resisti al LOGO PIÙ GRANDE!","en":"You only pass the walls if you resist the BIGGER LOGO!"},"post":{"it":"Le mura sono tue. Buon compleanno, Lucca.","en":"The walls are yours. Happy birthday, Lucca."}},"items":[{"id":"luccacrea","t":"LUCCA CREA","d":{"it":"Dal 2023: art director, communication consultant e project manager.","en":"Since 2023: art director, communication consultant and project manager."},"media":[]},{"id":"lcg60","t":"LCG60","d":{"it":"Art direction, project management e curatela per i 60 anni di Lucca Comics & Games, 2025-2026.","en":"Art direction, project management and curation for the 60th anniversary of Lucca Comics & Games, 2025-2026."},"media":[]},{"id":"legacy","t":"LUCCA LEGACY","d":{"it":"A Comics & Games Story. Mostra inaugurata il 3 ottobre 2026: Legacy Board, The Vault, Tree of Strips, Cover Story. Progetto visivo e cura editoriale.","en":"A Comics & Games Story. Exhibition opened on 3 October 2026: Legacy Board, The Vault, Tree of Strips, Cover Story. Visual design and editorial curation."},"media":[]},{"id":"talk","t":"TALK LCG 2023","d":{"it":"Relatrice: intelligenza artificiale e progettazione grafica.","en":"Speaker: artificial intelligence and graphic design."},"media":[]},{"id":"comms","t":"COMUNICAZIONE","d":{"it":"Comunicazione istituzionale e LinkedIn per Lucca Crea e Lucca Comics & Games.","en":"Institutional communication and LinkedIn for Lucca Crea and Lucca Comics & Games."},"media":[]}]},{"id":"type","builtin":true,"icon":3,"title":{"it":"Type design","en":"Type design"},"place":{"it":"FONDERIA TYPODIVA","en":"TYPODIVA FOUNDRY"},"badge":{"it":"MEDAGLIA GLIFO","en":"GLYPH BADGE"},"sign":{"it":"FONDERIA TYPODIVA. Lettere fuse ogni giorno.","en":"TYPODIVA FOUNDRY. Letters cast daily."},"summary":{"it":"Typodiva è lo spazio tipografico di GUD: lettere disegnate, strumenti costruiti in codice, una comunità a TypeThursday.","en":"Typodiva is GUD's typographic space: drawn letters, tools built in code, a community at TypeThursday."},"leader":{"name":{"it":"IL FONT PIRATA","en":"THE FONT PIRATE"},"look":"punk"},"npc":{"look":"girl","say":{"it":"Ogni lettera qui dentro è stata disegnata, spaziata, provata. Poi ridisegnata.","en":"Every letter in here was drawn, spaced, tested. Then redrawn."}},"battle":{"enemy":"bug","hp":78,"lv":34,"weak":1,"name":{"it":"SOFTWARE BUG","en":"SOFTWARE BUG"},"moves":[{"n":{"it":"CRASH","en":"CRASH"},"p":12},{"n":{"it":"KERNING ROTTO","en":"BROKEN KERNING"},"p":11},{"n":{"it":"FONT MANCANTE","en":"MISSING FONT"},"p":10}],"pre":{"it":"Ho piratato un font! E mi porto dietro un BUG.","en":"I pirated a font! And I brought a BUG."},"post":{"it":"Va bene, restituisco il font. Con licenza.","en":"Fine, I'll return the font. Licensed."}},"items":[{"id":"typodiva","t":"TYPODIVA","d":{"it":"Il marchio di type design di GUD.","en":"GUD's type design label."},"media":[]},{"id":"master","t":"MASTER","d":{"it":"Master in Typography, Calligraphy & Font Design, IED Firenze, 2018.","en":"Master in Typography, Calligraphy & Font Design, IED Florence, 2018."},"media":[]},{"id":"tools","t":"STRUMENTI","d":{"it":"Glyphs, RoboFont, fontTools. E codice, taaaanto codice.","en":"Glyphs, RoboFont, fontTools. And code, lots of code."},"media":[]},{"id":"typethursday","t":"TYPETHURSDAY FIRENZE","d":{"it":"Dialogue Lead dal 2019. Autrice e ideatrice di TGITT.","en":"Dialogue Lead since 2019. Author and creator of TGITT."},"media":[]},{"id":"ohmyfont","t":"OHMYFONT","d":{"it":"Un corso di tipografia: programma e progetto didattico.","en":"A typography course: syllabus and teaching project."},"media":[]},{"id":"tarot","t":"TYPOGRAPHY TAROT","d":{"it":"22 Arcani Maggiori, 22 principi tipografici.","en":"22 Major Arcana, 22 typographic principles."},"media":[]},{"id":"codetools","t":"TOOL IN CODICE","d":{"it":"FONTain, visualizzatore tipografico ad acqua. Un generatore di schermate Televideo. Un generatore di cruciverba.","en":"FONTain, a typographic water visualiser. A Televideo screen generator. A crossword generator."},"media":[]}]},{"id":"gallery","builtin":true,"icon":4,"title":{"it":"Curatela e arte","en":"Curation and art"},"place":{"it":"GALLERIA","en":"GALLERY"},"badge":{"it":"MEDAGLIA CORNICE","en":"FRAME BADGE"},"sign":{"it":"GALLERIA. Curatela e arte.","en":"GALLERY. Curation and art."},"summary":{"it":"GUD cura mostre e progetti culturali: dal segno di Roberto Innocenti al fumetto italiano contemporaneo.","en":"GUD curates exhibitions and cultural projects: from Roberto Innocenti's drawings to contemporary Italian comics."},"leader":{"name":{"it":"LA CRITICA","en":"THE CRITIC"},"look":"critic"},"npc":{"look":"boy","say":{"it":"Quel piedistallo vuoto è un'opera concettuale. Si intitola \"Brief Chiaro\".","en":"That empty pedestal is a conceptual work. It is called \"Clear Brief\"."}},"battle":{"enemy":"voice","hp":76,"lv":33,"weak":2,"name":{"it":"VOCALE 4 MIN","en":"4-MIN VOICE NOTE"},"moves":[{"n":{"it":"PREAMBOLO","en":"PREAMBLE"},"p":9},{"n":{"it":"ALLORA, NIENTE...","en":"SO, ANYWAY..."},"p":11},{"n":{"it":"RIASSUNTO","en":"RECAP"},"p":12}],"pre":{"it":"Prima di parlare d'arte, ascolta il mio VOCALE di 4 minuti.","en":"Before we talk art, listen to my 4-minute VOICE NOTE."},"post":{"it":"Concettualmente ineccepibile.","en":"Conceptually flawless."}},"items":[{"id":"innocenti","t":"ROBERTO INNOCENTI","d":{"it":"Dal Sogno al Segno, Scandicci. Curatela e art direction della mostra.","en":"Dal Sogno al Segno, Scandicci. Curation and art direction of the exhibition."},"media":[]},{"id":"nerosubianco","t":"NERO SU BIANCO","d":{"it":"Serate di fumetto italiano contemporaneo al Caffè Letterario Le Murate, Firenze. (WIP)","en":"Contemporary Italian comics evenings at Caffè Letterario Le Murate, Florence. (WIP)"},"media":[]},{"id":"skynmap","t":"SKYN MAP","d":{"it":"Web app artistica: trasforma i segni della pelle in costellazioni. Project by GUD.","en":"Artistic web app: turns skin marks into constellations. Project by GUD."},"media":[]},{"id":"why","t":"WHY FESTIVAL","d":{"it":"Professionista e divulgatrice.","en":"Professional and speaker."},"media":[]},{"id":"tgif","t":"THANK GUD IT'S FRIDAY","d":{"it":"Un arcade pixel art girlpop: GUD sopravvive alla settimana lavorativa. Lo trovi sul sito.","en":"A girlpop pixel arcade: GUD survives the working week. Find it on the website."},"media":[]}]},{"id":"library","builtin":true,"icon":5,"title":{"it":"Scrittura","en":"Writing"},"place":{"it":"BIBLIOTECA","en":"LIBRARY"},"badge":{"it":"MEDAGLIA INCHIOSTRO","en":"INK BADGE"},"sign":{"it":"BIBLIOTECA. Le parole di GUD.","en":"LIBRARY. GUD's words."},"summary":{"it":"GUD scrive da sempre: saggi sulla tipografia, prosa lirica, rubriche, testi per la cultura.","en":"GUD has always written: essays on typography, lyric prose, columns, texts for culture."},"leader":{"name":{"it":"LA BIBLIOTECARIA","en":"THE LIBRARIAN"},"look":"libr"},"npc":{"look":"critic","say":{"it":"Shhh. Qui si legge GUD.","en":"Shhh. We are reading GUD."}},"battle":{"enemy":"email","hp":72,"lv":31,"weak":2,"name":{"it":"EMAIL NON LETTA","en":"UNREAD EMAIL"},"moves":[{"n":{"it":"RE: RE: RE:","en":"RE: RE: RE:"},"p":11},{"n":{"it":"CC: TUTTI","en":"CC: ALL"},"p":12},{"n":{"it":"PROMEMORIA","en":"REMINDER"},"p":9}],"pre":{"it":"Silenzio! Prima rispondi a questa EMAIL NON LETTA.","en":"Silence! First answer this UNREAD EMAIL."},"post":{"it":"Puoi prendere in prestito tutti i libri che vuoi.","en":"You may borrow every book you like."}},"items":[{"id":"fontdipotere","t":"FONT DI POTERE","d":{"it":"Tipografia, norma e dissidenza visiva nel design contemporaneo. Saggio, ISIA Journal, Firenze.","en":"Typography, norm and visual dissent in contemporary design. Essay, ISIA Journal, Florence."},"media":[]},{"id":"goblet","t":"THE CRYSTAL GOBLET","d":{"it":"Prosa lirica. Un archivio di scrittura attivo dal 2009, anche su ohmygud.com.","en":"Lyric prose. A writing archive active since 2009, also on ohmygud.com."},"media":[]},{"id":"kuore","t":"POSTA DEL KUORE","d":{"it":"La rubrica di consigli firmata Vodka Madonna.","en":"The advice column signed Vodka Madonna."},"media":[]},{"id":"copy","t":"COPYWRITING","d":{"it":"Testi editoriali e istituzionali per la cultura, dalla critica ai social.","en":"Editorial and institutional writing for culture, from criticism to social media."},"media":[]},{"id":"lingue","t":"LINGUE","d":{"it":"Italiano madrelingua. Inglese C1.","en":"Italian native. English C1."},"media":[]}]}],"mons":[{"id":"kernix","n":"KERNIX","l":"K","c":"P","a":"glasses","type":{"it":"TIPO","en":"TYPE"},"d":{"it":"Ama lo spazio tra le lettere più delle lettere stesse. La tipografia è il primo amore di GUD.","en":"Loves the space between letters more than the letters. Typography is GUD's first love."}},{"id":"glypho","n":"GLYPHO","l":"G","c":"Y","a":"spark","type":{"it":"DESIGN","en":"DESIGN"},"d":{"it":"Nasce in Glyphs, cresce in RoboFont, si allena con fontTools. È il type design di Typodiva.","en":"Born in Glyphs, raised in RoboFont, trained with fontTools. It is Typodiva's type design."}},{"id":"inklina","n":"INKLINA","l":"L","c":"B","a":"nib","type":{"it":"MANO","en":"HAND"},"d":{"it":"Disegna lettere a mano libera. Ha fatto la lettering artist per Disney.","en":"Draws letters by hand. Worked as a lettering artist for Disney."}},{"id":"balloona","n":"BALLOONA","l":"F","c":"W","a":"bubble","type":{"it":"FUMETTO","en":"COMICS"},"d":{"it":"Vive tra le vignette del fumetto italiano. Habitat naturale: Lucca.","en":"Lives inside Italian comics panels. Natural habitat: Lucca."}},{"id":"poppy","n":"POPPY","l":"P","c":"Y","a":"crown","type":{"it":"POP","en":"POP"},"d":{"it":"Mangia pop culture a colazione: icone, giochi, cosplay. Alta e bassa cultura nello stesso piatto.","en":"Eats pop culture for breakfast: icons, games, cosplay. High and low culture on the same plate."}},{"id":"critiko","n":"CRITIKO","l":"C","c":"K","a":"glasses","type":{"it":"TEORIA","en":"THEORY"},"d":{"it":"Legge teoria letteraria e critica. Quando ti guarda, ti sta analizzando.","en":"Reads literary and critical theory. When it looks at you, it is analysing you."}},{"id":"concetta","n":"CONCETTA","l":"A","c":"W","a":"beret","type":{"it":"ARTE","en":"ART"},"d":{"it":"Arte concettuale: l'idea prima dell'oggetto. A volte è solo un piedistallo vuoto.","en":"Conceptual art: the idea before the object. Sometimes just an empty pedestal."}},{"id":"codella","n":"CODELLA","l":"/","c":"B","a":"spark","type":{"it":"CODICE","en":"CODE"},"d":{"it":"Scrive codice per creare strumenti: FONTain, Televideo, cruciverba, automazioni. E questo gioco.","en":"Writes code to make tools: FONTain, Televideo, crosswords, automations. And this game."}},{"id":"proffy","n":"PROFFY","l":"I","c":"P","a":"cap","type":{"it":"SCUOLA","en":"SCHOOL"},"d":{"it":"Insegna dal 2016. Trasforma i brief in metodo e gli studenti in progettisti.","en":"Teaching since 2016. Turns briefs into method and students into designers."}},{"id":"archivia","n":"ARCHIVIA","l":"R","c":"B","a":"book","type":{"it":"ARCHIVIO","en":"ARCHIVE"},"d":{"it":"Colleziona archivi: 60 anni di poster, premi e interviste di Lucca Comics & Games.","en":"Collects archives: 60 years of Lucca Comics & Games posters, awards and interviews."}},{"id":"curatrix","n":"CURATRIX","l":"M","c":"Y","a":"beret","type":{"it":"MOSTRE","en":"SHOWS"},"d":{"it":"Cura mostre: mette in fila le storie e le fa respirare nello spazio.","en":"Curates exhibitions: lines up stories and lets them breathe in space."}},{"id":"pennina","n":"PENNINA","l":"W","c":"P","a":"nib","type":{"it":"PAROLE","en":"WORDS"},"d":{"it":"Scrive prosa lirica, critica e una posta del cuore. Archivio attivo dal 2009.","en":"Writes lyric prose, criticism and an agony aunt column. Archive active since 2009."}},{"id":"gudheart","n":"GUDHEART","l":"♥","c":"Y","a":"crown","legendary":true,"type":{"it":"AMORE","en":"LOVE"},"d":{"it":"Leggendario. Il segreto di GUD: fare le cose con amore. E con un po' di ironia.","en":"Legendary. GUD's secret: do things with love. And a little irony."}}],"lists":{"welcome":[{"it":"Un mondo in cui ci sono troppe cose belle da fare per preoccuparsi del portfolio.","en":"A world with far too many beautiful things to do to worry about a portfolio."},{"it":"Qui si disegnano lettere, si curano mostre, si insegna, si scrive. E si sopravvive alla settimana lavorativa.","en":"Here we draw letters, curate exhibitions, teach and write. And survive the working week."},{"it":"Il portfolio arriverà. Intanto, gioca.","en":"The portfolio will come. Meanwhile, play."}],"tgifIntro":[{"it":"Cerchi GUD?","en":"Looking for GUD?"},{"it":"Aiuta la tua art director preferita a sopravvivere alla settimana lavorativa.","en":"Help your favourite art director survive the working week."},{"it":"La tua missione? Portarla al venerdì. Possibilmente viva.","en":"Your mission? Get her to Friday. Alive, preferably."}],"feedbackWeek":[{"it":"FAI IL LOGO PIÙ GRANDE!","en":"MAKE THE LOGO BIGGER!"},{"it":"SI PUÒ FARE PIÙ POP?","en":"CAN WE MAKE IT POP?"},{"it":"SOLO UNA PICCOLA MODIFICA.","en":"JUST ONE SMALL CHANGE."},{"it":"PIÙ WOW!","en":"MORE WOW!"},{"it":"NON LO SENTO.","en":"I DON'T FEEL IT."},{"it":"PROVIAMO UN ALTRO FONT?","en":"CAN WE TRY ANOTHER FONT?"},{"it":"È URGENTE.","en":"IT'S URGENT."},{"it":"MIO CUGINO LO FA.","en":"MY COUSIN CAN DO IT."},{"it":"CE LO MANDI PER IERI?","en":"CAN WE HAVE IT BY YESTERDAY?"},{"it":"FEEDBACK NON RICHIESTO.","en":"FEEDBACK NON RICHIESTO."},{"it":"NON SO COSA VOGLIO, MA QUESTO NO.","en":"NON SO COSA VOGLIO, MA QUESTO NO."},{"it":"CI SIAMO QUASI, CAMBIAMO TUTTO.","en":"CI SIAMO QUASI, CAMBIAMO TUTTO."}],"feedbackWeekend":[{"it":"MANGIA, CHE SEI SCIUPATA!","en":"MANGIA, CHE SEI SCIUPATA!"},{"it":"UN ALTRO PO' DI PASTA?","en":"A LITTLE MORE PASTA?"},{"it":"ULTIMO GIRO, GIURO.","en":"LAST ROUND, I SWEAR."},{"it":"CHI HA CHIUSO LE TENDE?","en":"WHO CLOSED THE CURTAINS?"},{"it":"SONO LE 3 DI NOTTE.","en":"IT'S 3 AM."},{"it":"MAI PIÙ.","en":"NEVER AGAIN."},{"it":"HAI MESSO LA MAGLIA?","en":"ARE YOU WEARING A JUMPER?"},{"it":"DOMANI DIETA.","en":"DIET STARTS TOMORROW."}],"beach":[{"it":"SI VEDE CHE AMI GUD E VUOI VEDERLA FELICE.","en":"SI VEDE CHE AMI GUD E VUOI VEDERLA FELICE."},{"it":"MANDALE QUESTO SCREEN E CHIEDILE IL SUO IBAN.","en":"MANDALE QUESTO SCREEN E CHIEDILE IL SUO IBAN."},{"it":"VEDRAI CHE LO SARÀ ANCORA DI PIÙ.","en":"VEDRAI CHE LO SARÀ ANCORA DI PIÙ."}],"questIntro":[{"it":"Ciao! Benvenuto nel mondo della comunicazione visiva!","en":"Hello there! Welcome to the world of visual communication!"},{"it":"Mi chiamo PROF. SERIF. Studio le lettere. Quelle che prendono vita le chiamiamo GUDMON.","en":"My name is PROF. SERIF. I study letters. The ones that come alive we call GUDMON."},{"it":"Questa è GUD. Art director, type designer, docente, curatrice, autrice.","en":"This is GUD. Art director, type designer, teacher, curator, writer."},{"it":"Il suo sito è in costruzione. La sua storia invece è qui, in questa città.","en":"Her website is under construction. Her story, though, is right here in this town."},{"it":"Entra negli edifici e parla con tutti. Vinci le medaglie. Cattura i GUDMON nell'erba alta: sono le sue passioni.","en":"Enter the buildings and talk to everyone. Win the badges. Catch GUDMON in the tall grass: they are her passions."},{"it":"Il viaggio nel CV di GUD sta per cominciare!","en":"Your journey through GUD's CV is about to begin!"}]},"text":{"welcome":{"kicker":{"it":"BENVENUTO NELL'","en":"WELCOME TO THE"},"title":{"it":"AMAZING WORLD OF GUD","en":"AMAZING WORLD OF GUD"},"cta":{"it":"ENTRA","en":"ENTER"},"skip":{"it":"Vai dritto al CV","en":"Skip to the CV"}},"site":{"exploreCv":{"it":"ESPLORA IL CV","en":"EXPLORE THE CV"},"tricks":{"it":"TRUCCHI","en":"TRICKS"},"chooseTitle":{"it":"COME VUOI LEGGERE IL CV?","en":"HOW DO YOU WANT TO READ THE CV?"},"questDesc":{"it":"Il CV come un gioco di ruolo da Game Boy. Esplora, lotta, cattura le passioni di GUD.","en":"The CV as a handheld RPG. Explore, battle, catch GUD's passions."},"plainName":{"it":"BANALE CV","en":"BORING CV"},"plainDesc":{"it":"Il CV come lo vorrebbe un recruiter. Pulito, veloce, stampabile.","en":"The CV a recruiter would want. Clean, quick, printable."},"backToTgif":{"it":"TORNA A TGIF","en":"BACK TO TGIF"}},"tgif":{"subtitle":{"it":"E se non lo è, usa l'immaginazione.","en":"And if it's not, use your imagination."},"start":{"it":"PREMI START","en":"PRESS START"},"hint":{"it":"← → MUOVI · ↑ / SPAZIO SALTA · ↓ SCHIVA · K SPARA","en":"← → MOVE · ↑ / SPACE JUMP · ↓ DODGE · K SHOOT"},"hintMobile":{"it":"USA I TASTI SULLO SCHERMO","en":"USE THE ON-SCREEN BUTTONS"},"weekWinTitle":{"it":"CONGRATULAZIONI!","en":"CONGRATULATIONS!"},"weekWin1":{"it":"Sei sopravvissuta a un'altra settimana lavorativa.","en":"You survived another working week."},"weekWin2":{"it":"BIG CLIENT è stato sconfitto. I tuoi diritti umani sono stati temporaneamente ripristinati.","en":"BIG CLIENT has been defeated. Your human rights have been temporarily restored."},"weekWin3":{"it":"Ma sei pronta per la sfida finale?","en":"But are you ready for the ultimate challenge?"},"weekWin4":{"it":"IL WEEKEND.","en":"THE WEEKEND."},"weekWinCta":{"it":"ENTRA NEL WEEKEND","en":"ENTER WEEKEND MODE"},"weekLoseTitle":{"it":"VENERDÌ TARDI","en":"LATE FRIDAY"},"weekLoseSub":{"it":"RIUNIONE ACCETTATA","en":"MEETING ACCEPTED"},"weekLose1":{"it":"\"Congratulazioni. Il tuo weekend è stato riprogrammato a mai.\"","en":"\"Congratulations. Your weekend has been successfully rescheduled to never.\""},"wkndWinTitle":{"it":"CE L'HAI FATTA!","en":"YOU DID IT!"},"wkndWin1":{"it":"Sei sopravvissuta al weekend.","en":"You survived the weekend."},"wkndWin2":{"it":"Contro ogni previsione, sei pronta per lunedì.","en":"Against all odds, you are ready for Monday."},"wkndWinUnlock":{"it":"Hai sbloccato il posto felice segreto di GUD.","en":"You unlocked GUD's secret happy place."},"wkndWinCta":{"it":"LIVELLO SEGRETO ♥","en":"SECRET LEVEL ♥"},"wkndLoseTitle":{"it":"GAME OVER.","en":"GAME OVER."},"wkndLose1":{"it":"È lunedì.","en":"Monday is here."},"wkndLose2":{"it":"Il tuo corpo è presente. La tua anima è ancora all'aperitivo.","en":"Your body is present. Your soul is still at the aperitivo."},"retry":{"it":"RIPROVA","en":"TRY AGAIN"},"again":{"it":"GIOCA ANCORA","en":"PLAY AGAIN"},"score":{"it":"PUNTI","en":"SCORE"},"best":{"it":"RECORD","en":"BEST"},"energy":{"it":"ENERGIA","en":"ENERGY"},"goodLuck":{"it":"09:00 - IN BOCCA AL LUPO","en":"09:00 - GOOD LUCK"},"freedom":{"it":"10:00 - LIBERTÀ?","en":"10:00 - FREEDOM?"},"again2":{"it":"DI NUOVO","en":"AGAIN"},"almost":{"it":"CI SIAMO QUASI...","en":"ALMOST THERE..."},"why":{"it":"08:00 - PERCHÉ?","en":"08:00 - WHY?"},"warning":{"it":"ATTENZIONE!","en":"WARNING!"},"approaching":{"it":"IN ARRIVO","en":"APPROACHING"},"defeated":{"it":"SCONFITTO!","en":"DEFEATED!"},"secret":{"it":"LIVELLO SEGRETO: ILOVEGUD","en":"SECRET LEVEL: ILOVEGUD"}},"quest":{"subtitle":{"it":"PINK ADVENTURE","en":"PINK ADVENTURE"},"tagline":{"it":"UN CV INTERATTIVO","en":"AN INTERACTIVE CV"},"hint":{"it":"Frecce: muovi. A (Z/Spazio): parla. B (X): indietro. START (Invio): menu.","en":"Arrows: move. A (Z/Space): talk. B (X): back. START (Enter): menu."},"hintMobile":{"it":"Croce: muovi. A: parla. B: indietro. START: menu.","en":"D-pad: move. A: talk. B: back. START: menu."},"signFirenze":{"it":"FIRENZE. Dove tutto è cominciato.","en":"FLORENCE. Where it all began."},"signHome":{"it":"Casa di GUD.","en":"GUD's house."},"signCentro":{"it":"CENTRO GUD. Caffè, pause e contatti.","en":"GUD CENTER. Coffee, breaks and contacts."},"signRoute":{"it":"VIA DEL SEGNO. Attenzione: erba alta. Ci vivono i GUDMON selvatici!","en":"ROUTE OF THE MARK. Warning: tall grass. Wild GUDMON live here!"},"signLucca":{"it":"LUCCA. Città del fumetto e del gioco.","en":"LUCCA. City of comics and games."},"signNew":{"it":"QUARTIERE NUOVO. Qui GUD sta costruendo.","en":"NEW DISTRICT. GUD is building here."},"signTower":{"it":"TORRE GUINIGI. Sì, in cima ci sono gli alberi.","en":"GUINIGI TOWER. Yes, there are trees on top."},"tower":{"it":"La Torre Guinigi. Da quassù si vede tutta la storia di Lucca Comics.","en":"The Guinigi Tower. From up here you can see all of Lucca Comics' history."},"monument":{"it":"MONUMENTO ALLA G. Per qualcuno è una lettera. Per GUD è un'identità.","en":"MONUMENT TO THE G. For some, a letter. For GUD, an identity."},"npcTourist":{"it":"Il David? No, io sono qui per il kerning perfetto.","en":"The David? No, I came for the perfect kerning."},"npcBrividi":{"it":"Ho fatto il workshop Brividi all'ISIA. Brividi, appunto.","en":"I took the Brividi workshop at ISIA. Chills, indeed."},"npcGrass":{"it":"Nell'erba alta vivono i GUDMON: sono le passioni di GUD! Usa lo SKETCHBOOK per catturarli.","en":"GUDMON live in the tall grass: they are GUD's passions! Use the SKETCHBOOK to catch them."},"npcDex":{"it":"Ogni GUDMON catturato entra nel GUDDEX. Premi START per vederlo.","en":"Every GUDMON you catch goes into the GUDDEX. Press START to see it."},"npcCosplay":{"it":"Mi sono vestito da BIG CLIENT. Nessuno ha riso.","en":"I came dressed as BIG CLIENT. Nobody laughed."},"npcGuard":{"it":"Lucca Comics & Games ha 60 anni. GUD ne ha graficato la festa.","en":"Lucca Comics & Games turned 60. GUD designed the party."},"profStart":{"it":"Premi START per aprire il menu: GUDDEX, scheda di GUD, zaino e CV rapido. Le medaglie si vincono negli edifici di Firenze e di Lucca.","en":"Press START to open the menu: GUDDEX, GUD's card, bag and quick CV. Badges are won in the buildings of Florence and Lucca."},"profProgress":{"it":"Hai {b} medaglie su {B} e {c} GUDMON su {C}. Ottimo lavoro!","en":"You have {b} of {B} badges and {c} of {C} GUDMON. Great work!"},"profLegend":{"it":"Sei nella Hall of Fame! Si dice che, catturati tutti i GUDMON, ne appaia uno leggendario.","en":"You made the Hall of Fame! Legend says that once every GUDMON is caught, a legendary one appears."},"mom":{"it":"GUD! Il tuo ufficio è tutta la città, a quanto pare. Ricordati di mangiare: stasera parmigiana.","en":"GUD! Your office is the whole town, apparently. Remember to eat: parmigiana tonight."},"homeShelf":{"it":"Libri di tipografia. Tanti. Troppi? Mai troppi.","en":"Typography books. Many. Too many? Never."},"homePoster":{"it":"Un poster: THANK GUD IT'S FRIDAY. Un arcade girlpop: si gioca sul sito di GUD.","en":"A poster: THANK GUD IT'S FRIDAY. A girlpop arcade: play it on GUD's website."},"homeWindow":{"it":"Fuori c'è Firenze. E una scadenza.","en":"Outside: Florence. And a deadline."},"homeBoard":{"it":"Una bacheca: moodboard, post-it, un biglietto per Lucca.","en":"A pinboard: moodboard, post-its, a ticket to Lucca."},"homeBed":{"it":"Il letto di GUD. Ci dorme poco: troppe idee.","en":"GUD's bed. She barely sleeps: too many ideas."},"homePc":{"it":"Il PC di GUD. Una cartella si chiama definitivo_v8_ultimo.","en":"GUD's PC. A folder is called final_v8_really_final."},"homeTv":{"it":"In TV: un'art director attraversa Firenze cercando il weekend.","en":"On TV: an art director crosses Florence looking for the weekend."},"homePlant":{"it":"Una pianta. Sopravvive. Come GUD.","en":"A plant. It survives. Like GUD."},"barista1":{"it":"Benvenuta al CENTRO GUD! Qui ci si ricarica.","en":"Welcome to the GUD CENTER! This is where we recharge."},"barista2":{"it":"Vuoi un caffè e una sigaretta?","en":"Would you like a coffee and a cigarette?"},"barista3":{"it":"GUD è di nuovo in forma. Torna quando vuoi!","en":"GUD is back in shape. Come back anytime!"},"recruiter":{"it":"Ho sentito che GUD è disponibile per nuovi progetti. Il PC a destra ha tutti i suoi contatti.","en":"I heard GUD is open to new projects. The PC on the right has all her contacts."},"pcContacts":{"it":"PC di GUD. Contatti per nuovi progetti, docenze e collaborazioni:","en":"GUD's PC. Contacts for new projects, teaching and collaborations:"},"centroPoster":{"it":"Un poster: \"Il riposo fa parte del progetto.\"","en":"A poster: \"Rest is part of the project.\""},"clientEarly":{"it":"Ah, sei tu. Torna quando avrai tutte le medaglie. Ne hai {b}. Io intanto scrivo a tutti in CC.","en":"Oh, it's you. Come back with every badge. You have {b}. Meanwhile I'll email everyone in CC."},"clientPre":{"it":"Pensavi di aver finito? Ultimo giro di revisioni!","en":"Thought you were done? One last round of revisions!"},"clientPost":{"it":"Va bene. Approvato. Così com'è.","en":"Fine. Approved. As it is."},"clientAfter":{"it":"Approvato. Non lo ripeterò.","en":"Approved. I won't say it twice."},"allBadges":{"it":"Tutte le medaglie! BIG CLIENT ti aspetta a Lucca, sotto la Torre Guinigi.","en":"All the badges! BIG CLIENT is waiting in Lucca, below the Guinigi Tower."},"hof1":{"it":"Congratulazioni! GUD e il suo team entrano nella HALL OF FAME!","en":"Congratulations! GUD and her team enter the HALL OF FAME!"},"hof2":{"it":"Hai esplorato tutto il CV di GUD. Il sito è in costruzione, ma GUD è disponibile per nuovi progetti, docenze e collaborazioni.","en":"You explored GUD's whole CV. The website is under construction, but GUD is available for new projects, teaching and collaborations."},"lose":{"it":"Un caffè e una pausa, e GUD è di nuovo in piedi. Riprova!","en":"A coffee and a break, and GUD is back on her feet. Try again!"},"seeProject":{"it":"Vuoi vedere il progetto?","en":"Want to see the project?"},"seeYes":{"it":"SÌ, MOSTRA","en":"YES, SHOW ME"},"seeNo":{"it":"NO","en":"NO"},"ludo1":{"it":"Bau! (Il ciuffo al vento, lo sguardo di chi ha già capito tutto.)","en":"Woof! (Crest in the wind, the look of someone who already gets it.)"},"ludo2":{"it":"Ludo ti segue ovunque. Anche dai clienti. Soprattutto dai clienti.","en":"Ludo follows you everywhere. Even to clients. Especially to clients."},"ludo3":{"it":"Ludo annusa il kerning e approva.","en":"Ludo sniffs the kerning and approves."},"ludo4":{"it":"Ludo chiede un biscotto. Poi un altro. Poi il portfolio può aspettare.","en":"Ludo asks for a treat. Then another one. The portfolio can wait."}},"cv":{"title":{"it":"CURRICULUM","en":"CURRICULUM"},"print":{"it":"STAMPA / PDF","en":"PRINT / PDF"},"education":{"it":"Formazione","en":"Education"},"languages":{"it":"Lingue","en":"Languages"},"passions":{"it":"Passioni","en":"Passions"},"contacts":{"it":"Contatti","en":"Contacts"},"open":{"it":"VEDI PROGETTO","en":"SEE PROJECT"},"playQuest":{"it":"Preferisci giocarlo? Apri GUDQUEST","en":"Rather play it? Open GUDQUEST"}}}};</script>
+<script>
+/* =====================================================================
+   THANK GUD IT'S FRIDAY — shared game engine
+   Vanilla JS · Canvas 2D · Web Audio. No dependencies.
+   The same engine powers /desktop and /mobile (layout set by GUD_CONFIG).
+   ===================================================================== */
+(function () {
+'use strict';
+
+const CFG = Object.assign({ layout: 'desktop', assetBase: '../assets/' }, window.GUD_CONFIG || {});
+const MOBILE = CFG.layout === 'mobile';
+const C = { Y: '#FFE600', P: '#FF1493', B: '#FF85C8', L: '#FFD6EA', K: '#111111', W: '#FFF9F1' };
+const rand = (a, b) => a + Math.random() * (b - a);
+const irand = (a, b) => Math.floor(a + Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const pad = (n, l) => String(Math.max(0, Math.floor(n))).padStart(l, '0');
+const $ = id => document.getElementById(id);
+const store = {
+  get(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* ignore */ } }
+};
+/* ---- site-wide language + content (shared by every page of the GUD world) ---- */
+const EMBED = /[?&]embed=1/.test(location.search);
+let LANG = store.get('gud_lang') || ((navigator.language || '').toLowerCase().indexOf('it') === 0 ? 'it' : 'en');
+let CONTENT = window.GUD_DEFAULT_CONTENT || {};
+const tr = o => (o == null ? '' : typeof o === 'string' ? o : (o[LANG] || o.it || o.en || ''));
+const TX = (group, key, vars) => { let s = tr(((CONTENT.text || {})[group] || {})[key]); if (!s) { const d = (((window.GUD_DEFAULT_CONTENT || {}).text || {})[group] || {})[key]; s = tr(d); } Object.keys(vars || {}).forEach(k => { s = s.split('{' + k + '}').join(String(vars[k])); }); return s; };
+const LIST = key => ((CONTENT.lists || {})[key] || ((window.GUD_DEFAULT_CONTENT || {}).lists || {})[key] || []);
+function loadContent() {
+  const base = CFG.contentBase || '../../content/';
+  if (location.protocol === 'file:') return Promise.resolve(CONTENT);
+  return fetch(base + 'content.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(r => (r.ok ? r.json() : null)).catch(() => null)
+    .then(j => { if (j && j.sections) CONTENT = j; return CONTENT; });
+}
+const HOOKS = { lang: [], mute: [], code: [] };
+function setLang(l) { LANG = l === 'en' ? 'en' : 'it'; store.set('gud_lang', LANG); document.documentElement.lang = LANG; HOOKS.lang.forEach(f => { try { f(LANG); } catch (e) { console.error(e); } }); }
+window.addEventListener('message', e => {
+  const d = e.data; if (!d || d.gud !== 1) return;
+  if (location.protocol !== 'file:' && e.origin !== location.origin) return;
+  if (d.lang) setLang(d.lang);
+  if (d.mute != null) HOOKS.mute.forEach(f => f(!!d.mute));
+  if (d.code) HOOKS.code.forEach(f => f(String(d.code)));
+});
+window.addEventListener('storage', e => { if (e.key === 'gud_lang' && e.newValue && e.newValue !== LANG) setLang(e.newValue); });
+function tellParent(msg) { try { if (window.parent && window.parent !== window) window.parent.postMessage(Object.assign({ gud: 1 }, msg), location.protocol === 'file:' ? '*' : location.origin); } catch (e) { /* */ } }
+if (EMBED) document.documentElement.classList.add('embed');
+document.documentElement.lang = LANG;
+
+/* ---------------------------------------------------------------------
+   1. PIXEL FONT — custom 5×7 bitmap, uppercase + Italian accents
+   --------------------------------------------------------------------- */
+const GLYPHS = [
+  ['A', '01110,10001,10001,11111,10001,10001,10001'], ['B', '11110,10001,10001,11110,10001,10001,11110'],
+  ['C', '01110,10001,10000,10000,10000,10001,01110'], ['D', '11110,10001,10001,10001,10001,10001,11110'],
+  ['E', '11111,10000,10000,11110,10000,10000,11111'], ['F', '11111,10000,10000,11110,10000,10000,10000'],
+  ['G', '01110,10001,10000,10111,10001,10001,01111'], ['H', '10001,10001,10001,11111,10001,10001,10001'],
+  ['I', '01110,00100,00100,00100,00100,00100,01110'], ['J', '00111,00010,00010,00010,00010,10010,01100'],
+  ['K', '10001,10010,10100,11000,10100,10010,10001'], ['L', '10000,10000,10000,10000,10000,10000,11111'],
+  ['M', '10001,11011,10101,10101,10001,10001,10001'], ['N', '10001,10001,11001,10101,10011,10001,10001'],
+  ['O', '01110,10001,10001,10001,10001,10001,01110'], ['P', '11110,10001,10001,11110,10000,10000,10000'],
+  ['Q', '01110,10001,10001,10001,10101,10010,01101'], ['R', '11110,10001,10001,11110,10100,10010,10001'],
+  ['S', '01111,10000,10000,01110,00001,00001,11110'], ['T', '11111,00100,00100,00100,00100,00100,00100'],
+  ['U', '10001,10001,10001,10001,10001,10001,01110'], ['V', '10001,10001,10001,10001,10001,01010,00100'],
+  ['W', '10001,10001,10001,10101,10101,10101,01010'], ['X', '10001,10001,01010,00100,01010,10001,10001'],
+  ['Y', '10001,10001,01010,00100,00100,00100,00100'], ['Z', '11111,00001,00010,00100,01000,10000,11111'],
+  ['0', '01110,10001,10011,10101,11001,10001,01110'], ['1', '00100,01100,00100,00100,00100,00100,01110'],
+  ['2', '01110,10001,00001,00010,00100,01000,11111'], ['3', '11111,00010,00100,00010,00001,10001,01110'],
+  ['4', '00010,00110,01010,10010,11111,00010,00010'], ['5', '11111,10000,11110,00001,00001,10001,01110'],
+  ['6', '00110,01000,10000,11110,10001,10001,01110'], ['7', '11111,00001,00010,00100,01000,01000,01000'],
+  ['8', '01110,10001,10001,01110,10001,10001,01110'], ['9', '01110,10001,10001,01111,00001,00010,01100'],
+  ['!', '00100,00100,00100,00100,00100,00000,00100'], ['?', '01110,10001,00001,00010,00100,00000,00100'],
+  ['.', '00000,00000,00000,00000,00000,01100,01100'], [',', '00000,00000,00000,00000,01100,00100,01000'],
+  ["'", '00100,00100,01000,00000,00000,00000,00000'], ['-', '00000,00000,00000,11111,00000,00000,00000'],
+  [':', '00000,01100,01100,00000,01100,01100,00000'], ['/', '00001,00001,00010,00100,01000,10000,10000'],
+  ['+', '00000,00100,00100,11111,00100,00100,00000'], ['%', '11001,11001,00010,00100,01000,10011,10011'],
+  ['(', '00010,00100,01000,01000,01000,00100,00010'], [')', '01000,00100,00010,00010,00010,00100,01000'],
+  ['<', '00010,00100,01000,10000,01000,00100,00010'], ['>', '01000,00100,00010,00001,00010,00100,01000'],
+  ['=', '00000,00000,11111,00000,11111,00000,00000'], ['_', '00000,00000,00000,00000,00000,00000,11111'],
+  ['@', '01110,10001,10111,10101,10111,10000,01110'], ['&', '01100,10010,10100,01000,10101,10010,01101'],
+  ['"', '01010,01010,00000,00000,00000,00000,00000'], ['*', '00000,10101,01110,11111,01110,10101,00000'],
+  ['#', '01010,11111,01010,01010,01010,11111,01010'],
+  ['♥', '00000,01010,11111,11111,01110,00100,00000'],
+  ['À', '01000,00100,01110,10001,11111,10001,10001'], ['È', '01000,00100,11111,10000,11110,10000,11111'],
+  ['É', '00010,00100,11111,10000,11110,10000,11111'], ['Ì', '01000,00100,01110,00100,00100,00100,01110'],
+  ['Ò', '01000,00100,01110,10001,10001,10001,01110'], ['Ù', '01000,00100,10001,10001,10001,10001,01110'],
+  [' ', '0,0,0,0,0,0,0']
+];
+const FONT = {};
+GLYPHS.forEach(([k, v]) => { FONT[k] = v.split(',').map(r => parseInt(r, 2)); });
+FONT['’'] = FONT["'"]; FONT['‘'] = FONT["'"];
+
+function tw(s, sc) { s = String(s); return s.length ? (s.length * 6 - 1) * (sc || 1) : 0; }
+function dtext(c, s, x, y, sc, col, align) {
+  s = String(s).toUpperCase(); sc = sc || 1;
+  const w = tw(s, sc);
+  if (align === 'center') x -= w / 2; else if (align === 'right') x -= w;
+  x = Math.round(x); y = Math.round(y); c.fillStyle = col;
+  for (let i = 0; i < s.length; i++) {
+    const g = FONT[s[i]] || FONT['?'];
+    for (let r = 0; r < 7; r++) {
+      const row = g[r]; if (!row) continue;
+      let cc = 0;
+      while (cc < 5) {
+        if (row & (16 >> cc)) {
+          let e = cc; while (e < 5 && (row & (16 >> e))) e++;
+          c.fillRect(x + cc * sc, y + r * sc, (e - cc) * sc, sc); cc = e;
+        } else cc++;
+      }
+    }
+    x += 6 * sc;
+  }
+  return w;
+}
+function otext(c, s, x, y, sc, col, ocol, align, shadow) {
+  sc = sc || 1; const w = tw(s, sc);
+  if (align === 'center') x -= w / 2; else if (align === 'right') x -= w;
+  x = Math.round(x); y = Math.round(y);
+  const o = sc >= 3 ? Math.max(1, Math.round(sc / 3)) : 1;
+  if (shadow) dtext(c, s, x + o * 2, y + o * 2, sc, shadow);
+  dtext(c, s, x - o, y, sc, ocol); dtext(c, s, x + o, y, sc, ocol);
+  dtext(c, s, x, y - o, sc, ocol); dtext(c, s, x, y + o, sc, ocol);
+  dtext(c, s, x, y, sc, col);
+  return w;
+}
+function wrap(text, maxC) {
+  const words = String(text).toUpperCase().split(/\s+/).filter(Boolean);
+  const lines = []; let cur = '';
+  for (const w of words) {
+    if (!cur) cur = w; else if ((cur + ' ' + w).length <= maxC) cur += ' ' + w; else { lines.push(cur); cur = w; }
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+/* ---------------------------------------------------------------------
+   2. PIXEL-ART SPRITES — drawn programmatically, auto 1px black outline
+   --------------------------------------------------------------------- */
+function outline(cv) {
+  const w = cv.width, h = cv.height, x = cv.getContext('2d');
+  const im = x.getImageData(0, 0, w, h), d = im.data, src = new Uint8ClampedArray(d);
+  const col = i => src[i + 3] > 0 && !(src[i] < 40 && src[i + 1] < 40 && src[i + 2] < 40);
+  for (let yy = 0; yy < h; yy++) for (let xx = 0; xx < w; xx++) {
+    const i = (yy * w + xx) * 4; if (src[i + 3]) continue;
+    if ((xx > 0 && col(i - 4)) || (xx < w - 1 && col(i + 4)) || (yy > 0 && col(i - w * 4)) || (yy < h - 1 && col(i + w * 4))) {
+      d[i] = 17; d[i + 1] = 17; d[i + 2] = 17; d[i + 3] = 255;
+    }
+  }
+  x.putImageData(im, 0, 0); return cv;
+}
+function mk(w, h, fn, noOutline) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const x = c.getContext('2d');
+  const R = (a, b, cw, ch, col) => { x.fillStyle = col; x.fillRect(a, b, cw, ch); };
+  fn(R, x); if (!noOutline) outline(c); return c;
+}
+function disc(R, cx, cy, r, col) {
+  for (let dy = -r; dy <= r; dy++) { const hw = Math.floor(Math.sqrt(r * r - dy * dy) + 0.4); R(cx - hw, cy + dy, hw * 2 + 1, 1, col); }
+}
+const TINT = new Map();
+function tinted(cv, col) {
+  let m = TINT.get(cv); if (!m) { m = {}; TINT.set(cv, m); }
+  if (!m[col]) {
+    const c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height;
+    const x = c.getContext('2d'); x.drawImage(cv, 0, 0); x.globalCompositeOperation = 'source-in';
+    x.fillStyle = col; x.fillRect(0, 0, c.width, c.height); m[col] = c;
+  }
+  return m[col];
+}
+
+/* --- GUD, the protagonist (34×34 cell, feet on row 31) --- */
+function gudDraw(R, pose, f) {
+  const o = (x, y, w, h, c) => R(x + 5, y + 2, w, h, c);
+  const SK = C.L, HR = C.K;
+  const beach = pose === 'beach' || pose === 'beachjump';
+  if (pose === 'duck') {
+    const s = f ? 1 : 0;
+    o(0, 14 + s, 8, 3, HR); o(1, 13, 6, 1, HR); o(2, 17, 5, 1 + s, HR);
+    o(8, 13, 7, 7, SK); o(7, 11, 8, 2, HR); o(6, 12, 3, 5, HR); o(8, 13, 6, 1, HR);
+    o(9, 15, 3, 3, C.K); o(10, 16, 1, 1, C.W); o(12, 15, 3, 3, C.K); o(13, 16, 1, 1, C.W);
+    o(13, 18, 1, 1, C.P);
+    o(8, 20, 8, 4, C.P); o(15, 21, 4, 2, SK);
+    o(5, 23, 10, 3, C.B);
+    o(9, 26, 7, 2, C.K); o(14, 27, 2, 2, C.K); o(15, 28, 4, 2, C.P);
+    o(4, 26, 6, 2, C.K); o(2, 28, 4, 2, C.P);
+    return;
+  }
+  if (pose === 'defeat') {
+    o(-4, 26, 6, 3, HR); o(-3, 22, 3, 5, HR);
+    o(0, 22, 7, 6, SK); o(0, 21, 7, 1, HR);
+    o(1, 23, 3, 3, C.K); o(2, 24, 1, 1, C.P); o(4, 24, 3, 3, C.K); o(5, 25, 1, 1, C.P);
+    o(3, 27, 2, 1, C.K);
+    o(7, 23, 7, 5, C.P); o(9, 28, 5, 1, SK); o(14, 22, 4, 7, C.B);
+    o(18, 23, 7, 2, C.K); o(18, 26, 7, 2, C.K); o(25, 21, 2, 4, C.P); o(25, 26, 2, 3, C.P);
+    return;
+  }
+  const runlike = pose === 'run' || pose === 'shoot';
+  const jumpP = pose === 'jump' || pose === 'jumpshoot' || pose === 'beachjump';
+  let by = 0;
+  if (runlike && f % 2 === 1) by = -1;
+  if (pose === 'victory' && f === 1) by = -2;
+  // hair (long, behind)
+  const hl = jumpP ? 9 : 12 + (runlike ? f % 2 : 0) + (pose === 'idle' ? f : 0);
+  o(4, 3 + by, 4, hl, HR); o(3, 6 + by, 2, hl - 3, HR);
+  if (jumpP) o(1, 4 + by, 3, 4, HR);
+  if (runlike) o(2, 8 + by + (f % 2), 2, 5, HR);
+  // head
+  o(8, 4 + by, 7, 7, SK);
+  o(7, 2 + by, 8, 2, HR); o(6, 3 + by, 3, 5, HR); o(8, 4 + by, 6, 1, HR); o(8, 5 + by, 1, 1, HR);
+  // glasses
+  if (beach) {
+    o(9, 6 + by, 6, 2, C.K); o(9, 8 + by, 2, 1, C.K); o(13, 8 + by, 2, 1, C.K);
+    o(10, 6 + by, 1, 1, C.W); o(13, 6 + by, 1, 1, C.W);
+  } else {
+    o(9, 6 + by, 3, 3, C.K); o(12, 6 + by, 3, 3, C.K);
+    const lens = (pose === 'idle' && f === 1) ? C.K : (pose === 'hurt' ? C.P : C.W);
+    o(10, 7 + by, 1, 1, lens); o(13, 7 + by, 1, 1, lens);
+  }
+  // mouth
+  if (pose === 'hurt') o(12, 9 + by, 2, 2, C.K);
+  else if (['victory', 'collect', 'beach', 'beachjump'].includes(pose)) o(11, 9 + by, 3, 1, C.P);
+  else o(13, 9 + by, 1, 1, C.P);
+  o(11, 11 + by, 2, 1, SK);
+  // outfit
+  if (beach) { o(9, 12 + by, 5, 2, C.P); o(9, 14 + by, 5, 3, SK); o(9, 17 + by, 5, 2, C.P); }
+  else { o(9, 12 + by, 5, 5, C.P); o(11, 12 + by, 1, 1, C.Y); o(8, 17 + by, 7, 2, C.B); o(7, 19 + by, 9, 1, C.B); }
+  // legs
+  const LG = beach ? SK : C.K, SH = beach ? SK : C.P;
+  const leg = (tx, sx, lift) => { o(tx, 19, 2, 5, LG); o(sx, 24, 2, 4 - lift, LG); o(sx, 28 - lift, 3, 2, SH); };
+  if (jumpP) { leg(11, 13, 2); leg(8, 7, 1); }
+  else if (runlike) {
+    const L = [[[12, 14, 0], [9, 6, 1]], [[11, 12, 0], [10, 9, 2]], [[12, 13, 0], [9, 7, 0]], [[10, 10, 0], [11, 12, 2]]][f % 4];
+    leg(...L[0]); leg(...L[1]);
+  } else if (pose === 'hurt') { leg(8, 7, 0); leg(12, 14, 0); }
+  else { leg(9, 9, 0); leg(12, 12, 0); }
+  // arms
+  const arm = (x, y, w, h) => o(x, y + by, w, h, SK);
+  if (pose === 'shoot' || pose === 'jumpshoot') { arm(13, 13, 7, 2); o(20, 12 + by, 2, 4, C.Y); arm(7, 13, 2, 3); }
+  else if (pose === 'victory') { arm(14, 6, 2, 6); arm(7, 6, 2, 6); }
+  else if (pose === 'collect') { arm(14, 6, 2, 6); arm(8, 13, 2, 4); }
+  else if (pose === 'hurt') { arm(15, 9, 2, 4); arm(6, 9, 2, 4); }
+  else if (beach) {
+    arm(13, 12, 2, 2); arm(15, 10, 2, 3); arm(8, 13, 2, 4);
+    o(14, 4 + by, 7, 1, C.Y); o(15, 5 + by, 5, 1, C.Y); o(16, 6 + by, 3, 1, C.Y);
+    o(17, 7 + by, 1, 2, C.Y); o(15, 9 + by, 5, 1, C.Y); o(19, 1 + by, 1, 3, C.P); o(17, 0 + by, 5, 1, C.B);
+  }
+  else if (jumpP) { arm(14, 9, 2, 4); arm(7, 11, 2, 3); }
+  else if (pose === 'run') { if (f % 2 === 0) { arm(14, 13, 3, 2); arm(7, 13, 2, 3); } else arm(13, 13, 2, 4); }
+  else arm(13, 13, 2, 4);
+}
+const GUDC = {};
+function gud(pose, f) { const k = pose + f; return GUDC[k] || (GUDC[k] = mk(34, 34, R => gudDraw(R, pose, f))); }
+
+/* --- GUD seen from the front / from behind, same proportions and palette as the side sprites --- */
+const LOOKS = {
+  gud: { hair: 'long', hc: C.K, skin: C.L, top: C.P, bot: C.B, skirt: true, glasses: true, legs: C.K, shoe: C.P, neck: C.Y },
+  mom: { hair: 'short', hc: C.W, skin: C.L, top: C.B, bot: C.P, skirt: true, legs: C.L, shoe: C.K, earrings: true },
+  prof: { hair: 'short', hc: C.W, skin: C.L, top: C.W, bot: C.K, glasses: true, legs: C.K, shoe: C.K, coat: true },
+  client: { hair: 'bald', hc: C.K, skin: C.L, top: C.W, bot: C.K, tie: true, glasses: 'thin', legs: C.K, shoe: C.K },
+  girl: { hair: 'bob', hc: C.Y, skin: C.L, top: C.Y, bot: C.P, skirt: true, legs: C.L, shoe: C.K },
+  boy: { hair: 'short', hc: C.K, skin: C.L, top: C.B, bot: C.K, legs: C.K, shoe: C.W },
+  teach: { hair: 'bun', hc: C.B, skin: C.L, top: C.K, bot: C.K, skirt: true, glasses: true, legs: C.K, shoe: C.P },
+  barista: { hair: 'long', hc: C.P, skin: C.L, top: C.W, bot: C.P, skirt: true, legs: C.L, shoe: C.K, apron: true },
+  punk: { hair: 'mohawk', hc: C.P, skin: C.L, top: C.K, bot: C.K, legs: C.K, shoe: C.Y },
+  critic: { hair: 'short', hc: C.Y, skin: C.L, top: C.W, bot: C.K, glasses: true, legs: C.K, shoe: C.K },
+  libr: { hair: 'bun', hc: C.W, skin: C.L, top: C.B, bot: C.K, skirt: true, glasses: true, legs: C.K, shoe: C.K },
+  guard: { hair: 'short', hc: C.K, skin: C.L, top: C.Y, bot: C.K, legs: C.K, shoe: C.K, helmet: true }
+};
+function personDraw(R, lk, dir, f) {
+  const o = (x, y, w, h, c) => R(x + 5, y + 2, w, h, c);
+  const SK = lk.skin || C.L, HC = lk.hc;
+  const step = f === 1 ? 1 : f === 2 ? 2 : 0;
+  const legsFB = () => {
+    const la = step === 1 ? 2 : 0, lb = step === 2 ? 2 : 0;
+    o(9, 20, 2, 8 - la, lk.legs); o(13, 20, 2, 8 - lb, lk.legs);
+    o(8, 28 - la, 3, 2, lk.shoe); o(13, 28 - lb, 3, 2, lk.shoe);
+  };
+  const body = (front) => {
+    const sw = step === 1 ? -1 : step === 2 ? 1 : 0;
+    o(9, 12, 6, 5, lk.top);
+    if (lk.coat) { o(8, 12, 8, 9, C.W); o(11, 12, 2, 6, C.B); }
+    if (front && lk.neck) o(11, 12, 2, 1, lk.neck);
+    if (front && lk.tie) { o(11, 12, 2, 1, C.W); o(11, 13, 2, 5, C.P); }
+    if (front && lk.apron) o(10, 14, 4, 5, C.B);
+    o(7, 12 + sw, 2, 5, lk.coat ? C.W : (lk.tie ? lk.top : SK)); o(15, 12 - sw, 2, 5, lk.coat ? C.W : (lk.tie ? lk.top : SK));
+    o(7, 17 + sw, 2, 1, SK); o(15, 17 - sw, 2, 1, SK);
+    if (lk.skirt) { o(8, 17, 8, 2, lk.bot); o(7, 19, 10, 1, lk.bot); }
+    else if (!lk.coat) o(9, 17, 6, 3, lk.bot);
+  };
+  if (dir === 'down') {
+    if (lk.hair === 'long') { o(5, 4, 3, 13, HC); o(16, 4, 3, 13, HC); }
+    if (lk.hair === 'bob') { o(6, 4, 2, 7, HC); o(16, 4, 2, 7, HC); }
+    body(true);
+    o(8, 4, 8, 7, SK); o(11, 11, 2, 1, SK);
+    if (lk.hair === 'bald') { o(8, 3, 8, 1, SK); o(7, 6, 1, 3, HC); o(16, 6, 1, 3, HC); }
+    else if (lk.hair === 'mohawk') { o(10, 0, 4, 4, HC); }
+    else { o(7, 2, 10, 2, HC); o(8, 4, 8, 1, HC); o(7, 4, 1, 3, HC); o(16, 4, 1, 3, HC); }
+    if (lk.hair === 'bun') o(10, 0, 4, 2, HC);
+    if (lk.helmet) { o(7, 1, 10, 3, C.W); o(7, 3, 10, 1, C.K); }
+    if (lk.glasses === 'thin') { [8, 12].forEach(gx => { o(gx, 5, 4, 1, C.K); o(gx, 8, 4, 1, C.K); o(gx, 6, 1, 2, C.K); o(gx + 3, 6, 1, 2, C.K); }); o(10, 6, 1, 2, C.K); o(13, 6, 1, 2, C.K); }
+    else if (lk.glasses) { o(8, 6, 4, 3, C.K); o(12, 6, 4, 3, C.K); o(9, 7, 2, 1, C.W); o(13, 7, 2, 1, C.W); }
+    else { o(9, 7, 1, 2, C.K); o(14, 7, 1, 2, C.K); }
+    if (lk.earrings) { o(7, 8, 1, 2, C.Y); o(16, 8, 1, 2, C.Y); }
+    o(11, 9, 2, 1, C.P);
+    legsFB();
+  } else if (dir === 'up') {
+    body(false);
+    if (lk.hair === 'long') { o(6, 2, 12, 15, HC); o(7, 1, 10, 1, HC); }
+    else if (lk.hair === 'bald') o(8, 3, 8, 8, SK);
+    else if (lk.hair === 'mohawk') { o(8, 4, 8, 7, SK); o(10, 0, 4, 9, HC); }
+    else { o(8, 4, 8, 7, SK); o(7, 2, 10, lk.hair === 'bob' ? 9 : 6, HC); if (lk.hair === 'bun') o(10, 0, 4, 3, HC); }
+    if (lk.helmet) o(7, 1, 10, 4, C.W);
+    legsFB();
+  } else {
+    // side (facing right)
+    const run = step ? 1 : 0;
+    if (lk.hair === 'long') { o(4, 3, 4, 12 + run, HC); o(3, 6, 2, 9, HC); }
+    if (lk.hair === 'bob') o(5, 3, 3, 8, HC);
+    o(9, 12, 5, 5, lk.top); if (lk.coat) o(8, 12, 7, 9, C.W); if (lk.tie) o(13, 13, 1, 4, C.P);
+    if (lk.skirt) { o(8, 17, 7, 2, lk.bot); o(7, 19, 9, 1, lk.bot); } else if (!lk.coat) o(9, 17, 5, 3, lk.bot);
+    o(8, 4, 7, 7, SK); o(11, 11, 2, 1, SK);
+    if (lk.hair === 'bald') o(8, 3, 6, 1, SK);
+    else if (lk.hair === 'mohawk') o(9, 0, 4, 4, HC);
+    else { o(7, 2, 8, 2, HC); o(6, 3, 3, 5, HC); o(8, 4, 6, 1, HC); }
+    if (lk.hair === 'bun') o(6, 1, 3, 3, HC);
+    if (lk.helmet) { o(7, 1, 9, 3, C.W); }
+    if (lk.glasses === 'thin') { o(12, 5, 3, 1, C.K); o(12, 8, 3, 1, C.K); o(12, 6, 1, 2, C.K); o(14, 6, 1, 2, C.K); o(13, 6, 1, 2, C.K); o(9, 6, 3, 1, C.K); }
+    else if (lk.glasses) { o(12, 6, 3, 3, C.K); o(13, 7, 1, 1, C.W); o(10, 7, 2, 1, C.K); } else o(13, 7, 1, 2, C.K);
+    if (lk.earrings) o(9, 8, 1, 2, C.Y);
+    o(13, 9, 1, 1, C.P);
+    const legs = [[[11, 11, 0], [11, 11, 0]], [[12, 14, 0], [9, 6, 1]], [[12, 13, 0], [9, 7, 0]]][step];
+    legs.forEach(([tx, sx, lift]) => { o(tx, 20, 2, 4, lk.legs); o(sx, 24, 2, 4 - lift, lk.legs); o(sx, 28 - lift, 3, 2, lk.shoe); });
+    o(step === 1 ? 13 : 11, 13, 2, 4, lk.coat ? C.W : SK);
+  }
+}
+/* --- LUDO: GUD's Chinese crested dog. Hairless pink skin, white crest, socks and tail plume --- */
+const LUDOC = {};
+function ludo(dir, f) {
+  f = f ? 1 : 0;
+  const key = dir + f; if (LUDOC[key]) return LUDOC[key];
+  const side = dir === 'left' || dir === 'right';
+  let c = mk(24, 20, R => {
+    const SK = C.B, SH = C.P, HW = C.W, SP = C.K;
+    if (side) {
+      const a = f;
+      R(1, 2, 3, 4, HW); R(0, 3, 1, 2, HW); R(3, 5, 1, 2, SK); R(4, 7, 1, 3, SK);      // tail plume + tail
+      R(5 + a, 13, 1, 5, SH); R(13 - a, 14, 1, 4, SH);                                   // far legs
+      R(5, 9, 11, 4, SK); R(13, 9, 3, 5, SK); R(6, 13, 2, 1, SK);                        // body + chest
+      R(8, 10, 2, 1, SP); R(11, 11, 1, 1, SP); R(6, 9, 1, 1, SP);                        // spots
+      R(6 - a, 13, 2, 5, SK); R(14 + a, 14, 1, 4, SK);                                   // near legs
+      R(4 + a, 17, 3, 2, HW); R(12 - a, 17, 2, 2, HW); R(5 - a, 17, 3, 2, HW); R(13 + a, 17, 3, 2, HW); // socks
+      R(14, 6, 3, 4, SK);                                                                // neck
+      R(15, 4, 4, 3, SK); R(19, 5, 3, 2, SK); R(22, 5, 1, 1, C.K); R(17, 5, 1, 1, C.K); R(20, 7, 1, 1, C.P);
+      R(17, 0, 2, 4, SK); R(19, 0, 1, 3, HW);                                            // ear + fringe
+      R(15, 2, 2, 2, HW); R(14, 3, 2, 3, HW); R(13, 5, 2, 2, HW); R(13, 7, 1, 2, HW);    // crest down the neck
+    } else if (dir === 'down') {
+      const a = f;
+      R(16, 9, 2, 3, HW);                                                                // tail plume peeking
+      R(7, 1, 2, 4, SK); R(15, 1, 2, 4, SK); R(6, 1, 1, 3, HW); R(17, 1, 1, 3, HW);
+      R(9, 10, 6, 4, SK); R(10, 11, 1, 1, SP); R(13, 12, 1, 1, SP);
+      R(9, 14, 2, 4 - a, SK); R(13, 14, 2, 3 + a, SK);
+      R(8, 17 - a, 3, 2, HW); R(13, 16 + a, 3, 2, HW);
+      R(9, 4, 6, 5, SK); R(10, 8, 4, 2, SK);
+      R(9, 1, 6, 3, HW); R(10, 0, 4, 1, HW);                                             // crest
+      R(10, 6, 1, 1, C.K); R(13, 6, 1, 1, C.K); R(11, 9, 2, 1, C.K); R(11, 10, 2, 1, C.P);
+    } else {
+      const a = f;
+      R(7, 1, 2, 4, SK); R(15, 1, 2, 4, SK); R(6, 1, 1, 3, HW); R(17, 1, 1, 3, HW);
+      R(8, 3, 8, 5, SK);
+      R(9, 9, 6, 5, SK); R(9, 10, 1, 1, SP); R(14, 12, 1, 1, SP);
+      R(9, 14, 2, 4 - a, SK); R(13, 14, 2, 3 + a, SK);
+      R(8, 17 - a, 3, 2, HW); R(13, 16 + a, 3, 2, HW);
+      R(9, 1, 6, 5, HW); R(10, 0, 4, 1, HW); R(10, 6, 4, 2, HW);                         // crest from behind
+      R(11, 12, 2, 2, SK); R(10, 9, 4, 3, HW);                                           // tail + plume
+    }
+  });
+  if (dir === 'left') { const m = document.createElement('canvas'); m.width = 24; m.height = 20; const x = m.getContext('2d'); x.translate(24, 0); x.scale(-1, 1); x.drawImage(c, 0, 0); c = m; }
+  return (LUDOC[key] = c);
+}
+const PCACHE = {};
+function person(look, dir, f) {
+  f = f || 0;
+  const key = look + dir + f; if (PCACHE[key]) return PCACHE[key];
+  let c;
+  if (look === 'gud' && (dir === 'left' || dir === 'right')) c = gud(f ? 'run' : 'idle', f ? (f === 1 ? 0 : 2) : 0);
+  else { const lk = LOOKS[look] || LOOKS.boy; c = mk(34, 34, R => personDraw(R, lk, dir === 'left' ? 'right' : dir, f)); }
+  if (dir === 'left') { const m = document.createElement('canvas'); m.width = 34; m.height = 34; const x = m.getContext('2d'); x.translate(34, 0); x.scale(-1, 1); x.drawImage(c, 0, 0); c = m; }
+  return (PCACHE[key] = c);
+}
+function gudBack(f) {
+  return mk(34, 34, R => {
+    const o = (x, y, w, h, c) => R(x + 5, y + 2, w, h, c);
+    const by = f ? -1 : 0;
+    o(9, 12 + by, 6, 5, C.P); o(7, 12 + by, 2, 5, C.L); o(15, 12 + by, 2, 5, C.L);
+    o(8, 17 + by, 8, 2, C.B); o(7, 19 + by, 10, 1, C.B);
+    o(6, 2 + by, 12, 15, C.K); o(7, 1 + by, 10, 1, C.K); o(5, 8 + by, 1, 8, C.K); o(18, 8 + by, 1, 8, C.K);
+    o(5, 6 + by, 1, 1, C.K); o(18, 6 + by, 1, 1, C.K);
+    o(9, 20, 2, 8, C.K); o(13, 20, 2, 8, C.K); o(8, 28, 3, 2, C.P); o(13, 28, 3, 2, C.P);
+  });
+}
+/* --- GUDMON: GUD's passions, little creatures with a letter on the belly --- */
+function monSprite(m, blink) {
+  return mk(44, 44, (R, x) => {
+    const col = C[m.c] || C.P, dark = m.c === 'K';
+    disc(R, 22, 25, 15, col); R(9, 26, 26, 10, col); R(12, 36, 6, 4, col); R(26, 36, 6, 4, col);
+    R(9, 10, 5, 7, col); R(30, 10, 5, 7, col); R(10, 8, 3, 3, col); R(31, 8, 3, 3, col);
+    R(15, 27, 14, 11, C.W); dtext(x, String(m.l || '?').slice(0, 1), 20, 29, 1, dark ? C.K : C.P);
+    const ec = dark ? C.W : C.K;
+    if (blink) { R(14, 20, 4, 1, ec); R(26, 20, 4, 1, ec); }
+    else { R(14, 17, 4, 5, ec); R(26, 17, 4, 5, ec); R(15, 18, 1, 1, dark ? C.K : C.W); R(27, 18, 1, 1, dark ? C.K : C.W); }
+    R(11, 23, 3, 2, C.B); R(30, 23, 3, 2, C.B); R(20, 23, 4, 1, dark ? C.W : C.K);
+    const a = m.a;
+    if (a === 'glasses') { R(12, 16, 8, 7, C.K); R(24, 16, 8, 7, C.K); R(20, 18, 4, 1, C.K); R(14, 18, 4, 3, blink ? C.K : C.W); R(26, 18, 4, 3, blink ? C.K : C.W); if (!blink) { R(16, 19, 2, 2, C.K); R(28, 19, 2, 2, C.K); } }
+    if (a === 'crown') { R(14, 4, 16, 5, C.Y); R(14, 1, 2, 3, C.Y); R(21, 1, 2, 3, C.Y); R(28, 1, 2, 3, C.Y); R(21, 5, 2, 2, C.P); }
+    if (a === 'beret') { R(13, 7, 18, 4, C.K); R(16, 5, 12, 2, C.K); R(21, 3, 2, 2, C.K); }
+    if (a === 'cap') { R(12, 6, 20, 2, C.K); R(16, 8, 12, 3, C.K); R(30, 7, 1, 6, C.Y); R(29, 12, 3, 2, C.Y); }
+    if (a === 'nib') { R(36, 20, 4, 10, C.K); R(37, 30, 2, 3, C.K); R(37, 22, 2, 2, C.W); }
+    if (a === 'spark') { R(3, 6, 1, 5, C.Y); R(1, 8, 5, 1, C.Y); R(39, 30, 1, 5, C.Y); R(37, 32, 5, 1, C.Y); }
+    if (a === 'bubble') { R(30, 2, 12, 8, C.W); R(32, 10, 3, 2, C.W); R(32, 4, 1, 1, C.K); R(35, 4, 1, 1, C.K); R(38, 4, 1, 1, C.K); }
+    if (a === 'book') { R(1, 28, 9, 11, C.Y); R(5, 28, 1, 11, C.K); }
+    if (a === 'bow') { R(28, 6, 5, 4, C.P); R(34, 6, 5, 4, C.P); R(32, 7, 3, 2, C.Y); }
+    if (a === 'headphones') { R(9, 12, 26, 2, C.K); R(7, 16, 4, 8, C.K); R(33, 16, 4, 8, C.K); }
+  });
+}
+const MON_ACCESSORIES = ['none', 'glasses', 'crown', 'beret', 'cap', 'nib', 'spark', 'bubble', 'book', 'bow', 'headphones'];
+
+/* --- Obstacles, bonuses, bosses, fx --- */
+const SPR = { ob: {}, bn: {}, fx: {} };
+function buildSprites() {
+  const O = SPR.ob, B = SPR.bn, F = SPR.fx;
+  O.f24 = [mk(32, 24, (R, x) => {
+    R(1, 1, 30, 22, C.W); R(1, 1, 30, 9, C.P); dtext(x, 'F24', 3, 2, 1, C.W);
+    R(22, 3, 7, 5, C.W); R(23, 4, 5, 1, C.K); R(23, 6, 5, 1, C.K);
+    R(4, 13, 24, 1, C.K); R(4, 16, 15, 1, C.K); R(4, 19, 10, 1, C.K); R(21, 15, 8, 6, C.B); R(22, 17, 6, 1, C.P);
+  })];
+  O.email = [0, 1].map(f => mk(36, 26, (R, x) => {
+    if (f === 0) { R(1, 7, 6, 2, C.B); R(2, 5, 4, 2, C.B); R(29, 7, 6, 2, C.B); R(30, 5, 4, 2, C.B); }
+    else { R(1, 13, 6, 2, C.B); R(2, 15, 4, 2, C.B); R(29, 13, 6, 2, C.B); R(30, 15, 4, 2, C.B); }
+    R(7, 8, 22, 14, C.W);
+    for (let i = 0; i < 11; i++) { const yy = 8 + Math.floor(i * 0.6); R(7 + i, yy, 1, 1, C.K); R(28 - i, yy, 1, 1, C.K); }
+    R(11, 16, 2, 2, C.K); R(23, 16, 2, 2, C.K); R(10, 14, 3, 1, C.K); R(23, 14, 3, 1, C.K); R(14, 19, 8, 1, C.K);
+    R(23, 1, 11, 9, C.P); R(22, 2, 13, 7, C.P); dtext(x, '98', 23, 2, 1, C.W);
+  }));
+  O.urgent = [mk(66, 32, (R, x) => {
+    R(1, 1, 64, 30, C.W); R(1, 1, 64, 9, C.P); R(1, 10, 64, 1, C.K);
+    dtext(x, '!!!', 4, 2, 1, C.W); R(56, 2, 7, 7, C.W); dtext(x, 'X', 57, 2, 1, C.K);
+    dtext(x, 'MODIFICHE', 6, 13, 1, C.K); dtext(x, 'URGENTI', 12, 22, 1, C.P);
+  })];
+  O.call = [0, 1].map(f => mk(18, 28, (R) => {
+    R(2, 1, 14, 26, C.K); R(4, 4, 10, 17, f ? C.P : C.B); R(7, 2, 4, 1, C.W); R(7, 23, 4, 2, C.W);
+    R(6, 11, 6, 2, C.W); R(6, 12, 2, 3, C.W); R(10, 12, 2, 3, C.W); R(8, 8, 2, 1, C.W); R(7, 6, 4, 1, C.W);
+  }));
+  O.contradictory = [mk(30, 26, (R) => {
+    for (let i = 0; i < 5; i++) R(2 + i, 6 - i, 1, 1 + 2 * i, C.W); R(7, 4, 20, 5, C.W);
+    R(3, 15, 20, 5, C.P); for (let i = 0; i < 5; i++) R(27 - i, 17 - i, 1, 1 + 2 * i, C.P);
+  })];
+  const monitor = (R, screen) => { R(1, 3, 26, 18, C.K); R(3, 5, 22, 14, screen); R(11, 21, 6, 3, C.K); R(6, 24, 16, 3, C.K); };
+  O.bug = [mk(28, 28, (R) => {
+    monitor(R, C.B); R(17, 1, 7, 3, C.P); R(19, 1, 1, 3, C.K); R(16, 2, 1, 1, C.K); R(24, 2, 1, 1, C.K);
+  })];
+  O.internet = [mk(28, 28, (R) => {
+    monitor(R, C.W); R(12, 15, 3, 2, C.K); R(9, 12, 9, 1, C.K); R(8, 13, 1, 1, C.K); R(18, 13, 1, 1, C.K);
+    R(7, 9, 13, 1, C.K); R(6, 10, 1, 1, C.K); R(20, 10, 1, 1, C.K);
+    for (let i = 0; i < 5; i++) { R(18 + i, 6 + i, 1, 1, C.P); R(22 - i, 6 + i, 1, 1, C.P); }
+  })];
+  O.brief = [mk(80, 36, (R, x) => {
+    R(8, 9, 64, 22, C.B); R(3, 14, 74, 13, C.B); R(14, 3, 22, 8, C.B); R(38, 1, 24, 9, C.B); R(60, 6, 12, 5, C.B); R(10, 30, 58, 3, C.B);
+    dtext(x, 'BRIEF IN', 16, 11, 1, C.K); dtext(x, 'MILANESE', 16, 21, 1, C.K); dtext(x, '?', 68, 15, 1, C.P);
+  })];
+  O.overtime = [mk(52, 30, (R, x) => {
+    disc(R, 26, 11, 10, C.P); disc(R, 26, 11, 8, C.W); R(26, 5, 1, 7, C.K); R(26, 11, 5, 1, C.K);
+    R(1, 20, 50, 9, C.P); dtext(x, 'OVERTIME', 3, 21, 1, C.W);
+  })];
+  O.voice = [mk(98, 32, (R, x) => {
+    R(1, 1, 96, 25, C.W); R(2, 26, 7, 3, C.W); R(2, 29, 3, 2, C.W);
+    for (let i = 0; i < 4; i++) R(5 + i, 4 + i, 1, 7 - 2 * i, C.K);
+    [2, 4, 6, 3, 7, 5, 2, 6, 4, 3, 7, 2, 5, 3, 6, 2].forEach((h, i) => R(13 + i * 3, 7 - Math.floor(h / 2), 2, h, C.P));
+    dtext(x, '4:00', 68, 4, 1, C.K); dtext(x, 'VOCALE 4 MINUTI', 4, 16, 1, C.K);
+  })];
+  O.link404 = [mk(42, 30, (R, x) => {
+    R(1, 1, 40, 20, C.W); R(1, 1, 40, 2, C.P); dtext(x, '404', 4, 4, 2, C.P);
+    R(3, 23, 10, 5, C.K); x.clearRect(5, 24, 6, 3); R(13, 25, 4, 1, C.K);
+    R(25, 25, 4, 1, C.K); R(29, 23, 10, 5, C.K); x.clearRect(31, 24, 6, 3);
+    R(20, 23, 2, 1, C.P); R(19, 26, 1, 1, C.P); R(22, 26, 1, 1, C.P);
+  })];
+  O.update = [mk(78, 24, (R) => { R(1, 10, 76, 12, C.K); R(3, 12, 72, 8, C.W); })];
+  O.malessere = [mk(20, 18, (R) => {
+    R(2, 3, 7, 7, C.B); R(11, 3, 7, 7, C.B); R(3, 2, 5, 1, C.B); R(12, 2, 5, 1, C.B); R(2, 5, 16, 5, C.B);
+    for (let i = 0; i < 7; i++) R(3 + i, 10 + i, 14 - 2 * i, 1, C.B);
+    R(10, 3, 1, 3, C.K); R(9, 6, 1, 3, C.K); R(10, 9, 1, 3, C.K); R(9, 12, 1, 2, C.K);
+    R(5, 7, 1, 2, C.K); R(14, 7, 1, 2, C.K); R(4, 11, 3, 1, C.K); R(13, 11, 3, 1, C.K);
+  })];
+  O.martini = [mk(22, 28, (R) => {
+    R(1, 3, 20, 2, C.W); for (let i = 0; i < 9; i++) { const hw = 9 - i; R(11 - hw, 5 + i, hw * 2, 1, C.B); }
+    R(10, 13, 2, 9, C.W); R(5, 22, 12, 2, C.W);
+    for (let i = 0; i < 6; i++) R(17 - i, 1 + i, 1, 1, C.K); R(9, 6, 4, 3, C.P);
+  })];
+  O.pranzo = [mk(98, 28, (R, x) => {
+    R(22, 4, 54, 8, C.B); R(28, 2, 42, 3, C.B); R(18, 8, 62, 6, C.B); R(34, 1, 22, 3, C.P);
+    for (let i = 0; i < 12; i++) R(24 + i * 4, 5 + (i % 3), 2, 1, C.P);
+    R(4, 13, 90, 4, C.W); R(1, 15, 96, 10, C.W); R(8, 25, 82, 2, C.W); R(3, 16, 92, 1, C.P);
+    dtext(x, 'PRANZO DA MAMMA', 4, 17, 1, C.K);
+  })];
+  O.parmigiana = [mk(68, 28, (R, x) => {
+    R(3, 1, 62, 3, C.P); R(3, 4, 62, 2, C.W); R(3, 6, 62, 2, C.B);
+    R(1, 8, 66, 19, C.W); R(1, 8, 66, 1, C.K);
+    dtext(x, 'PARMIGIANA', 4, 10, 1, C.K); dtext(x, 'PER CENA', 10, 18, 1, C.P);
+  })];
+  // Bonuses — always ELECTRIC YELLOW
+  B.coffee = [mk(18, 18, (R) => {
+    R(3, 6, 10, 8, C.Y); R(4, 14, 8, 1, C.Y); R(13, 8, 3, 1, C.Y); R(15, 8, 1, 4, C.Y); R(13, 11, 3, 1, C.Y);
+    R(4, 6, 8, 1, C.K); R(1, 15, 16, 2, C.Y);
+  })];
+  B.cat = [mk(18, 16, (R) => {
+    R(2, 5, 14, 9, C.Y); R(2, 2, 3, 3, C.Y); R(3, 1, 1, 1, C.Y); R(13, 2, 3, 3, C.Y); R(14, 1, 1, 1, C.Y);
+    R(5, 8, 2, 2, C.K); R(11, 8, 2, 2, C.K); R(8, 10, 2, 1, C.P); R(1, 11, 3, 1, C.K); R(14, 11, 3, 1, C.K);
+  })];
+  B.dog = [mk(18, 16, (R) => {
+    R(4, 2, 10, 11, C.Y); R(1, 3, 3, 8, C.Y); R(14, 3, 3, 8, C.Y); R(4, 3, 1, 6, C.K); R(13, 3, 1, 6, C.K);
+    R(6, 6, 2, 2, C.K); R(10, 6, 2, 2, C.K); R(8, 9, 2, 2, C.K); R(8, 11, 2, 2, C.P);
+  })];
+  B.water = [mk(26, 19, (R, x) => {
+    R(1, 1, 22, 2, C.Y); R(2, 3, 20, 13, C.Y); R(3, 16, 18, 1, C.Y); R(3, 4, 18, 1, C.W); dtext(x, 'H2O', 4, 7, 1, C.K);
+  })];
+  B.salad = [mk(22, 16, (R) => {
+    R(1, 8, 20, 4, C.Y); R(3, 12, 16, 2, C.Y); R(6, 14, 10, 1, C.Y);
+    R(3, 4, 5, 4, C.B); R(8, 2, 6, 6, C.W); R(13, 4, 5, 4, C.P); R(6, 5, 2, 2, C.P); R(16, 3, 2, 2, C.B);
+  })];
+  B.oki = [mk(24, 14, (R, x) => { R(1, 1, 22, 12, C.Y); dtext(x, 'OKI', 4, 3, 1, C.K); R(1, 11, 22, 1, C.P); })];
+  B.polase = [mk(40, 14, (R, x) => { R(1, 1, 38, 12, C.Y); dtext(x, 'POLASE', 3, 3, 1, C.K); R(1, 11, 38, 1, C.P); })];
+  // FX
+  F.heart = mk(11, 10, (R) => { R(2, 1, 2, 1, C.Y); R(6, 1, 2, 1, C.Y); R(1, 2, 8, 3, C.Y); R(2, 5, 6, 1, C.Y); R(3, 6, 4, 1, C.Y); R(4, 7, 2, 1, C.Y); R(2, 2, 1, 1, C.W); });
+  F.heartP = mk(11, 10, (R) => { R(2, 1, 2, 1, C.P); R(6, 1, 2, 1, C.P); R(1, 2, 8, 3, C.P); R(2, 5, 6, 1, C.P); R(3, 6, 4, 1, C.P); R(4, 7, 2, 1, C.P); R(2, 2, 1, 1, C.W); });
+  F.cloud = mk(42, 18, (R) => { R(8, 5, 26, 8, C.W); R(3, 9, 36, 6, C.W); R(13, 2, 10, 4, C.W); R(24, 3, 8, 3, C.W); });
+  F.sun = mk(32, 32, (R) => disc(R, 16, 16, 13, C.Y));
+  F.cal = mk(28, 26, (R, x) => {
+    R(2, 4, 24, 20, C.W); R(2, 4, 24, 8, C.P); dtext(x, 'MON', 6, 5, 1, C.W); R(7, 1, 2, 5, C.K); R(19, 1, 2, 5, C.K);
+    dtext(x, '9:00', 3, 14, 1, C.K);
+  });
+  F.olive = mk(11, 11, (R) => { disc(R, 5, 5, 4, C.P); R(3, 3, 2, 2, C.B); });
+  F.ice = mk(12, 12, (R) => { R(1, 1, 10, 10, C.W); R(2, 2, 3, 2, C.L); R(7, 7, 2, 2, C.B); });
+  F.wave = [0, 1].map(f => mk(46, 14, (R) => {
+    R(2, 6, 42, 7, C.B); R(8, 3, 30, 3, C.B); R(16, 1, 14, 2, C.B);
+    R(10 + f * 3, 3, 4, 1, C.W); R(20 - f * 2, 1, 4, 1, C.W); R(30 + f * 2, 3, 4, 1, C.W);
+  }));
+  F.palm = mk(64, 100, (R) => {
+    for (let i = 0; i < 72; i++) { const x = 29 + Math.round(Math.sin(i / 24) * 5); R(x, 26 + i, 5, 1, (Math.floor(i / 4) % 2) ? C.K : C.B); }
+    const fr = [[-1.2, -0.25], [1.2, -0.25], [-1, 0.35], [1, 0.35], [0.3, -0.9], [-0.4, -0.85]];
+    fr.forEach(([dx, dy], j) => { for (let t = 0; t < 24; t++) R(Math.round(31 + dx * t), Math.round(26 + dy * t + (t * t) / 38), 3, 2, (t + j) % 3 ? C.P : C.B); });
+    R(26, 27, 5, 5, C.Y); R(32, 28, 5, 5, C.Y);
+  });
+  F.umbrella = mk(64, 70, (R) => {
+    const cx = 32, top = 2, rr = 28;
+    for (let dy = 0; dy < 15; dy++) {
+      const hw = Math.round(Math.sqrt(Math.max(0, 1 - Math.pow((14 - dy) / 14, 2))) * rr);
+      for (let xx = -hw; xx <= hw; xx++) R(cx + xx, top + dy, 1, 1, (Math.floor((xx + rr) / 7) % 2) ? C.W : C.P);
+    }
+    R(cx, top + 15, 2, 50, C.K);
+  });
+  // Bosses
+  const bigClient = shirt => [0, 1].map(f => mk(90, 124, (R, x) => {
+    R(30, 98, 12, 18, C.K); R(48, 98, 12, 18, C.K); R(26, 114, 18, 6, C.K); R(46, 114, 18, 6, C.K);
+    R(30, 115, 3, 1, C.B); R(50, 115, 3, 1, C.B);
+    R(20, 42, 50, 6, C.K); R(16, 46, 58, 52, C.K);
+    for (let i = 0; i < 24; i++) { const hw = Math.max(1, 9 - Math.floor(i * 0.38)); R(45 - hw, 46 + i, hw * 2, 1, C.W); }
+    R(42, 47, 6, 4, C.P); for (let i = 0; i < 22; i++) { const hw = i < 16 ? 2 + Math.floor(i / 6) : Math.max(1, 4 - (i - 16)); R(45 - hw, 51 + i, hw * 2, 1, C.P); }
+    for (let i = 0; i < 16; i++) { R(34 + Math.floor(i * 0.6), 46 + i, 1, 1, C.B); R(55 - Math.floor(i * 0.6), 46 + i, 1, 1, C.B); }
+    R(60, 58, 6, 3, C.W); R(61, 56, 2, 2, C.P); R(64, 56, 2, 2, C.Y);
+    R(43, 92, 4, 3, C.Y);
+    R(22, 62, 19, 9, C.W); dtext(x, 'CEO', 23, 63, 1, C.K);
+    R(6, 48, 12, 40, C.K); R(72, 48, 12, 40, C.K); R(6, 88, 12, 9, C.L); R(72, 88, 12, 9, C.L);
+    R(1, 97, 22, 18, C.B); R(8, 93, 8, 2, C.K); R(8, 93, 2, 5, C.K); R(14, 93, 2, 5, C.K); R(10, 104, 4, 3, C.Y); R(1, 106, 22, 1, C.K);
+    R(78, 74, 9, 15, C.K); R(80, 76, 5, 10, C.P);
+    R(36, 40, 18, 6, C.L);
+    R(22, 8, 46, 36, C.L); R(25, 5, 40, 4, C.L); R(20, 14, 50, 26, C.L);
+    R(32, 42, 26, 1, C.B);
+    R(16, 20, 5, 12, C.L); R(69, 20, 5, 12, C.L); R(17, 23, 2, 6, C.B); R(71, 23, 2, 6, C.B);
+    R(24, 4, 42, 2, C.K); for (let i = 0; i < 7; i++) R(25 + i * 6, 6, 4, 2, C.K); R(20, 10, 4, 10, C.K); R(66, 10, 4, 10, C.K);
+    for (let i = 0; i < 12; i++) { R(28 + i, 15 + Math.floor(i / 3), 1, 3, C.K); R(61 - i, 15 + Math.floor(i / 3), 1, 3, C.K); }
+    R(30, 21, 9, 5, C.W); R(51, 21, 9, 5, C.W); R(31, 22, 3, 3, C.K); R(52, 22, 3, 3, C.K);
+    R(43, 22, 5, 10, C.B); R(42, 29, 7, 3, C.B); R(26, 28, 5, 3, C.B); R(59, 28, 5, 3, C.B);
+    if (f === 0) { R(32, 34, 26, 5, C.K); R(34, 35, 22, 2, C.W); R(48, 35, 3, 2, C.Y); }
+    else { R(32, 32, 26, 10, C.K); R(34, 33, 22, 2, C.W); R(38, 37, 14, 4, C.P); R(48, 33, 3, 2, C.Y); }
+    if (shirt) {
+      // GUDQUEST version: white shirt with rolled sleeves, thin reading glasses
+      R(16, 46, 58, 52, C.W); R(6, 48, 12, 22, C.W); R(72, 48, 12, 22, C.W); R(6, 68, 12, 3, C.B); R(72, 68, 12, 3, C.B);
+      R(6, 71, 12, 26, C.L); R(72, 71, 12, 26, C.L); R(18, 48, 1, 48, C.B); R(71, 48, 1, 48, C.B);
+      R(36, 46, 9, 5, C.B); R(46, 46, 9, 5, C.B); R(38, 46, 15, 3, C.W);
+      R(42, 47, 6, 4, C.P); for (let i = 0; i < 22; i++) { const hw = i < 16 ? 2 + Math.floor(i / 6) : Math.max(1, 4 - (i - 16)); R(45 - hw, 51 + i, hw * 2, 1, C.P); }
+      for (let i = 0; i < 4; i++) R(45, 76 + i * 5, 1, 2, C.K);
+      R(56, 56, 10, 9, C.B); R(57, 57, 8, 7, C.W); R(61, 53, 2, 6, C.P); R(64, 54, 1, 5, C.K);
+      R(16, 92, 58, 6, C.K); R(43, 92, 4, 3, C.Y);
+      const fr = (gx, gy, w, h) => { R(gx, gy, w, 1, C.K); R(gx, gy + h - 1, w, 1, C.K); R(gx, gy, 1, h, C.K); R(gx + w - 1, gy, 1, h, C.K); };
+      fr(28, 19, 13, 9); fr(49, 19, 13, 9); R(41, 21, 8, 1, C.K); R(20, 21, 8, 1, C.K); R(62, 21, 8, 1, C.K);
+    }
+  }));
+  SPR.client = bigClient(false);
+  SPR.clientQ = bigClient(true);
+  SPR.hangover = [0, 1].map(f => mk(100, 122, (R) => {
+    R(4, 10, 92, 4, C.W);
+    for (let i = 0; i < 50; i++) { const hw = Math.round(46 - i * 0.86); R(50 - hw, 14 + i, hw * 2, 1, C.B); R(50 - hw, 14 + i, 2, 1, C.W); R(50 + hw - 2, 14 + i, 2, 1, C.W); }
+    R(8, 15, 84, 1, C.P);
+    for (let i = 0; i < 22; i++) R(86 - i, 1 + i, 2, 1, C.K);
+    R(70, 4, 11, 9, C.P); R(72, 3, 7, 11, C.P); R(73, 6, 4, 3, C.B);
+    R(12, 36, 11, 3, C.K); R(5, 32, 8, 8, C.W); R(77, 36, 11, 3, C.K); R(87, 32, 8, 8, C.W);
+    R(18, 22, 26, 11, C.K); R(56, 22, 26, 11, C.K); R(44, 24, 12, 3, C.K);
+    R(21, 24, 4, 2, C.W); R(25, 26, 2, 1, C.W); R(59, 24, 4, 2, C.W); R(63, 26, 2, 1, C.W);
+    if (f === 0) { R(36, 40, 28, 4, C.K); R(34, 42, 3, 3, C.K); R(63, 42, 3, 3, C.K); }
+    else { R(37, 38, 26, 12, C.K); R(39, 39, 22, 2, C.W); R(41, 44, 18, 5, C.P); }
+    R(30, 50, 2, 2, C.W); R(62, 54, 2, 2, C.W); R(46, 58, 2, 2, C.W);
+    R(46, 64, 8, 44, C.W); R(48, 64, 2, 44, C.L);
+    R(30, 107, 40, 3, C.W); R(24, 110, 52, 6, C.W);
+  }));
+}
+
+/* ---------------------------------------------------------------------
+   3. CUSTOM ASSETS — optional PNGs listed in /assets/manifest.js
+   --------------------------------------------------------------------- */
+const ASSETS = {};
+(function loadAssets() {
+  const M = window.GUD_ASSETS || {};
+  Object.keys(M).forEach(key => {
+    const def = typeof M[key] === 'string' ? { src: M[key] } : M[key];
+    if (!def || !def.src) return;
+    const img = new Image();
+    img.onload = () => { ASSETS[key] = { img, frames: Math.max(1, def.frames || 1), fps: def.fps || 10 }; };
+    img.onerror = () => { /* fallback to built-in pixel art */ };
+    img.src = CFG.assetBase + def.src;
+  });
+})();
+function drawCustom(c, key, x, y, w, h, t) {
+  const a = ASSETS[key]; if (!a) return false;
+  const fw = a.img.width / a.frames, fh = a.img.height;
+  const s = Math.min(w / fw, h / fh), dw = Math.round(fw * s), dh = Math.round(fh * s);
+  const fr = Math.floor((t || 0) * a.fps) % a.frames;
+  c.drawImage(a.img, fr * fw, 0, fw, fh, Math.round(x + (w - dw) / 2), Math.round(y + h - dh), dw, dh);
+  return true;
+}
+
+/* ---------------------------------------------------------------------
+   4. AUDIO — authentic 8-bit synth (square / triangle / noise)
+   --------------------------------------------------------------------- */
+const AU = { ctx: null, master: null, noise: null, muted: store.get('gud_muted') === '1' };
+AU.init = function () {
+  if (!this.ctx) {
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    try { this.ctx = new AC(); } catch (e) { return; }
+    this.master = this.ctx.createGain(); this.master.gain.value = this.muted ? 0 : 0.5;
+    this.master.connect(this.ctx.destination);
+    const len = this.ctx.sampleRate, b = this.ctx.createBuffer(1, len, this.ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    this.noise = b;
+  }
+  if (this.ctx.state === 'suspended') this.ctx.resume();
+};
+AU.setMute = function (m) {
+  this.muted = m; store.set('gud_muted', m ? '1' : '0');
+  if (this.master) this.master.gain.setValueAtTime(m ? 0 : 0.5, this.ctx.currentTime);
+};
+HOOKS.mute.push(m => AU.setMute(m));
+window.addEventListener('storage', e => { if (e.key === 'gud_muted') AU.setMute(e.newValue === '1'); });
+const NOTE = n => 440 * Math.pow(2, (n - 69) / 12);
+function tn(f, d, o) {
+  o = o || {}; const a = AU.ctx; if (!a || a.state !== 'running') return;
+  const t = o.t != null ? o.t : a.currentTime + (o.at || 0);
+  const osc = a.createOscillator(), g = a.createGain();
+  osc.type = o.type || 'square'; osc.frequency.setValueAtTime(f, t);
+  if (o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t + d);
+  const v = o.vol || 0.1;
+  g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + 0.005);
+  g.gain.setValueAtTime(v, t + d * 0.6); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+  osc.connect(g); g.connect(AU.master); osc.start(t); osc.stop(t + d + 0.05);
+}
+function nz(d, o) {
+  o = o || {}; const a = AU.ctx; if (!a || a.state !== 'running') return;
+  const t = o.t != null ? o.t : a.currentTime + (o.at || 0);
+  const s = a.createBufferSource(); s.buffer = AU.noise;
+  const fl = a.createBiquadFilter(); fl.type = o.ft || 'lowpass'; fl.frequency.setValueAtTime(o.f || 2000, t);
+  if (o.fto) fl.frequency.exponentialRampToValueAtTime(o.fto, t + d);
+  const g = a.createGain(); g.gain.setValueAtTime(o.vol || 0.12, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+  s.connect(fl); fl.connect(g); g.connect(AU.master); s.start(t, Math.random() * 0.5); s.stop(t + d + 0.05);
+}
+function mel(notes, step, o) {
+  o = o || {};
+  notes.forEach((n, i) => { if (n) tn(NOTE(n), (o.len || step) * 0.95, Object.assign({}, o, { at: (o.at || 0) + i * step })); });
+}
+const SFX = {
+  start() { mel([72, 76, 79, 84, 79, 84, 88], 0.07, { vol: 0.08 }); mel([48, 55, 60], 0.15, { type: 'triangle', vol: 0.16 }); },
+  jump() { tn(320, 0.13, { to: 760, vol: 0.07 }); },
+  shoot() { tn(1400, 0.1, { to: 170, vol: 0.06 }); nz(0.05, { ft: 'highpass', f: 3000, vol: 0.04 }); },
+  bonus() { mel([88, 91, 96, 100], 0.05, { vol: 0.07 }); },
+  hurt() { tn(220, 0.28, { to: 55, vol: 0.12, type: 'sawtooth' }); nz(0.22, { f: 700, vol: 0.14 }); },
+  drain() { tn(300, 0.4, { to: 120, vol: 0.08, type: 'triangle' }); mel([64, 63, 62], 0.12, { vol: 0.04, at: 0.1 }); },
+  giant() { for (let i = 0; i < 6; i++) tn(i % 2 ? 1046 : 523, 0.05, { at: i * 0.05, vol: 0.06, type: 'sawtooth' }); nz(0.3, { ft: 'bandpass', f: 1500, vol: 0.12 }); },
+  slam() { tn(130, 0.25, { to: 40, type: 'triangle', vol: 0.28 }); nz(0.2, { f: 500, vol: 0.2 }); },
+  shatter() { nz(0.3, { ft: 'highpass', f: 2000, fto: 7000, vol: 0.07 }); mel([84, 79, 74, 67], 0.035, { vol: 0.04 }); },
+  pop() { tn(600, 0.06, { to: 300, vol: 0.05 }); nz(0.05, { f: 4000, vol: 0.05 }); },
+  bossAppear() { for (let i = 0; i < 4; i++) tn(440, 0.22, { to: 880, at: i * 0.26, vol: 0.07 }); tn(55, 1.1, { type: 'triangle', vol: 0.22 }); },
+  bossHit() { nz(0.06, { f: 1400, vol: 0.1 }); tn(170, 0.08, { to: 80, vol: 0.07 }); },
+  bossDefeat() {
+    nz(1.0, { f: 3000, fto: 80, vol: 0.28 }); tn(300, 0.9, { to: 40, vol: 0.09, type: 'sawtooth' });
+    mel([72, 76, 79, 84, 79, 84, 88, 91, 96], 0.09, { at: 1.0, vol: 0.08 }); mel([48, 52, 55, 60], 0.18, { at: 1.0, type: 'triangle', vol: 0.15 });
+  },
+  gameOver() { mel([67, 66, 65, 64], 0.3, { vol: 0.08 }); tn(NOTE(40), 1.0, { at: 1.2, type: 'triangle', vol: 0.2 }); },
+  weekend() {
+    mel([72, 76, 79, 84, 76, 79, 84, 88, 0, 91, 91, 96], 0.08, { vol: 0.08 });
+    mel([48, 0, 55, 0, 52, 0, 57, 0, 60], 0.08, { type: 'triangle', vol: 0.16 });
+    [0, 0.32, 0.64, 0.8].forEach(at => nz(0.06, { at, ft: 'highpass', f: 1800, vol: 0.08 }));
+  },
+  hack() { mel([84, 79, 88, 91, 96], 0.06, { vol: 0.08 }); tn(NOTE(108), 0.3, { at: 0.3, type: 'triangle', vol: 0.05 }); },
+  denied() { tn(110, 0.3, { type: 'sawtooth', vol: 0.1 }); tn(104, 0.3, { type: 'square', vol: 0.05, at: 0.05 }); },
+  chime() { const n = pick([84, 86, 88, 91, 93, 96]); tn(NOTE(n), 0.45, { type: 'triangle', vol: 0.045 }); tn(NOTE(n + 12), 0.3, { type: 'triangle', vol: 0.015, at: 0.14 }); },
+  day() { mel([76, 84, 88], 0.09, { vol: 0.06 }); },
+  thud() { tn(90, 0.12, { to: 50, type: 'triangle', vol: 0.15 }); }
+};
+// Beach chiptune loop
+const MUSIC = {
+  bpm: 112,
+  mel: [76, 0, 79, 81, 84, 0, 81, 79, 76, 0, 74, 76, 79, 0, 0, 0, 72, 0, 74, 76, 79, 0, 76, 74, 72, 0, 69, 72, 74, 0, 0, 0],
+  bass: [48, 0, 55, 0, 53, 0, 60, 0, 45, 0, 52, 0, 50, 0, 57, 0, 48, 0, 55, 0, 53, 0, 60, 0, 43, 0, 50, 0, 55, 0, 43, 0],
+  timer: null, next: 0, step: 0
+};
+function startMusic() {
+  stopMusic(); if (!AU.ctx) return;
+  MUSIC.next = AU.ctx.currentTime + 0.1; MUSIC.step = 0;
+  MUSIC.timer = setInterval(() => {
+    if (!AU.ctx || AU.ctx.state !== 'running') return;
+    const st = 60 / MUSIC.bpm / 2;
+    while (MUSIC.next < AU.ctx.currentTime + 0.25) {
+      const i = MUSIC.step % 32, t = MUSIC.next;
+      if (MUSIC.mel[i]) tn(NOTE(MUSIC.mel[i]), st * 0.85, { t, type: 'square', vol: 0.03 });
+      if (MUSIC.bass[i]) tn(NOTE(MUSIC.bass[i]), st * 1.6, { t, type: 'triangle', vol: 0.09 });
+      if (i % 2 === 1) nz(0.03, { t, ft: 'highpass', f: 6000, vol: 0.012 });
+      MUSIC.next += st; MUSIC.step++;
+    }
+  }, 60);
+}
+function stopMusic() { if (MUSIC.timer) clearInterval(MUSIC.timer); MUSIC.timer = null; }
+
+/* ---------------------------------------------------------------------
+   5. DOM + CANVAS SETUP
+   --------------------------------------------------------------------- */
+const cvs = $('game'), ctx = cvs.getContext('2d'), stage = $('stage');
+const overlay = $('overlay'), hackEl = $('hack'), hackForm = $('hackForm'), hackInput = $('hackInput'), hackMsg = $('hackMsg');
+const muteBtn = $('muteBtn'), hackBtn = $('hackBtn'), menuBtn = $('menuBtn');
+let W = 480, H = 270, G = 240, HUDH = 16, KS = 1;
+
+function resize() {
+  const r = stage.getBoundingClientRect();
+  const bw = Math.max(60, r.width), bh = Math.max(60, r.height);
+  if (MOBILE) { W = 256; H = Math.round(clamp(W * bh / bw, 300, 440)); }
+  else { H = 270; W = Math.round(clamp(H * bw / bh, 400, 720)); }
+  const s = Math.min(bw / W, bh / H), dpr = window.devicePixelRatio || 1;
+  KS = Math.max(1, Math.ceil(s * dpr));
+  cvs.width = W * KS; cvs.height = H * KS;
+  cvs.style.width = Math.floor(W * s) + 'px'; cvs.style.height = Math.floor(H * s) + 'px';
+  G = H - (MOBILE ? 36 : 30); HUDH = MOBILE ? 26 : 16;
+  ctx.imageSmoothingEnabled = false;
+}
+
+/* ---------------------------------------------------------------------
+   6. GAME DATA
+   --------------------------------------------------------------------- */
+const WEEK = { get days() { return LANG === 'it' ? ['LUNEDÌ', 'MARTEDÌ', 'MERCOLEDÌ', 'GIOVEDÌ', 'VENERDÌ'] : ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']; }, start: [540, 540, 540, 540, 540], end: 1050, bossAt: 840, rate: 510 / 26 };
+const WKND = { get days() { return LANG === 'it' ? ['SABATO', 'DOMENICA'] : ['SATURDAY', 'SUNDAY']; }, start: [600, 480], end: 1560, bossAt: 720, rate: 24 };
+const FEEDBACK_WEEK_F = () => LIST('feedbackWeek').map(tr).filter(Boolean);
+const FEEDBACK_WKND_F = () => LIST('feedbackWeekend').map(tr).filter(Boolean);
+const POOL_WEEK = [['email', 'call', 'f24', 'update'], ['urgent', 'voice', 'link404', 'malessere'], ['logo', 'bug', 'brief'], ['internet', 'overtime', 'contradictory'], []];
+const OBD = {
+  f24: { lvl: 'ground', mul: 1.35, hp: 3 },
+  email: { lvl: 'head', mul: 1.15, hp: 1 },
+  urgent: { lvl: 'head', mul: 1, hp: 2 },
+  call: { lvl: 'ground', mul: 1, hp: 1 },
+  logo: { lvl: 'ground', mul: 1, hp: 2 },
+  contradictory: { lvl: 'osc', mul: 1, hp: 2 },
+  bug: { lvl: 'ground', mul: 1, hp: 2, hb: [1, 1, 26, 26] },
+  brief: { lvl: 'head', mul: 0.9, hp: 3, hb: [3, 2, 74, 31] },
+  internet: { lvl: 'ground', mul: 1, hp: 2, hb: [1, 3, 26, 24] },
+  overtime: { lvl: 'drop', mul: 1, hp: 2 },
+  voice: { lvl: 'head', mul: 1.05, hp: 3, hb: [1, 1, 96, 25] },
+  link404: { lvl: 'ground', mul: 1, hp: 2 },
+  update: { lvl: 'ground', mul: 1, hp: 3, hb: [1, 10, 76, 12] },
+  malessere: { lvl: 'low', mul: 0.85, hp: 1 },
+  martini: { lvl: 'ground', mul: 1.2, hp: 1, hb: [2, 3, 18, 21] },
+  pranzo: { lvl: 'ground', mul: 1, hp: 3, hb: [3, 3, 92, 22] },
+  parmigiana: { lvl: 'ground', mul: 1, hp: 3 }
+};
+const BND = {
+  coffee: { fx: 'energy', v: 35, txt: '+COFFEE!' }, cat: { fx: 'morale', v: 5, txt: 'MEOW! MORALE UP' }, dog: { fx: 'morale', v: 5, txt: 'WOOF! MORALE UP' },
+  water: { fx: 'energy', v: 25, txt: '+H2O' }, salad: { fx: 'energy', v: 35, txt: '+GREENS', cure: true },
+  oki: { fx: 'morale', v: 4, txt: 'OKI! NO PAIN' }, polase: { fx: 'full', txt: 'POLASE! FULL ENERGY' }
+};
+const CLIENT_WORDS = ['ASAP', 'FYI', 'PING!', '+1', 'REV. 7', 'URGENTE', 'CALL?', 'QUICK Q', 'CC: ALL', 'EXPOSURE'];
+const HANG_WORDS = ['BLEAH', 'MAL DI TESTA', 'ZZZ', 'MAI PIÙ', 'HIC!', 'ACQUA...'];
+
+const S = { state: 'intro', mode: 'week', paused: false, hackOpen: false, time: 0, scroll: 0, lastResult: null, best: +(store.get('gud_best') || 0) };
+const P = { x: 60, y: 200, vy: 0, onGround: true, duck: false, jumpQ: 0, shootCd: 0, shootAnim: 0, hurtT: 0, invT: 0, morale: 0, slowT: 0, collectT: 0, anim: 0 };
+const input = { left: false, right: false, jump: false, duck: false, shoot: false };
+
+function resetRun(mode) {
+  Object.assign(S, {
+    mode, score: 0, lives: 3, energy: 100, day: 0, min: mode === 'week' ? WEEK.start[0] : WKND.start[0],
+    obs: [], bonuses: [], shots: [], eshots: [], parts: [], pops: [], giants: [], papers: [],
+    boss: null, bossDone: false, spawnT: 1.4, bonusT: 3.5, giantT: 8, shake: 0, glitch: 0, glitchT: 3,
+    banner: null, result: null, endT: 0, speed: 170
+  });
+  Object.assign(P, { x: Math.round(W * 0.16), y: G - 32, vy: 0, onGround: true, duck: false, jumpQ: 0, shootCd: 0, shootAnim: 0, hurtT: 0, invT: 0, morale: 0, slowT: 0, collectT: 0, anim: 0 });
+}
+resetRun('week');
+
+const DAYS = () => (S.mode === 'week' ? WEEK : WKND);
+function timeStr(m) { m = Math.floor(m); return pad(Math.floor(m / 60) % 24, 2) + ':' + pad(m % 60, 2); }
+function progress() {
+  if (S.mode === 'week') return clamp((S.day * 510 + (S.min - 540)) / (4 * 510 + 300), 0, 1);
+  return clamp(S.day === 0 ? (S.min - 600) / 1200 : (960 + S.min - 480) / 1200, 0, 1);
+}
+
+/* ---------------------------------------------------------------------
+   7. HELPERS — particles, popups, banners, collisions
+   --------------------------------------------------------------------- */
+function overlap(a, b, ins) { ins = ins || 0; return a.x + ins < b.x + b.w - ins && a.x + a.w - ins > b.x + ins && a.y + ins < b.y + b.h - ins && a.y + a.h - ins > b.y + ins; }
+function pbox() { return P.duck ? { x: P.x + 9, y: P.y + 15, w: 13, h: 17 } : { x: P.x + 12, y: P.y + 6, w: 9, h: 26 }; }
+function burst(x, y, n, cols, spd, size, grav) {
+  for (let i = 0; i < n && S.parts.length < 900; i++) {
+    const a = Math.random() * Math.PI * 2, v = rand(spd * 0.3, spd);
+    S.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - spd * 0.3, g: grav == null ? 300 : grav, life: rand(0.35, 0.8), max: 0.8, col: pick(cols), s: size || 1 });
+  }
+}
+function pop(text, x, y, col) { S.pops.push({ text, x, y, t: 0, dur: 1, col: col || C.Y }); }
+function banner(text, sub, dur, flash) { S.banner = { text, sub, t: 0, dur: dur || 1.8, flash }; }
+function obRect(o) { return o.k === 'logo' ? { x: o.x, y: o.y, w: o.w, h: o.h } : { x: o.x + o.hb[0], y: o.y + o.hb[1], w: o.hb[2], h: o.hb[3] }; }
+function breakSprite(o, cols) { const r = obRect(o); burst(r.x + r.w / 2, r.y + r.h / 2, 18 + Math.min(30, r.w / 3), cols || [C.P, C.W, C.K, C.B], 140, 2); }
+
+/* ---------------------------------------------------------------------
+   8. OBSTACLES
+   --------------------------------------------------------------------- */
+function placeY(o) {
+  const b = o.hb[1] + o.hb[3];
+  if (o.lvl === 'head') return G - 20 - b;
+  if (o.lvl === 'low') return G - 3 - b;
+  return G - b;
+}
+function sizeLogo(o) {
+  const dist = o.x - (P.x + 21);
+  const sc = dist > 150 ? 1 : dist > 90 ? 2 : 3;
+  if (sc !== o.sc && o.sc) { SFX.pop(); S.shake = Math.max(S.shake, 0.08); }
+  o.sc = sc; o.w = tw('LOGO', sc); o.h = 7 * sc; o.y = G - o.h;
+}
+function makeOb(k, v) {
+  const d = OBD[k], spr = SPR.ob[k], fr = spr ? spr[0] : null;
+  const o = { k, t: 0, hp: d.hp, x: W + 8, w: fr ? fr.width : 24, h: fr ? fr.height : 21, mul: d.mul, lvl: d.lvl, vy: 0, hitT: 0, v };
+  o.hb = d.hb || [1, 1, o.w - 2, o.h - 2];
+  if (k === 'logo') { o.sc = 0; sizeLogo(o); o.baseY = o.y; return o; }
+  if (k === 'martini') {
+    o.v = v || pick(['slide', 'bounce', 'fly']);
+    if (o.v === 'fly') { o.lvl = 'head'; o.mul = 1.1; }
+    if (o.v === 'bounce') { o.mul = 1; }
+  }
+  o.baseY = placeY(o); o.y = o.baseY;
+  if (k === 'martini' && o.v === 'bounce') { o.y = G - 90; o.vy = -60; }
+  if (o.lvl === 'drop') { o.x = Math.round(W * rand(0.66, 0.85)); o.y = -o.h - 6; o.falling = true; }
+  return o;
+}
+function spawnObstacle() {
+  let k;
+  if (S.mode === 'week') {
+    let pool = []; for (let i = 0; i <= Math.min(S.day, 4); i++) pool = pool.concat(POOL_WEEK[i]);
+    if (S.day < 4) pool = pool.concat(POOL_WEEK[S.day]);
+    k = pick(pool);
+  } else k = pick(['martini', 'martini', 'martini', 'pranzo', 'pranzo', 'parmigiana', 'parmigiana']);
+  const o = makeOb(k); S.obs.push(o);
+  const p = progress();
+  S.spawnT = Math.max(0.75, rand(0.95, 1.75) * (1 - 0.35 * p) + (o.w + 30) / S.speed);
+}
+function updateObstacles(dt) {
+  const pb = pbox();
+  for (let i = S.obs.length - 1; i >= 0; i--) {
+    const o = S.obs[i]; o.t += dt; o.hitT -= dt;
+    if (!o.falling) o.x -= S.speed * o.mul * dt;
+    switch (o.k) {
+      case 'email': o.y = o.baseY - Math.abs(Math.sin(o.t * 5)) * 4; break;
+      case 'brief': o.y = o.baseY - Math.abs(Math.sin(o.t * 2.4)) * 5; o.x += Math.sin(o.t * 3) * 0.5; break;
+      case 'contradictory': o.y = o.baseY - (Math.sin(o.t * 3.2) * 0.5 + 0.5) * 34; break;
+      case 'malessere': o.y = o.baseY - Math.abs(Math.sin(o.t * 4)) * 3; break;
+      case 'logo': sizeLogo(o); break;
+      case 'martini':
+        if (o.v === 'bounce') { o.vy += 800 * dt; o.y += o.vy * dt; if (o.y >= o.baseY) { o.y = o.baseY; o.vy = -270; } }
+        if (o.v === 'fly') o.y = o.baseY - Math.abs(Math.sin(o.t * 6)) * 3;
+        break;
+      case 'overtime':
+        if (o.falling) {
+          o.x -= S.speed * 0.2 * dt; o.vy += 900 * dt; o.y += o.vy * dt;
+          if (o.y >= o.baseY) { o.y = o.baseY; o.falling = false; S.shake = Math.max(S.shake, 0.12); SFX.thud(); burst(o.x + o.w / 2, G, 8, [C.W, C.B], 60, 1); }
+        }
+        break;
+      case 'f24': if (Math.random() < 0.25) S.parts.push({ x: o.x + o.w, y: G - 2, vx: rand(10, 40), vy: rand(-30, -5), g: 60, life: 0.4, max: 0.4, col: C.W, s: 1 }); break;
+    }
+    if (o.x + o.w < -30) { S.obs.splice(i, 1); continue; }
+    if (S.result) continue;
+    if (overlap(pb, obRect(o), 2)) {
+      if (P.morale > 0) { breakSprite(o); S.score += 50; pop('+50', o.x, o.y - 4, C.Y); SFX.pop(); S.obs.splice(i, 1); continue; }
+      if (o.k === 'malessere') { applyMalessere(); breakSprite(o, [C.B, C.P]); S.obs.splice(i, 1); continue; }
+      if (P.invT <= 0) { hurt(o.k === 'call' ? 'RING RING!' : o.k === 'f24' ? 'TAXES!' : 'OUCH!'); breakSprite(o); S.obs.splice(i, 1); }
+    }
+  }
+}
+function applyMalessere() {
+  S.energy = Math.max(1, S.energy - 25); P.slowT = 4; SFX.drain(); pop('MALESSERE...', P.x, P.y - 6, C.B);
+}
+
+/* ---------------------------------------------------------------------
+   9. BONUSES
+   --------------------------------------------------------------------- */
+function spawnBonus() {
+  let k;
+  if (S.mode === 'week') k = S.energy < 55 ? pick(['coffee', 'coffee', 'coffee', 'cat', 'dog']) : pick(['coffee', 'coffee', 'cat', 'dog']);
+  else k = S.energy < 55 ? pick(['water', 'salad', 'polase', 'oki']) : pick(['water', 'salad', 'oki', 'water', 'polase']);
+  const spr = SPR.bn[k][0], high = Math.random() < 0.45;
+  const b = { k, x: W + 20, w: spr.width, h: spr.height, t: rand(0, 3), sp: 0 };
+  b.baseY = high ? G - 46 - b.h : G - 5 - b.h; b.y = b.baseY;
+  S.bonuses.push(b);
+}
+function collect(b) {
+  const d = BND[b.k];
+  if (d.fx === 'energy') S.energy = Math.min(100, S.energy + d.v);
+  if (d.fx === 'full') S.energy = 100;
+  if (d.fx === 'morale') { P.morale = Math.max(P.morale, d.v); S.energy = Math.min(100, S.energy + 10); }
+  if (d.cure) P.slowT = 0;
+  S.score += 100; P.collectT = 0.3; SFX.bonus();
+  burst(b.x + b.w / 2, b.y + b.h / 2, 16, [C.Y, C.W, C.Y], 90, 1, 80);
+  pop(d.txt, b.x - 10, b.y - 10, C.Y);
+}
+function updateBonuses(dt) {
+  const pb = pbox();
+  for (let i = S.bonuses.length - 1; i >= 0; i--) {
+    const b = S.bonuses[i]; b.t += dt; b.x -= S.speed * dt; b.y = b.baseY + Math.round(Math.sin(b.t * 5) * 2);
+    b.sp -= dt;
+    if (b.sp <= 0) { b.sp = 0.16; S.parts.push({ x: b.x + rand(-2, b.w + 2), y: b.y + rand(-2, b.h), vx: 0, vy: -18, g: 0, life: 0.45, max: 0.45, col: pick([C.Y, C.W]), s: 1 }); }
+    if (b.x + b.w < -10) { S.bonuses.splice(i, 1); continue; }
+    if (!S.result && overlap(pb, b, 0)) { collect(b); S.bonuses.splice(i, 1); }
+  }
+}
+
+/* ---------------------------------------------------------------------
+   10. GIANT FEEDBACK — pixel typographic attacks
+   --------------------------------------------------------------------- */
+function fitGiant(text, maxW, maxH) {
+  const words = text.toUpperCase().split(' ');
+  for (let sc = 10; sc >= 1; sc--) {
+    const maxC = Math.floor((maxW + sc) / (6 * sc)); if (maxC < 2) continue;
+    if (words.some(w => w.length > maxC)) continue;
+    const lines = wrap(text, maxC), h = lines.length * 8 * sc - sc;
+    if (h <= maxH) return { lines, sc, w: Math.max(...lines.map(l => tw(l, sc))), h };
+  }
+  return { lines: [text.toUpperCase()], sc: 1, w: tw(text, 1), h: 7 };
+}
+function spawnGiant(kind, list) {
+  const text = pick(list || (S.mode === 'week' ? FEEDBACK_WEEK_F() : FEEDBACK_WKND_F())) || 'MORE WOW!';
+  const top = HUDH + (S.boss ? 24 : 6);
+  let L, x, y, targetY;
+  if (kind === 'sweep') {
+    const maxW = S.boss ? Math.min(W * 0.62, S.boss.x - 10) : W * rand(0.6, 0.85);
+    L = fitGiant(text, maxW, (G - 20) - top);
+    x = (S.boss ? S.boss.x - 4 : W - 6) - L.w; y = G - 20 - L.h; targetY = y;
+  } else {
+    L = fitGiant(text, W * (MOBILE ? 0.46 : 0.44), G - top - 4);
+    x = W - 6 - L.w; y = top; targetY = G - L.h;
+  }
+  const g = Object.assign({ kind, text, x, y, targetY, t: 0, phase: 'enter', hp: 6, hitT: 0, vy: 0, collide: false }, L);
+  S.giants.push(g);
+  SFX.giant(); S.glitch = 0.25; S.shake = Math.max(S.shake, 0.15);
+  S.spawnT = Math.max(S.spawnT, 2.2);
+}
+function giantRects(g) {
+  const cx = g.x + g.w / 2;
+  return g.lines.map((l, i) => { const lw = tw(l, g.sc); return { x: cx - lw / 2, y: g.y + i * 8 * g.sc, w: lw, h: 7 * g.sc }; });
+}
+function shatterGiant(g, loud) {
+  const cx = g.x + g.w / 2; let n = 0;
+  const step = g.sc >= 4 ? 2 : 1;
+  g.lines.forEach((l, li) => {
+    const lw = tw(l, g.sc), lx = cx - lw / 2, ly = g.y + li * 8 * g.sc;
+    for (let ci = 0; ci < l.length; ci++) {
+      const gl = FONT[l[ci]] || FONT['?'];
+      for (let r = 0; r < 7; r += step) for (let c = 0; c < 5; c += step) {
+        if (!(gl[r] & (16 >> c)) || S.parts.length > 950) continue;
+        const px = lx + ci * 6 * g.sc + c * g.sc, py = ly + r * g.sc;
+        S.parts.push({ x: px, y: py, vx: (px - cx) * rand(0.6, 1.8) + rand(-40, 40), vy: rand(-170, -10), g: 520, life: rand(0.5, 1.1), max: 1.1, col: pick([C.P, C.Y, C.K]), s: g.sc * step }); n++;
+      }
+    }
+  });
+  if (loud) { SFX.shatter(); S.glitch = 0.15; S.shake = Math.max(S.shake, 0.15); }
+}
+function updateGiants(dt) {
+  const pb = pbox();
+  for (let i = S.giants.length - 1; i >= 0; i--) {
+    const g = S.giants[i]; g.t += dt; g.hitT -= dt;
+    if (g.phase === 'enter') {
+      if (g.t >= 0.5) { g.phase = g.kind === 'sweep' ? 'move' : 'drop'; g.t = 0; g.collide = true; }
+    } else if (g.phase === 'move') {
+      g.x -= (S.speed * 1.05 + 45) * dt;
+      if (g.x + g.w < -10) { S.giants.splice(i, 1); continue; }
+    } else if (g.phase === 'drop') {
+      g.vy += 1500 * dt; g.y += g.vy * dt;
+      if (g.y >= g.targetY) { g.y = g.targetY; g.phase = 'hold'; g.t = 0; S.shake = 0.35; SFX.slam(); burst(g.x + g.w / 2, G, 24, [C.W, C.B, C.K], 160, 2); }
+    } else if (g.phase === 'hold') {
+      if (g.t > 1.6) { shatterGiant(g, true); S.giants.splice(i, 1); continue; }
+    }
+    if (g.collide && !S.result && P.invT <= 0) {
+      if (giantRects(g).some(r => overlap(pb, r, 1))) {
+        if (P.morale > 0) { shatterGiant(g, true); S.score += 150; pop('NOPE!', P.x, P.y - 8, C.Y); S.giants.splice(i, 1); continue; }
+        hurt('FEEDBACK!');
+      }
+    }
+  }
+}
+function drawGiant(g) {
+  let sc = g.sc;
+  if (g.phase === 'enter') { const k = Math.min(1, g.t / 0.45); sc = Math.max(1, Math.ceil(g.sc * (0.12 + 0.88 * k * k))); }
+  const cx = g.x + g.w / 2, cy = g.y + g.h / 2 + (g.phase === 'move' ? Math.round(Math.sin(S.time * 30) * 1) : 0);
+  const h = g.lines.length * 8 * sc - sc, y0 = Math.round(cy - h / 2);
+  const cyc = Math.floor(S.time / (g.phase === 'enter' ? 0.06 : 0.13)) % 3;
+  let main = [C.P, C.Y, C.K][cyc]; const out = main === C.K ? C.Y : C.K;
+  if (g.hitT > 0) main = C.W;
+  if (g.kind === 'slam' && g.phase !== 'hold') { // landing marker
+    ctx.fillStyle = Math.floor(S.time * 10) % 2 ? C.K : C.P;
+    for (let x = Math.round(g.x); x < g.x + g.w; x += 6) ctx.fillRect(x, G - 3, 4, 2);
+  }
+  g.lines.forEach((l, i) => {
+    const lw = tw(l, sc), lx = Math.round(cx - lw / 2), ly = y0 + i * 8 * sc;
+    otext(ctx, l, lx, ly, sc, main, out, null, out === C.K ? C.P : C.K);
+  });
+}
+
+/* ---------------------------------------------------------------------
+   11. PLAYER
+   --------------------------------------------------------------------- */
+function pressJump() { P.jumpQ = 0.13; }
+function fire() {
+  const word = S.mode === 'week' ? 'DIRITTI UMANI' : 'TÈ MATCHA';
+  const y = P.duck ? P.y + 19 : (P.onGround ? P.y + 13 : P.y + 12);
+  S.shots.push({ x: P.x + 21, y, w: tw(word, 1) + 2, h: 9, vx: 390, word, t: 0 });
+  P.shootCd = 0.3; P.shootAnim = 0.16; SFX.shoot();
+  for (let i = 0; i < 4; i++) S.parts.push({ x: P.x + 26, y: y + 4, vx: rand(20, 80), vy: rand(-40, 40), g: 0, life: 0.15, max: 0.2, col: C.Y, s: 1 });
+}
+function updatePlayer(dt, ground, canShoot) {
+  const slow = P.slowT > 0 ? 0.55 : 1;
+  let mv = 0; if (input.left) mv -= 1; if (input.right) mv += 1;
+  P.duck = input.duck && P.onGround;
+  P.x += mv * 140 * slow * (P.duck ? 0.6 : 1) * dt;
+  let maxX = S.state === 'beach' ? W - 50 : Math.round(W * 0.62);
+  if (S.boss && !S.boss.dying) maxX = Math.min(maxX, S.boss.x - 40);
+  P.x = clamp(P.x, S.state === 'beach' ? 12 : -9, maxX);
+  if (P.jumpQ > 0) {
+    P.jumpQ -= dt;
+    if (P.onGround) { P.vy = -330 * (slow < 1 ? 0.88 : 1); P.onGround = false; P.jumpQ = 0; SFX.jump(); burst(P.x + 16, ground, 4, [C.W, C.B], 40, 1); }
+  }
+  if (!P.onGround) {
+    let gm = 1; if (P.vy < 0 && !input.jump) gm = 2.2; if (input.duck) gm = 2.8;
+    P.vy += 980 * gm * dt; P.y += P.vy * dt;
+    if (P.y >= ground - 32) { P.y = ground - 32; P.vy = 0; P.onGround = true; burst(P.x + 16, ground - 1, 5, [C.W, C.B], 50, 1); }
+  } else P.y = ground - 32;
+  P.shootCd -= dt;
+  if (canShoot && input.shoot && P.shootCd <= 0) fire();
+  P.shootAnim -= dt; P.hurtT -= dt; P.invT -= dt; P.collectT -= dt; P.slowT -= dt;
+  if (P.morale > 0) {
+    P.morale -= dt;
+    if (Math.random() < 0.5) S.parts.push({ x: P.x + rand(8, 24), y: P.y + rand(4, 30), vx: 0, vy: -25, g: 0, life: 0.4, max: 0.4, col: pick([C.Y, C.W]), s: 1 });
+  }
+  P.anim += dt * 12 * clamp(S.speed / 170, 0.6, 1.6);
+}
+function hurt(msg) {
+  if (P.invT > 0 || P.morale > 0 || S.result) return;
+  S.lives--; P.hurtT = 0.45; P.invT = 1.6; S.energy = Math.max(1, S.energy - 8); S.shake = 0.3; SFX.hurt();
+  pop(msg || 'OUCH!', P.x, P.y - 8, C.P);
+  burst(P.x + 16, P.y + 16, 14, [C.P, C.K, C.W], 120, 1);
+  if (S.lives <= 0) lose();
+}
+function lose() {
+  S.result = 'lose'; S.endT = 2.0; S.lives = 0; SFX.gameOver(); P.vy = 0;
+  S.giants.forEach(g => shatterGiant(g, false)); S.giants = [];
+}
+function playerPose() {
+  if (S.state === 'beach') return P.onGround ? ['beach', Math.floor(S.time * 2) % 2] : ['beachjump', 0];
+  if (S.state === 'intro') return ['idle', Math.floor(S.time * 1.5) % 2];
+  const res = S.result || (S.state === 'end' ? S.lastResult : null);
+  if (res === 'lose') return ['defeat', 0];
+  if (res === 'win') return ['victory', Math.floor(S.time * 4) % 2];
+  if (P.hurtT > 0) return ['hurt', 0];
+  if (!P.onGround) return [P.shootAnim > 0 ? 'jumpshoot' : 'jump', 0];
+  if (P.duck) return ['duck', Math.floor(P.anim / 2) % 2];
+  if (P.collectT > 0) return ['collect', 0];
+  return [P.shootAnim > 0 ? 'shoot' : 'run', Math.floor(P.anim) % 4];
+}
+const CUSTOM_POSE = { idle: 'idle', run: 'run', shoot: 'shoot', jump: 'jump', jumpshoot: 'shoot', duck: 'duck', hurt: 'hurt', collect: 'collect', victory: 'victory', defeat: 'defeat', beach: 'beach', beachjump: 'beach' };
+function drawPlayer() {
+  const [pose, f] = playerPose();
+  if (P.invT > 0 && P.morale <= 0 && !S.result && Math.floor(S.time * 14) % 2) return;
+  const x = Math.round(P.x), y = Math.round(P.y);
+  const key = 'player/' + CUSTOM_POSE[pose];
+  if (ASSETS[key]) {
+    const hh = pose === 'duck' ? 20 : 32;
+    if (P.morale > 0) { ctx.fillStyle = C.Y; ctx.fillRect(x + 4, y + 32 - hh - 2, 26, 2); }
+    drawCustom(ctx, key, x, y + 32 - hh, 34, hh, S.time);
+    return;
+  }
+  const spr = gud(pose, f);
+  if (P.morale > 0) {
+    const t = tinted(spr, Math.floor(S.time * 10) % 2 ? C.Y : C.W);
+    ctx.drawImage(t, x - 1, y); ctx.drawImage(t, x + 1, y); ctx.drawImage(t, x, y - 1); ctx.drawImage(t, x, y + 1);
+  }
+  if (S.state === 'beach') { ctx.drawImage(spr, x - 17, y - 32, 68, 68); return; }
+  ctx.drawImage(spr, x, y);
+  if (P.slowT > 0 && S.state === 'play') { const b = Math.floor(S.time * 4) % 2; ctx.drawImage(SPR.fx.heartP, x + 22, y - 2 - b); }
+  if (pose === 'defeat') dtext(ctx, 'ZZZ', x + 8, y + 12 - Math.floor(S.time * 3) % 3, 1, C.K);
+}
+
+/* ---------------------------------------------------------------------
+   12. BOSSES — BIG CLIENT & HANGOVER
+   --------------------------------------------------------------------- */
+function spawnBoss() {
+  const week = S.mode === 'week';
+  const spr = week ? SPR.client : SPR.hangover;
+  const b = { kind: week ? 'client' : 'hangover', name: week ? 'BIG CLIENT' : 'HANGOVER', spr, w: spr[0].width, h: spr[0].height,
+    x: W + 10, y: 0, hp: week ? 40 : 44, t: 0, atkT: 2.4, hitT: 0, mouthT: 0, entering: true, dying: false };
+  b.maxHp = b.hp; b.shown = b.hp;
+  S.boss = b;
+  S.obs.forEach(o => breakSprite(o)); S.obs = [];
+  S.giants.forEach(g => shatterGiant(g, false)); S.giants = [];
+  banner(TX('tgif', 'warning'), b.name + ' ' + TX('tgif', 'approaching'), 2.4, true);
+  SFX.bossAppear(); S.shake = 0.4; S.glitch = 0.3;
+}
+function bossBox(b) {
+  return b.kind === 'client' ? { x: b.x + 14, y: b.y + 4, w: b.w - 26, h: b.h - 8 } : { x: b.x + 8, y: b.y + 8, w: b.w - 16, h: b.h - 12 };
+}
+function eshot(o) { S.eshots.push(Object.assign({ t: 0, g: 0, vy: 0, bounce: 0, hp: 1 }, o)); }
+function textShot(word, lvl, vx, dx) {
+  const w = tw(word, 1) + 6, h = 11;
+  eshot({ kind: 'text', word, x: S.boss.x + 10 + (dx || 0), y: lvl === 'ground' ? G - h : G - 20 - h, w, h, vx });
+}
+function bossAttack(b) {
+  const r = b.hp / b.maxHp; b.mouthT = 0.4;
+  if (b.kind === 'client') {
+    const opts = ['text', 'text', 'meeting'];
+    if (r < 0.7 && !S.giants.length) opts.push('giant');
+    if (r < 0.45) opts.push('rain', 'text');
+    const a = pick(opts);
+    if (a === 'text') { const n = r < 0.5 ? 2 : 1; for (let i = 0; i < n; i++) textShot(pick(CLIENT_WORDS), pick(['ground', 'head']), -rand(170, 240), i * 80); }
+    if (a === 'meeting') { const s = SPR.fx.cal; eshot({ kind: 'cal', x: b.x + 4, y: b.y + 60, w: s.width, h: s.height, vx: -rand(140, 190), vy: -rand(200, 280), g: 700, bounce: 0.55 }); }
+    if (a === 'giant') spawnGiant('sweep', FEEDBACK_WEEK_F());
+    if (a === 'rain') for (let i = 0; i < 3; i++) eshot({ kind: 'drop', word: pick(['@', 'CC', 'RE:']), x: rand(10, b.x - 30), y: HUDH + 24 - i * 40, w: 17, h: 11, vx: 0, vy: 60, g: 240 });
+  } else {
+    const opts = ['olive', 'text', 'spill'];
+    if (r < 0.7) opts.push('ice'); if (r < 0.6 && !S.giants.length) opts.push('giant');
+    const a = pick(opts);
+    if (a === 'olive') { const n = r < 0.5 ? 3 : 2; for (let i = 0; i < n; i++) eshot({ kind: 'olive', x: b.x + 70, y: b.y + 6, w: 11, h: 11, vx: -rand(130, 210), vy: -rand(150, 260), g: 700, bounce: 0.75 }); }
+    if (a === 'text') textShot(pick(HANG_WORDS), pick(['ground', 'head']), -rand(170, 230));
+    if (a === 'spill') eshot({ kind: 'wave', x: b.x + 10, y: G - 14, w: 46, h: 14, vx: -rand(210, 250) });
+    if (a === 'ice') for (let i = 0; i < 3; i++) eshot({ kind: 'ice', x: rand(10, b.x - 30), y: HUDH + 20 - i * 46, w: 12, h: 12, vx: 0, vy: 50, g: 380 });
+    if (a === 'giant') spawnGiant('sweep', FEEDBACK_WKND_F());
+  }
+}
+function updateBoss(dt) {
+  const b = S.boss; if (!b) return;
+  b.t += dt; b.hitT -= dt; b.mouthT -= dt;
+  b.tx = W - b.w - (MOBILE ? 2 : 10);
+  const hover = b.kind === 'hangover' ? 10 + Math.sin(b.t * 1.6) * (MOBILE ? 14 : 7) : 0;
+  b.y = (b.kind === 'client' ? G - 120 : G - 117 - hover) + (b.dying ? b.sink || 0 : 0);
+  b.shown += (b.hp - b.shown) * Math.min(1, dt * 5);
+  if (b.dying) {
+    b.sink = (b.sink || 0) + 18 * dt; b.bt = (b.bt || 0) - dt;
+    if (b.bt <= 0) { b.bt = 0.07; burst(b.x + rand(0, b.w), b.y + rand(0, b.h), 10, [C.Y, C.P, C.W, C.K], 160, 2); S.shake = 0.15; }
+    if (b.t > 2.1 && !b.gone) { b.gone = true; burst(b.x + b.w / 2, b.y + b.h / 2, 120, [C.Y, C.P, C.W, C.K], 260, 3); S.shake = 0.5; }
+    return;
+  }
+  if (b.entering) { b.x -= 90 * dt; if (b.x <= b.tx) { b.x = b.tx; b.entering = false; } return; }
+  b.x = b.tx + Math.round(Math.sin(b.t * 0.8) * 6);
+  if (S.result) return;
+  b.atkT -= dt;
+  if (b.atkT <= 0) { bossAttack(b); const r = b.hp / b.maxHp; b.atkT = (r > 0.6 ? 1.6 : r > 0.3 ? 1.25 : 0.95) * rand(0.85, 1.15); }
+}
+function hitBoss(b) {
+  b.hp--; b.hitT = 0.08; S.score += 25; SFX.bossHit();
+  if (b.hp <= 0) {
+    b.hp = 0; b.dying = true; b.t = 0; S.result = 'win'; S.endT = 3.0; S.bossDone = true;
+    S.score += 2000; S.eshots.forEach(e => burst(e.x, e.y, 6, [C.Y, C.W], 80, 1)); S.eshots = [];
+    S.giants.forEach(g => shatterGiant(g, false)); S.giants = [];
+    S.min = S.mode === 'week' ? 1050 : 780; SFX.bossDefeat();
+    banner(b.name, TX('tgif', 'defeated'), 2.6, true);
+  }
+}
+function updateEshots(dt) {
+  const pb = pbox();
+  for (let i = S.eshots.length - 1; i >= 0; i--) {
+    const e = S.eshots[i]; e.t += dt;
+    e.vy += e.g * dt; e.x += e.vx * dt; e.y += e.vy * dt;
+    if (e.y + e.h >= G) {
+      if (e.bounce) { e.y = G - e.h; e.vy = -Math.abs(e.vy) * e.bounce; if (Math.abs(e.vy) < 60) e.bounce = 0; }
+      else if (e.kind === 'ice' || e.kind === 'drop') { burst(e.x + e.w / 2, G - 2, 8, [C.W, C.B], 70, 1); S.eshots.splice(i, 1); continue; }
+      else e.y = G - e.h;
+    }
+    if (e.x + e.w < -20 || e.x > W + 60) { S.eshots.splice(i, 1); continue; }
+    if (!S.result && overlap(pb, e, 1)) {
+      if (P.morale > 0) { burst(e.x + e.w / 2, e.y + e.h / 2, 10, [C.Y, C.W], 90, 1); S.eshots.splice(i, 1); continue; }
+      if (P.invT <= 0) { hurt(e.kind === 'cal' ? 'MEETING ACCEPTED' : 'OUCH!'); S.eshots.splice(i, 1); }
+    }
+  }
+}
+function drawBoss() {
+  const b = S.boss; if (!b || b.gone) return;
+  if (b.dying && Math.floor(S.time * 16) % 2) return;
+  let spr = b.spr[b.mouthT > 0 || b.dying ? 1 : 0];
+  if (b.hitT > 0) spr = tinted(spr, C.W);
+  const key = 'boss/' + (b.kind === 'client' ? 'bigclient' : 'hangover');
+  if (!(b.hitT <= 0 && drawCustom(ctx, key, b.x, b.y, b.w, b.h, S.time))) ctx.drawImage(spr, Math.round(b.x), Math.round(b.y));
+  if (b.kind === 'hangover' && !b.dying) { // stink waves
+    ctx.fillStyle = C.K;
+    for (let i = 0; i < 3; i++) { const yy = Math.round(b.y - 6 - ((S.time * 12 + i * 6) % 18)); ctx.fillRect(Math.round(b.x + 30 + i * 18 + Math.sin(S.time * 5 + i) * 2), yy, 1, 3); }
+  }
+}
+function drawEshot(e) {
+  const x = Math.round(e.x), y = Math.round(e.y);
+  if (e.kind === 'text' || e.kind === 'drop') {
+    ctx.fillStyle = C.K; ctx.fillRect(x, y, e.w, e.h); ctx.fillStyle = C.P; ctx.fillRect(x + 1, y + 1, e.w - 2, e.h - 2);
+    dtext(ctx, e.word, x + 3, y + 2, 1, C.W);
+    if (e.kind === 'drop') { ctx.fillStyle = Math.floor(S.time * 10) % 2 ? C.K : C.P; ctx.fillRect(x, G - 2, e.w, 2); }
+  } else if (e.kind === 'cal') {
+    ctx.drawImage(SPR.fx.cal, x, y);
+    if (Math.floor(S.time * 6) % 2) otext(ctx, 'MEETING REQUEST', x + e.w / 2, y - 10, 1, C.P, C.W, 'center');
+  } else if (e.kind === 'olive') ctx.drawImage(SPR.fx.olive, x, y);
+  else if (e.kind === 'ice') { ctx.drawImage(SPR.fx.ice, x, y); ctx.fillStyle = Math.floor(S.time * 10) % 2 ? C.K : C.B; ctx.fillRect(x, G - 2, e.w, 2); }
+  else if (e.kind === 'wave') ctx.drawImage(SPR.fx.wave[Math.floor(S.time * 8) % 2], x, y);
+}
+
+/* ---------------------------------------------------------------------
+   13. PLAYER PROJECTILES — DIRITTI UMANI / TÈ MATCHA
+   --------------------------------------------------------------------- */
+function updateShots(dt) {
+  for (let i = S.shots.length - 1; i >= 0; i--) {
+    const s = S.shots[i]; s.t += dt; s.x += s.vx * dt;
+    let dead = s.x > W + 10;
+    if (!dead) for (let j = S.obs.length - 1; j >= 0; j--) {
+      const o = S.obs[j];
+      if (overlap(s, obRect(o), 0)) {
+        dead = true; o.hp--; o.hitT = 0.08; SFX.bossHit();
+        if (o.hp <= 0) { breakSprite(o); S.score += 50; pop('+50', o.x, o.y - 6, C.Y); S.obs.splice(j, 1); }
+        break;
+      }
+    }
+    if (!dead) for (let j = S.giants.length - 1; j >= 0; j--) {
+      const g = S.giants[j];
+      if (g.collide && giantRects(g).some(r => overlap(s, r, 0))) {
+        dead = true; g.hp--; g.hitT = 0.07; SFX.bossHit();
+        if (g.hp <= 0) { shatterGiant(g, true); S.score += 150; pop('FEEDBACK REJECTED!', Math.max(4, g.x), g.y + g.h / 2, C.Y); S.giants.splice(j, 1); }
+        break;
+      }
+    }
+    if (!dead) for (let j = S.eshots.length - 1; j >= 0; j--) {
+      const e = S.eshots[j];
+      if (overlap(s, e, 0)) { dead = true; burst(e.x + e.w / 2, e.y + e.h / 2, 8, [C.Y, C.W, C.P], 90, 1); S.eshots.splice(j, 1); S.score += 10; break; }
+    }
+    const b = S.boss;
+    if (!dead && b && !b.entering && !b.dying && overlap(s, bossBox(b), 0)) {
+      dead = true; hitBoss(b); burst(s.x + s.w, s.y + 4, 8, [C.Y, C.W], 100, 1);
+    }
+    if (dead) S.shots.splice(i, 1);
+  }
+}
+function drawShot(s) {
+  const x = Math.round(s.x), y = Math.round(s.y);
+  ctx.fillStyle = C.P;
+  for (let k = 1; k <= 3; k++) ctx.fillRect(x - k * 5, y + 2 + (k % 2) * 3, 3, 1);
+  otext(ctx, s.word, x + 1, y + 1, 1, C.Y, C.K);
+}
+
+/* ---------------------------------------------------------------------
+   14. BACKGROUNDS
+   --------------------------------------------------------------------- */
+const BG = {};
+function skyline(mode) {
+  if (BG[mode]) return BG[mode];
+  const tw_ = 480, th = 110; let seed = mode === 'week' ? 7 : 13;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  BG[mode] = mk(tw_, th, (R) => {
+    let x = 0;
+    while (x < tw_ - 10) {
+      const bw = 18 + Math.floor(rnd() * 30), bh = 36 + Math.floor(rnd() * 66), col = mode === 'week' ? C.B : C.P;
+      const w2 = Math.min(bw - 2, tw_ - x - 1);
+      R(x, th - bh, w2, bh, col);
+      for (let wy = th - bh + 4; wy < th - 6; wy += 6) for (let wx = x + 3; wx < x + w2 - 4; wx += 5) R(wx, wy, 2, 3, rnd() < 0.25 ? C.Y : (mode === 'week' ? C.L : C.K));
+      if (rnd() < 0.4) R(x + Math.floor(w2 / 2), th - bh - 6, 1, 6, C.K);
+      x += bw;
+    }
+  }, true);
+  return BG[mode];
+}
+const SIGNS = { week: ['DEADLINE ->', 'OPEN SPACE', 'COFFEE ZONE', 'MEETING ROOM', 'NO WIFI', 'BRAINSTORM', 'ASAP ST.', 'HR ->'],
+  weekend: ['APERITIVO', 'DISCO', 'PIZZERIA', 'DA MAMMA', 'KARAOKE', 'BRUNCH', 'SPIAGGIA ->', 'OPEN BAR'] };
+function drawBackground() {
+  const week = S.mode === 'week';
+  const hr = (S.min / 60) % 24;
+  const night = !week && (hr >= 21 || hr < 7);
+  const sunset = !week && hr >= 18 && hr < 21;
+  // sky
+  let sky = C.L;
+  if (!week) sky = night ? C.K : (S.day === 1 ? C.L : C.Y);
+  ctx.fillStyle = sky; ctx.fillRect(-8, -8, W + 16, G + 8);
+  if (sunset) { const cols = [C.Y, C.B, C.P]; for (let i = 0; i < 9; i++) { ctx.fillStyle = cols[i % 3]; ctx.fillRect(-8, Math.round(G * 0.25 + i * (G * 0.08)), W + 16, 2 + i); } }
+  if (week && S.day === 4 && S.state === 'play') { // Friday alarm stripes
+    ctx.fillStyle = C.B; const o = Math.floor(S.time * 20) % 16;
+    for (let y = HUDH + 2; y < G * 0.55; y += 4) for (let x = -16 + o + ((y / 4) % 2) * 8; x < W; x += 16) ctx.fillRect(x, y, 2, 2);
+  }
+  if (night) { // stars
+    for (let i = 0; i < 40; i++) {
+      const sx = (i * 97 + 13) % W, sy = HUDH + ((i * 53) % Math.max(20, G - 140));
+      if ((Math.floor(S.time * 3) + i) % 5) { ctx.fillStyle = i % 3 ? C.Y : C.W; ctx.fillRect(sx, sy, 1, 1); }
+    }
+    const dx = Math.round(W * 0.5 + Math.sin(S.time) * 4); // disco ball
+    ctx.fillStyle = C.W; ctx.fillRect(dx, HUDH, 1, 14);
+    ctx.drawImage(tinted(SPR.fx.sun, C.W), dx - 16, HUDH + 4, 32, 32);
+    ctx.fillStyle = C.B; for (let i = 0; i < 6; i++) ctx.fillRect(dx - 10 + ((i * 7 + Math.floor(S.time * 8)) % 20), HUDH + 12 + (i % 3) * 6, 3, 3);
+  } else {
+    // clock-sun showing game time
+    const sx = W - (MOBILE ? 28 : 36), sy = HUDH + (MOBILE ? 30 : 24);
+    ctx.drawImage(week ? SPR.fx.sun : tinted(SPR.fx.sun, C.P), sx - 16, sy - 16);
+    const m = S.min % 60, h = (S.min / 60) % 12;
+    const hand = (ang, len) => { for (let r = 0; r < len; r++) ctx.fillRect(Math.round(sx + Math.sin(ang) * r), Math.round(sy - Math.cos(ang) * r), 1, 1); };
+    ctx.fillStyle = C.K; hand(m / 60 * Math.PI * 2, 10); hand(h / 12 * Math.PI * 2, 6);
+    // clouds
+    for (let i = 0; i < 4; i++) { const cx = ((i * 190 - S.scroll * 0.08) % (W + 80) + W + 80) % (W + 80) - 50; ctx.drawImage(SPR.fx.cloud, Math.round(cx), HUDH + 12 + (i % 3) * 22); }
+  }
+  // skyline
+  const sk = skyline(week ? 'week' : 'weekend'), off = Math.floor(S.scroll * 0.2) % sk.width;
+  for (let x = -off; x < W; x += sk.width) ctx.drawImage(sk, x, G - sk.height);
+  // signs (mid parallax)
+  const list = SIGNS[week ? 'week' : 'weekend'], gap = 190, so = S.scroll * 0.55, first = Math.floor(so / gap);
+  for (let i = first; i < first + Math.ceil(W / gap) + 2; i++) {
+    const sx = Math.round(i * gap - so + 30), txt = list[((i % list.length) + list.length) % list.length], w = tw(txt, 1) + 8;
+    ctx.fillStyle = C.K; ctx.fillRect(sx + w / 2 - 1, G - 44, 2, 44);
+    const neon = night && Math.floor(S.time * 2 + i) % 4;
+    ctx.fillStyle = neon ? C.P : C.K; ctx.fillRect(sx - 1, G - 58, w + 2, 15);
+    ctx.fillStyle = night ? C.K : C.W; ctx.fillRect(sx, G - 57, w, 13);
+    dtext(ctx, txt, sx + 4, G - 54, 1, night ? (neon ? C.Y : C.B) : C.K);
+  }
+  // papers (week chaos)
+  S.papers && S.papers.forEach(p => { ctx.fillStyle = C.W; ctx.fillRect(Math.round(p.x), Math.round(p.y), 5, 6); ctx.fillStyle = C.K; ctx.fillRect(Math.round(p.x) + 1, Math.round(p.y) + 2, 3, 1); });
+  // ground: checker tiles
+  ctx.fillStyle = C.K; ctx.fillRect(-8, G, W + 16, 2);
+  const t1 = C.P, t2 = week ? C.B : (night ? C.K : C.Y);
+  ctx.fillStyle = t1; ctx.fillRect(-8, G + 2, W + 16, H - G + 8);
+  ctx.fillStyle = t2; const go = Math.floor(S.scroll) % 16;
+  for (let y = G + 2, row = 0; y < H + 8; y += 8, row++) for (let x = -go - 16 + (row % 2) * 8; x < W + 8; x += 16) ctx.fillRect(x, y, 8, 8);
+  ctx.fillStyle = C.W; ctx.fillRect(-8, G + 2, W + 16, 1);
+}
+
+/* ---------------------------------------------------------------------
+   15. BEACH — secret ILOVEGUD scenario
+   --------------------------------------------------------------------- */
+const BEACH_TEXT_F = () => LIST('beach').map(tr).filter(Boolean);
+function beachGround() { return Math.round(H - (MOBILE ? 18 : 14)); }
+function startBeach() {
+  resetRun(S.mode);
+  S.state = 'beach'; S.hearts = []; S.heartT = 0; S.chimeT = 1;
+  P.x = Math.round(W * (MOBILE ? 0.3 : 0.36)); P.y = beachGround() - 32;
+  hideOverlay(); menuBtn.hidden = false;
+  SFX.hack(); setTimeout(startMusic, 500); focusGame();
+}
+function updateBeach(dt) {
+  S.heartT -= dt;
+  while (S.heartT <= 0) { S.heartT += MOBILE ? 0.11 : 0.08; if (S.hearts.length < 160) S.hearts.push({ x: rand(-6, W), y: -10, vy: rand(22, 55), ph: rand(0, 6), front: Math.random() < 0.3 }); }
+  const gb = beachGround();
+  for (let i = S.hearts.length - 1; i >= 0; i--) {
+    const h = S.hearts[i]; h.y += h.vy * dt; h.x += Math.sin(S.time * 2 + h.ph) * 12 * dt;
+    if (h.y > gb - rand(0, 30)) { if (Math.random() < 0.3) S.parts.push({ x: h.x + 4, y: h.y + 4, vx: 0, vy: -10, g: 0, life: 0.3, max: 0.3, col: C.W, s: 1 }); S.hearts.splice(i, 1); }
+  }
+  S.chimeT -= dt; if (S.chimeT <= 0) { S.chimeT = rand(1.4, 3.2); SFX.chime(); }
+  updatePlayer(dt, gb, false);
+  updateParts(dt);
+}
+function beachPanelLayout() {
+  const pw = W - 16, maxBottom = Math.round(H * (MOBILE ? 0.58 : 0.6));
+  let sc = 3, lines, h;
+  for (; sc >= 1; sc--) {
+    const maxC = Math.floor((pw - 16 + sc) / (6 * sc));
+    lines = BEACH_TEXT_F().map(p => wrap(p, maxC));
+    h = 8 + 12 + lines.reduce((a, l) => a + l.length, 0) * 10 * sc + (lines.length - 1) * 3 * sc + 6;
+    if (8 + h <= maxBottom || sc === 1) break;
+  }
+  return { sc, lines, h, pw, x: 8, y: 8 };
+}
+function drawBeach() {
+  const L = beachPanelLayout(), pb = L.y + L.h + 4;
+  const hor = Math.round(clamp(Math.max(H * 0.58, pb + 34), 0, H * 0.7)), sand = Math.round(hor + (H - hor) * 0.4), gb = beachGround();
+  ctx.fillStyle = C.L; ctx.fillRect(-8, -8, W + 16, hor + 8);
+  for (let i = 0; i < 8; i++) { ctx.fillStyle = i < 4 ? C.B : C.P; ctx.fillRect(-8, Math.round(hor * 0.42 + i * hor * 0.07), W + 16, 1 + i); }
+  // striped retro sun
+  const sx = Math.round(W * 0.7), rr = Math.max(18, Math.min(MOBILE ? 34 : 40, hor - pb - 2));
+  for (let dy = -rr; dy <= 0; dy++) {
+    if (dy > -rr * 0.55 && ((-dy) % 7) < 2 + Math.floor((rr + dy) / 14)) continue;
+    const hw = Math.floor(Math.sqrt(rr * rr - dy * dy)); ctx.fillStyle = C.Y; ctx.fillRect(sx - hw, hor + dy, hw * 2 + 1, 1);
+  }
+  // sea
+  ctx.fillStyle = C.P; ctx.fillRect(-8, hor, W + 16, sand - hor);
+  ctx.fillStyle = C.Y; for (let i = 0; i < 5; i++) { const w = Math.max(4, rr * 1.6 - i * 12); ctx.fillRect(Math.round(sx - w / 2 + Math.sin(S.time * 2 + i) * 2), hor + 3 + i * 5, Math.round(w), 1); }
+  ctx.fillStyle = C.W;
+  for (let r = 0; r < Math.floor((sand - hor) / 6); r++) { const o = (S.time * (r % 2 ? 14 : -10)) % 22; for (let x = -22 + o + r * 5; x < W; x += 22) ctx.fillRect(Math.round(x), hor + 6 + r * 6, 6, 1); }
+  // sand
+  ctx.fillStyle = C.Y; ctx.fillRect(-8, sand, W + 16, H - sand + 8);
+  ctx.fillStyle = C.W; for (let x = -8; x < W + 8; x += 4) ctx.fillRect(x, sand + Math.round(Math.sin(x * 0.2 + S.time * 3)), 4, 2);
+  ctx.fillStyle = C.B; for (let i = 0; i < 40; i++) ctx.fillRect((i * 71) % W, sand + 6 + ((i * 37) % Math.max(8, H - sand - 8)), 1, 1);
+  // props
+  ctx.drawImage(SPR.fx.palm, Math.round(W * 0.02) - 10, gb - 98);
+  const ux = Math.round(W - (MOBILE ? 66 : 84));
+  ctx.drawImage(SPR.fx.umbrella, ux, gb - 64);
+  ctx.fillStyle = C.K; ctx.fillRect(ux + 2, gb - 4, 46, 4); ctx.fillStyle = C.P; for (let i = 0; i < 6; i++) ctx.fillRect(ux + 3 + i * 8, gb - 3, 4, 2);
+  S.hearts.forEach(h => { if (!h.front) drawHeart(h); });
+  drawBeachPanel(L);
+  drawPlayer();
+  const pr = S.panelRect;
+  S.hearts.forEach(h => { if (h.front && !(pr && h.x > pr.x - 12 && h.x < pr.x + pr.w + 2 && h.y < pr.y + pr.h + 2)) drawHeart(h); });
+  drawParts();
+}
+function drawBeachPanel(L) {
+  const { sc, lines, h, pw, x, y } = L; S.panelRect = { x, y, w: pw + 4, h: h + 4 };
+  ctx.fillStyle = C.P; ctx.fillRect(x + 4, y + 4, pw, h);
+  ctx.fillStyle = C.K; ctx.fillRect(x - 2, y - 2, pw + 4, h + 4);
+  ctx.fillStyle = C.W; ctx.fillRect(x, y, pw, h);
+  dtext(ctx, '\u2665 ' + TX('tgif', 'secret') + ' \u2665', W / 2, y + 6, 1, Math.floor(S.time * 3) % 2 ? C.P : C.K, 'center');
+  let yy = y + 20;
+  lines.forEach((pl, pi) => {
+    pl.forEach(l => { otext(ctx, l, W / 2, yy, sc, pi === 1 ? C.P : C.K, C.W, 'center'); yy += 10 * sc; });
+    yy += 3 * sc;
+  });
+  ctx.drawImage(SPR.fx.heartP, x + 4, y + 4); ctx.drawImage(SPR.fx.heartP, x + pw - 15, y + 4);
+}
+function drawHeart(h) { if (!drawCustom(ctx, 'fx/heart', Math.round(h.x), Math.round(h.y), 11, 10, S.time)) ctx.drawImage(SPR.fx.heart, Math.round(h.x), Math.round(h.y)); }
+/* ---------------------------------------------------------------------
+   16. PARTICLES, POPUPS, HUD, BANNER
+   --------------------------------------------------------------------- */
+function updateParts(dt) {
+  for (let i = S.parts.length - 1; i >= 0; i--) {
+    const p = S.parts[i]; p.life -= dt; if (p.life <= 0) { S.parts.splice(i, 1); continue; }
+    p.vy += p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+  }
+  for (let i = S.pops.length - 1; i >= 0; i--) { const p = S.pops[i]; p.t += dt; if (p.t > p.dur) S.pops.splice(i, 1); }
+  if (S.banner) { S.banner.t += dt; if (S.banner.t > S.banner.dur) S.banner = null; }
+  S.shake = Math.max(0, S.shake - dt); S.glitch = Math.max(0, S.glitch - dt);
+}
+function drawParts() {
+  S.parts.forEach(p => { ctx.fillStyle = p.col; ctx.fillRect(Math.round(p.x), Math.round(p.y), p.s, p.s); });
+  S.pops.forEach(p => { const x = clamp(p.x, 2, W - tw(p.text, 1) - 2); otext(ctx, p.text, x, p.y - p.t * 22, 1, p.col, C.K); });
+}
+function drawHUD() {
+  ctx.fillStyle = C.W; ctx.fillRect(0, 0, W, HUDH); ctx.fillStyle = C.K; ctx.fillRect(0, HUDH - 1, W, 1); ctx.fillStyle = C.P; ctx.fillRect(0, HUDH, W, 1);
+  const D = DAYS(), day = D.days[Math.min(S.day, D.days.length - 1)], tm = timeStr(S.min), score = TX('tgif', 'score') + ' ' + pad(S.score, 6);
+  const bar = (x, y) => {
+    const lowBlink = S.energy < 25 && Math.floor(S.time * 6) % 2;
+    ctx.fillStyle = C.K; ctx.fillRect(x, y, 50, 7); ctx.fillStyle = C.L; ctx.fillRect(x + 1, y + 1, 48, 5);
+    ctx.fillStyle = lowBlink ? C.P : C.Y; ctx.fillRect(x + 1, y + 1, Math.round(48 * clamp(S.energy, 0, 100) / 100), 5);
+  };
+  const hearts = (xr, y) => { for (let i = 0; i < 3; i++) dtext(ctx, '♥', xr - (3 - i) * 7, y, 1, i < S.lives ? C.P : C.B); };
+  if (!MOBILE) {
+    const x = 4; dtext(ctx, day, x, 4, 1, C.P); dtext(ctx, tm, x + tw(day, 1) + 6, 4, 1, C.K);
+    dtext(ctx, score, W / 2, 4, 1, C.K, 'center');
+    hearts(W - 3, 4); const bx = W - 3 - 21 - 6 - 50; bar(bx, 4); dtext(ctx, TX('tgif', 'energy'), bx - 4, 4, 1, C.K, 'right');
+  } else {
+    dtext(ctx, day, 4, 3, 1, C.P); dtext(ctx, tm, 4 + tw(day, 1) + 5, 3, 1, C.K);
+    dtext(ctx, score, W - 4, 3, 1, C.K, 'right');
+    const en = TX('tgif', 'energy'); dtext(ctx, en, 4, 14, 1, C.K); bar(8 + tw(en, 1), 14); hearts(W - 3, 14);
+  }
+  const b = S.boss;
+  if (b && !b.gone) {
+    const bw = Math.min(200, Math.round(W * 0.6)), bx = Math.round((W - bw) / 2), by = HUDH + 13;
+    otext(ctx, b.name, W / 2, HUDH + 4, 1, C.P, C.W, 'center');
+    ctx.fillStyle = C.K; ctx.fillRect(bx - 1, by - 1, bw + 2, 8); ctx.fillStyle = C.B; ctx.fillRect(bx, by, bw, 6);
+    ctx.fillStyle = C.Y; ctx.fillRect(bx, by, Math.round(bw * b.shown / b.maxHp), 6);
+    ctx.fillStyle = b.hitT > 0 ? C.W : C.P; ctx.fillRect(bx, by, Math.round(bw * b.hp / b.maxHp), 6);
+    ctx.fillStyle = C.K; for (let x = bx + 10; x < bx + bw; x += 10) ctx.fillRect(x, by, 1, 6);
+  }
+}
+function drawBanner() {
+  const bn = S.banner; if (!bn) return;
+  if (bn.flash && Math.floor(bn.t * 8) % 2 === 0 && bn.t < 1.2) return;
+  let sc = MOBILE ? 3 : 4; while (sc > 1 && tw(bn.text, sc) > W - 16) sc--;
+  const y = Math.round(HUDH + (G - HUDH) * 0.3);
+  otext(ctx, bn.text, W / 2, y, sc, bn.flash ? C.Y : C.P, C.K, 'center', C.K);
+  if (bn.sub) { let s2 = 1; if (tw(bn.sub, 2) < W - 20) s2 = 2; otext(ctx, bn.sub, W / 2, y + 7 * sc + 8, s2 === 2 && MOBILE ? 1 : s2, C.K, C.W, 'center'); }
+}
+function glitchFx() {
+  if (S.glitch <= 0) return;
+  for (let i = 0; i < 3; i++) {
+    const y = irand(HUDH + 2, H - 12), h = irand(2, 8), dx = irand(-12, 12);
+    try { ctx.drawImage(cvs, 0, y * KS, cvs.width, h * KS, dx, y, W, h); } catch (e) { /* ignore */ }
+  }
+  ctx.fillStyle = pick([C.P, C.Y, C.K]); ctx.fillRect(0, irand(HUDH, H), W, 1);
+}
+
+/* ---------------------------------------------------------------------
+   17. MAIN UPDATE / RENDER
+   --------------------------------------------------------------------- */
+function update(dt) {
+  S.time += dt;
+  if (S.paused || S.hackOpen) return;
+  if (S.state === 'beach') { updateBeach(dt); return; }
+  if (S.state !== 'play') { S.scroll += (S.state === 'intro' ? 40 : 0) * dt; updateParts(dt); return; }
+
+  const D = DAYS(), week = S.mode === 'week';
+  if (!S.result) {
+    // clock
+    const rate = S.boss ? 2 : D.rate;
+    S.min += rate * dt;
+    if (S.boss) S.min = Math.min(S.min, week ? 1049 : 900);
+    else if (S.min >= D.end && S.day < D.days.length - 1) {
+      S.day++; S.min = D.start[S.day]; SFX.day();
+      banner(D.days[S.day], week ? (S.day === 4 ? TX('tgif', 'almost') : timeStr(S.min) + ' - ' + TX('tgif', 'again2')) : TX('tgif', 'why'), 1.8);
+    }
+    if (!S.boss && !S.bossDone && S.day === D.days.length - 1 && S.min >= D.bossAt) spawnBoss();
+  }
+  const p = progress();
+  S.speed = S.result === 'lose' ? 0 : S.boss ? 70 : (175 + 105 * p);
+  S.scroll += S.speed * dt;
+
+  if (!S.result) {
+    S.energy -= (week ? 1.0 + 0.6 * p : 1.3) * dt;
+    if (S.energy <= 0) { S.energy = 0; const l = S.lives; hurt('BURNOUT!'); if (S.lives < l) S.energy = 60; else S.energy = 1; }
+    S.score += dt * 10 * (1 + p);
+    if (!S.boss) {
+      if (!S.giants.length) S.spawnT -= dt;
+      if (S.spawnT <= 0) spawnObstacle();
+      S.giantT -= dt;
+      if (S.giantT <= 0 && !S.giants.length && !S.obs.some(o => o.x > W * 0.45)) {
+        spawnGiant(Math.random() < 0.55 ? 'sweep' : 'slam'); S.giantT = rand(10, 15) * (1 - 0.3 * p);
+      }
+    }
+    S.bonusT -= dt; if (S.bonusT <= 0) { spawnBonus(); S.bonusT = rand(3.6, 6.4); }
+    if (week && S.day >= 1) {
+      while (S.papers.length < S.day * 3) S.papers.push({ x: W + rand(0, 200), y: rand(HUDH + 10, G - 70), vx: rand(60, 140), ph: rand(0, 6) });
+      S.papers.forEach(pp => { pp.x -= (S.speed * 0.5 + pp.vx) * dt; pp.y += Math.sin(S.time * 3 + pp.ph) * 20 * dt; if (pp.x < -10) { pp.x = W + rand(0, 80); pp.y = rand(HUDH + 10, G - 70); } });
+    }
+    if (week && S.day >= 3) { S.glitchT -= dt; if (S.glitchT <= 0) { S.glitch = rand(0.05, 0.15); S.glitchT = rand(1.5, 4) * (S.day === 4 ? 0.5 : 1); } }
+  }
+  updatePlayer(dt, G, !S.result);
+  updateObstacles(dt); updateBonuses(dt); updateGiants(dt); updateShots(dt); updateBoss(dt); updateEshots(dt); updateParts(dt);
+  if (S.result) { S.endT -= dt; if (S.endT <= 0) showEnd(); }
+}
+function drawObstacle(o) {
+  const x = Math.round(o.x), y = Math.round(o.y);
+  if (o.k === 'logo') {
+    if (!drawCustom(ctx, 'malus/logo', x, y, o.w, o.h, o.t)) otext(ctx, 'LOGO', x, y, o.sc, o.hitT > 0 ? C.W : C.P, C.K, null, C.Y);
+    if (Math.floor(S.time * 6) % 2) otext(ctx, 'BIGGER!', x + o.w / 2, y - 11, 1, C.K, C.W, 'center');
+    return;
+  }
+  const spr = SPR.ob[o.k], fr = spr[spr.length > 1 ? Math.floor(o.t * 6) % spr.length : 0];
+  let dx = x;
+  if (o.k === 'call') dx += Math.floor(S.time * 30) % 2;
+  if (o.falling) { ctx.fillStyle = Math.floor(S.time * 10) % 2 ? C.K : C.P; ctx.fillRect(x + 4, G - 2, o.w - 8, 2); }
+  if (!drawCustom(ctx, 'malus/' + o.k, dx, y, o.w, o.h, o.t)) {
+    ctx.drawImage(o.hitT > 0 ? tinted(fr, C.W) : fr, dx, y);
+    if (o.k === 'bug') { for (let i = 0; i < 6; i++) { ctx.fillStyle = pick([C.P, C.Y, C.K, C.W]); ctx.fillRect(x + irand(3, 20), y + irand(5, 16), irand(2, 6), 1); } }
+    if (o.k === 'update') { const pct = Math.floor((o.t * 23) % 100); ctx.fillStyle = C.P; ctx.fillRect(x + 3, y + 12, Math.round(72 * pct / 100), 8); }
+  }
+  if (o.k === 'update') dtext(ctx, 'UPDATING ' + Math.floor((o.t * 23) % 100) + '%', x + 2, y + 1, 1, C.K);
+  if (o.k === 'call' && Math.floor(S.time * 5) % 2) otext(ctx, 'INCOMING CALL', x + o.w / 2, y - 11, 1, C.P, C.W, 'center');
+  if (o.k === 'internet' && Math.floor(S.time * 3) % 2) otext(ctx, 'NO SIGNAL', x + o.w / 2, y - 10, 1, C.K, C.W, 'center');
+  if (o.k === 'contradictory') otext(ctx, Math.floor(S.time * 3) % 2 ? 'SÌ!' : 'NO!', x + o.w / 2, y - 10, 1, C.P, C.W, 'center');
+}
+function drawBonus(b) {
+  const x = Math.round(b.x), y = Math.round(b.y);
+  if (!drawCustom(ctx, 'bonus/' + b.k, x, y, b.w, b.h, b.t)) {
+    ctx.drawImage(SPR.bn[b.k][0], x, y);
+    if (b.k === 'coffee') { ctx.fillStyle = C.W; const s = Math.floor(b.t * 5) % 3; ctx.fillRect(x + 6 + (s === 1 ? 1 : 0), y + 1 + s, 1, 2); ctx.fillRect(x + 10 - (s === 2 ? 1 : 0), y + 3 - s % 2, 1, 2); }
+  }
+}
+function render() {
+  ctx.setTransform(KS, 0, 0, KS, 0, 0); ctx.imageSmoothingEnabled = false;
+  let sx = 0, sy = 0;
+  if (S.shake > 0) { const m = Math.min(4, Math.ceil(S.shake * 10)); sx = irand(-m, m); sy = irand(-m, m); }
+  ctx.save(); ctx.translate(sx, sy);
+  if (S.state === 'beach') { drawBeach(); ctx.restore(); return; }
+  drawBackground();
+  S.bonuses.forEach(drawBonus);
+  S.obs.forEach(drawObstacle);
+  drawBoss();
+  S.giants.forEach(drawGiant);
+  S.eshots.forEach(drawEshot);
+  S.shots.forEach(drawShot);
+  drawPlayer();
+  drawParts();
+  ctx.restore();
+  if (S.state !== 'intro') { drawHUD(); drawBanner(); }
+  glitchFx();
+}
+let last = 0;
+function frame(t) {
+  requestAnimationFrame(frame);
+  if (!last) last = t;
+  let dt = (t - last) / 1000; last = t;
+  if (dt <= 0) return; if (dt > 0.05) dt = 0.05;
+  try { update(dt); render(); } catch (e) { if (window.console) console.error(e); }
+}
+
+/* ---------------------------------------------------------------------
+   18. SCREENS (DOM overlays)
+   --------------------------------------------------------------------- */
+const HINT = () => TX('tgif', MOBILE ? 'hintMobile' : 'hint');
+const esc = v => String(v == null ? '' : v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const X = k => esc(TX('tgif', k));
+const SCORELINE = () => `<p class="score">${X('score')} ${pad(S.score, 6)} · ${X('best')} ${pad(S.best, 6)}</p>`;
+const SCREENS = {
+  intro: () => {
+    const li = LIST('tgifIntro').map(tr);
+    return `<div class="panel intro">
+    <h1 class="title"><span>THANK GUD</span> <span>IT'S FRIDAY</span></h1>
+    <p class="sub">${X('subtitle')}</p>
+    <div class="msg">${li.map((t, i) => `<p class="${i === 0 || i === li.length - 1 ? 'lead' : ''}">${esc(t)}</p>`).join('')}</div>
+    <button class="btn primary blink" data-do="start">${X('start')}</button>
+    <p class="hint">${esc(HINT())}</p></div>`;
+  },
+  weekWin: () => `<div class="panel">
+    <h2 class="title big">${X('weekWinTitle')}</h2>
+    <div class="msg"><p>${X('weekWin1')}</p><p>${X('weekWin2')}</p><p>${X('weekWin3')}</p><p class="lead">${X('weekWin4')}</p></div>
+    ${SCORELINE()}
+    <button class="btn primary" data-do="weekend">${X('weekWinCta')}</button></div>`,
+  weekLose: () => `<div class="panel dark">
+    <h2 class="title big">${X('weekLoseTitle')}</h2><h3 class="title mid">${X('weekLoseSub')}</h3>
+    <div class="msg"><p>${X('weekLose1')}</p></div>
+    ${SCORELINE()}
+    <button class="btn primary" data-do="retry-week">${X('retry')}</button></div>`,
+  wkndWin: () => `<div class="panel">
+    <h2 class="title big">${X('wkndWinTitle')}</h2>
+    <div class="msg"><p>${X('wkndWin1')}</p><p>${X('wkndWin2')}</p><p class="lead">${X('wkndWinUnlock')}</p></div>
+    ${SCORELINE()}
+    <button class="btn primary blink" data-do="secret">${X('wkndWinCta')}</button><br>
+    <button class="btn" data-do="restart">${X('again')}</button></div>`,
+  wkndLose: () => `<div class="panel dark">
+    <h2 class="title big">${X('wkndLoseTitle')}</h2>
+    <div class="msg"><p>${X('wkndLose1')}</p><p>${X('wkndLose2')}</p></div>
+    ${SCORELINE()}
+    <button class="btn primary" data-do="retry-weekend">${X('retry')}</button></div>`
+};
+let OVERLAY_NAME = null;
+function showOverlay(name, focus) {
+  OVERLAY_NAME = name; overlay.innerHTML = SCREENS[name](); overlay.hidden = false;
+  if (focus) { const b = overlay.querySelector('.primary'); if (b) setTimeout(() => { try { b.focus({ preventScroll: true }); } catch (e) { /* */ } }, 60); }
+}
+function hideOverlay() { OVERLAY_NAME = null; overlay.hidden = true; overlay.innerHTML = ''; }
+function showEnd() {
+  S.state = 'end'; S.lastResult = S.result; S.result = null;
+  S.score = Math.floor(S.score);
+  if (S.score > S.best) { S.best = S.score; store.set('gud_best', String(S.best)); }
+  const n = (S.mode === 'week' ? 'week' : 'wknd') + (S.lastResult === 'win' ? 'Win' : 'Lose');
+  showOverlay(n, true);
+}
+function toIntro() {
+  stopMusic(); resetRun('week'); S.state = 'intro'; menuBtn.hidden = true; showOverlay('intro');
+}
+function startRun(mode, opts) {
+  opts = opts || {}; AU.init(); stopMusic();
+  resetRun(mode); S.state = 'play'; S.lastResult = null; menuBtn.hidden = true; hideOverlay();
+  const D = DAYS();
+  if (opts.boss) { S.day = D.days.length - 1; S.min = D.bossAt; spawnBoss(); }
+  else banner(D.days[0], mode === 'week' ? TX('tgif', 'goodLuck') : TX('tgif', 'freedom'), 1.8);
+  if (!opts.silent) (mode === 'weekend' ? SFX.weekend : SFX.start)();
+  focusGame();
+}
+function focusGame() { try { window.focus(); cvs.focus({ preventScroll: true }); } catch (e) { /* */ } }
+overlay.addEventListener('click', e => {
+  const b = e.target.closest('[data-do]'); if (!b) return; AU.init();
+  const a = b.dataset.do;
+  if (a === 'start' || a === 'retry-week' || a === 'restart') startRun('week');
+  else if (a === 'weekend' || a === 'retry-weekend') startRun('weekend');
+  else if (a === 'secret') startBeach();
+});
+
+/* ---------------------------------------------------------------------
+   19. HACK PANEL — secret codes, available from every screen
+   --------------------------------------------------------------------- */
+function resetInputs() { Object.keys(input).forEach(k => { input[k] = false; }); document.querySelectorAll('[data-act].on').forEach(b => b.classList.remove('on')); }
+function openHack() {
+  AU.init(); S.hackOpen = true; hackEl.hidden = false; hackMsg.textContent = ''; hackInput.value = ''; resetInputs();
+  setTimeout(() => { try { hackInput.focus({ preventScroll: true }); } catch (e) { hackInput.focus(); } }, 30);
+}
+function closeHack() { S.hackOpen = false; hackEl.hidden = true; hackInput.blur(); focusGame(); }
+function handleCode(raw) {
+  const code = String(raw || '').trim().toLowerCase();
+  if (code === 'boss') { closeHack(); SFX.hack(); startRun(S.mode, { boss: true, silent: true }); return true; }
+  if (code === 'tequila') { closeHack(); startRun('weekend'); return true; }
+  if (code === 'ilovegud') { closeHack(); startBeach(); return true; }
+  const adm = String(((CONTENT.settings || {}).adminCode) || 'gudmin').toLowerCase();
+  if (code && code === adm) { closeHack(); SFX.hack(); try { (window.top || window).location.href = CFG.adminUrl || '../../admin/'; } catch (e) { location.href = CFG.adminUrl || '../../admin/'; } return true; }
+  SFX.denied(); hackMsg.textContent = 'ACCESS DENIED';
+  const box = hackForm; box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+  try { hackInput.select(); } catch (e) { /* */ }
+  return false;
+}
+hackBtn.addEventListener('click', () => (S.hackOpen ? closeHack() : openHack()));
+$('hackClose').addEventListener('click', closeHack);
+hackForm.addEventListener('submit', e => { e.preventDefault(); AU.init(); handleCode(hackInput.value); });
+hackInput.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Escape') closeHack(); });
+menuBtn.addEventListener('click', () => { AU.init(); toIntro(); });
+function syncMute() { muteBtn.textContent = AU.muted ? (LANG === 'it' ? 'AUDIO OFF' : 'SOUND OFF') : (LANG === 'it' ? 'AUDIO ON' : 'SOUND ON'); muteBtn.setAttribute('aria-pressed', AU.muted ? 'true' : 'false'); }
+muteBtn.addEventListener('click', () => { AU.init(); AU.setMute(!AU.muted); syncMute(); tellParent({ mute: AU.muted }); focusGame(); });
+syncMute();
+HOOKS.mute.push(() => syncMute());
+const CB_L = { left: ['SINISTRA', 'LEFT'], right: ['DESTRA', 'RIGHT'], duck: ['SCHIVA', 'DODGE'], shoot: ['SPARA', 'SHOOT'], jump: ['SALTA', 'JUMP'] };
+function cbLabels() { document.querySelectorAll('.cb[data-act]').forEach(b => { const l = CB_L[b.dataset.act], sp = b.querySelector('span'); if (l && sp) { sp.textContent = l[LANG === 'it' ? 0 : 1]; b.setAttribute('aria-label', l[LANG === 'it' ? 0 : 1]); } }); }
+cbLabels();
+HOOKS.lang.push(() => { cbLabels(); syncMute(); if (OVERLAY_NAME) showOverlay(OVERLAY_NAME); const lb = $('langBtn'); if (lb) lb.textContent = LANG === 'it' ? 'EN' : 'IT'; });
+HOOKS.code.push(c => { AU.init(); handleCode(c); });
+{ const lb = $('langBtn'); if (lb) { lb.textContent = LANG === 'it' ? 'EN' : 'IT'; lb.addEventListener('click', () => { AU.init(); setLang(LANG === 'it' ? 'en' : 'it'); tellParent({ lang: LANG }); focusGame(); }); } }
+
+/* ---------------------------------------------------------------------
+   20. INPUT — keyboard + touch
+   --------------------------------------------------------------------- */
+const KEYMAP = { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'jump', Space: 'jump', KeyW: 'jump', ArrowDown: 'duck', KeyS: 'duck', KeyK: 'shoot' };
+window.addEventListener('keydown', e => {
+  if (S.hackOpen) { if (e.key === 'Escape') closeHack(); return; }
+  AU.init();
+  const tag = e.target && e.target.tagName;
+  const a = KEYMAP[e.code];
+  if (tag === 'BUTTON' && (e.code === 'Space' || e.code === 'Enter')) return;
+  if (a) e.preventDefault();
+  if (S.state === 'intro' && (e.code === 'Enter' || e.code === 'Space')) { startRun('week'); return; }
+  if (S.state === 'end' && e.code === 'Enter') { const b = overlay.querySelector('.primary'); if (b) b.click(); return; }
+  if (!a) return;
+  if (a === 'jump' && !input.jump) pressJump();
+  input[a] = true;
+});
+window.addEventListener('keyup', e => { const a = KEYMAP[e.code]; if (a) input[a] = false; });
+window.addEventListener('blur', resetInputs);
+document.querySelectorAll('[data-act]').forEach(btn => {
+  const a = btn.dataset.act;
+  const on = e => { e.preventDefault(); AU.init(); try { btn.setPointerCapture(e.pointerId); } catch (_) { /* */ } if (a === 'jump' && !input.jump) pressJump(); input[a] = true; btn.classList.add('on'); };
+  const off = () => { input[a] = false; btn.classList.remove('on'); };
+  btn.addEventListener('pointerdown', on); btn.addEventListener('pointerup', off); btn.addEventListener('pointercancel', off);
+  btn.addEventListener('lostpointercapture', off); btn.addEventListener('contextmenu', e => e.preventDefault());
+});
+cvs.addEventListener('pointerdown', () => { AU.init(); if (S.state === 'beach' || (MOBILE && S.state === 'play')) pressJump(); focusGame(); });
+document.addEventListener('visibilitychange', () => { S.paused = document.hidden; if (document.hidden) resetInputs(); });
+
+/* ---------------------------------------------------------------------
+   21. BOOT
+   --------------------------------------------------------------------- */
+buildSprites();
+resize();
+if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', () => setTimeout(resize, 200));
+toIntro();
+requestAnimationFrame(frame);
+loadContent().then(() => { if (OVERLAY_NAME) showOverlay(OVERLAY_NAME); tellParent({ ready: 'tgif' }); });
+// tiny debug/test hook (harmless): window.GUD
+window.GUD = { state: S, player: P, input, startRun, handleCode, startBeach, toIntro, get boss() { return S.boss; } };
+
+})();
+
+</script>
+</body>
+</html>

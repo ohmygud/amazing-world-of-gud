@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thank GUD It's Friday</title>
+<meta name="description" content="An 80s girlpop pixel arcade survival game. Get GUD to Friday. Alive, preferably.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+/*@@CSS@@*/
+/* ---- DESKTOP LAYOUT ---- */
+#topbar{height:38px;padding:0 10px}
+.brand{font-size:10px}
+.tbtn{font-size:9px;padding:7px 9px}
+#overlay{padding:16px}
+.panel{max-width:640px;padding:22px 26px 20px}
+.title{font-size:clamp(18px,3.4vw,30px)}
+.title.big{font-size:clamp(18px,3.4vw,30px)}
+.title.mid{font-size:clamp(11px,1.6vw,15px);margin-top:12px}
+.sub{font-size:22px}
+.msg{font-size:21px}
+.msg .lead{font-size:11px}
+.score{font-size:10px}
+.hint{font-size:8px}
+.btn{font-size:13px;padding:14px 20px}
+@media (max-height:420px){.panel{padding:12px 16px}.msg{font-size:18px}.sub{font-size:18px}.title{font-size:18px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">THANK GUD IT'S FRIDAY <b>&hearts;&#xFE0E;</b></div>
+    <div class="tools">
+      <button id="menuBtn" class="tbtn" type="button" hidden>MENU</button>
+      <button id="muteBtn" class="tbtn" type="button" aria-pressed="false">SOUND ON</button>
+      <button id="hackBtn" class="tbtn hack" type="button">HACK</button>
+    </div>
+  </header>
+  <main id="stage">
+    <canvas id="game" tabindex="0" aria-label="Thank GUD It's Friday — arcade game. Arrows move, Up or Space jump, Down dodge, K shoot."></canvas>
+    <div id="overlay" hidden></div>
+<!--@@HACK@@-->
+  </main>
+</div>
+<script>window.GUD_CONFIG={layout:'desktop',assetBase:'../assets/'};</script>
+<script src="../assets/manifest.js"></script>
+<script>
+/*@@ENGINE@@*/
+</script>
+</body>
+</html>
