@@ -1,0 +1,35 @@
+SANDMAN FX — sogni di sabbia guidati dai dati
+==============================================
+
+COME SI APRE
+  Su Mac: doppio clic su AVVIA.command (si apre in Google Chrome).
+  Se macOS lo blocca: tasto destro su AVVIA.command > Apri > Apri.
+  In alternativa: tasto destro su SandmanFX.html > Apri con > Google Chrome.
+  Funziona offline: il modello AI e le librerie sono nella cartella lib/.
+  Non spostare SandmanFX.html fuori dalla cartella (ha bisogno di lib/).
+
+COME SI USA
+  1. FOTO     Carica una foto (o trascinala sul riquadro). L'AI calcola la
+              profondità in qualche secondo e la foto diventa un rilievo 3D.
+              Se vuoi, puoi caricare una tua depth map (bianco = vicino).
+  2. EXCEL    Carica un .xlsx / .xls / .csv. Ogni colonna diventa una
+              "forza": le righe vengono distese sulla durata del video.
+              Per ogni parametro scegli una colonna (o "fisso") e il valore
+              minimo → massimo. Le colonne di testo vengono trasformate in
+              numeri. "Auto-abbina" riassegna tutto automaticamente.
+              Esempio pronto: esempi/dati-esempio.xlsx
+  3. SEQUENZA La sabbia compone la foto, la camera si muove in 3D,
+              poi la foto si scioglie in sabbia. Durata e fasi regolabili.
+  4. SABBIA   Numero di granelli, fronte, bagliore, correnti d'oro.
+  5. ESPORTA  Scegli formato (9:16, 16:9, 1:1, 4:5, 4K) e fps, poi
+              "Esporta MP4": il file finisce nella cartella Download.
+
+PARAMETRI GUIDATI DAI DATI
+  Respiro della sabbia  quanto l'immagine si sgretola anche "a riposo"
+  Velocità/Direzione/Turbolenza correnti, Densità e Luce dell'oro
+  Forza e Direzione del vento, Pesi vento / vortice / clessidra
+  (decidono come i granelli si staccano e volano), Ampiezza camera,
+  Bagliore, Grandezza granelli, Frastagliatura del bordo.
+
+SCORCIATOIE
+  Spazio = play/pausa
