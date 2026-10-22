@@ -342,7 +342,8 @@ async function loadExcelFile(file){
     let best = 0, bestCols = -1;
     wb.SheetNames.forEach((nm, i) => {
       const rows = XLSX.utils.sheet_to_json(wb.Sheets[nm], {header:1, raw:true});
-      const c = buildColumnsFromRows(rows).length;
+      // preferisci i fogli con più colonne numeriche (il testo conta poco)
+      const c = buildColumnsFromRows(rows).reduce((n, col) => n + (col.text ? 0.25 : 1), 0);
       if (c > bestCols){ bestCols = c; best = i; }
     });
     fillSheetSelect(best);
